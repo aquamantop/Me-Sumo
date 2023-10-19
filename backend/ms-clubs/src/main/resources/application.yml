@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/me_sumo?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+    username:
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    jackson:
+      serialization:
+        write_dates_as_timestamps: false
+      date-format: yyyy-MM-dd
