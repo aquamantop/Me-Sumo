@@ -1,4 +1,4 @@
-package com.mesumo.msclubs.models;
+package com.mesumo.msclubs.models.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,8 @@
-package com.mesumo.msclubs.models;
+package com.mesumo.msclubs.models.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +14,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Activity {
+public class Amenity {
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
+    String name;
 }
