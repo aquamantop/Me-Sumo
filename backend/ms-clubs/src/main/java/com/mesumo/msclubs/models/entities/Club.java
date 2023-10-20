@@ -34,8 +34,8 @@ public class Club {
             fetch = FetchType.EAGER
     )
     @JoinTable(name = "club_activity",
-            joinColumns = @JoinColumn(name = "clubId"),
-            inverseJoinColumns = @JoinColumn(name = "activityId"))
+            joinColumns = @JoinColumn(name = "club_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id"))
     private Set<Activity> activities;
 
     @ManyToMany(
