@@ -18,11 +18,15 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String type;
+
     @ManyToMany(mappedBy = "activities")
     @JsonIgnore
     private Set<Club> clubs;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
     private Set<Court> courts;
 }

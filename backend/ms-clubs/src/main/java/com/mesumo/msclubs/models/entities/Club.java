@@ -27,10 +27,7 @@ public class Club {
     private String address;
 
     @ManyToMany(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
+            cascade = CascadeType.MERGE,
             fetch = FetchType.EAGER
     )
     @JoinTable(name = "club_activity",
@@ -38,15 +35,9 @@ public class Club {
             inverseJoinColumns = @JoinColumn(name = "activity_id"))
     private Set<Activity> activities;
 
-    @ManyToMany(
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "club_amenity",
-            joinColumns = @JoinColumn(name = "clubId"),
-            inverseJoinColumns = @JoinColumn(name = "amenityId"))
+            joinColumns = @JoinColumn(name = "club_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id"))
     private Set<Amenity> amenities;
 }

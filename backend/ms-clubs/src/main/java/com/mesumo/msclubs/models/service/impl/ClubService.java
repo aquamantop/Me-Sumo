@@ -33,7 +33,8 @@ public class ClubService implements IClubService {
 
     @Override
     public ClubDTO create(ClubDTO dto) {
-        repository.save(DTOToClub(dto));
+        Club club = repository.save(DTOToClub(dto));
+        dto.setId(club.getId());
         return dto;
     }
 
@@ -52,8 +53,7 @@ public class ClubService implements IClubService {
 
     @Override
     public ClubDTO update(ClubDTO dto) throws ResourceNotFoundException {
-        ClubDTO club = new ClubDTO();
-        club.setId(dto.getId());
+        ClubDTO club = clubToDTO(repository.findById(dto.getId()).get());
 
         if (dto.getName() != null){
             club.setName(dto.getName());
