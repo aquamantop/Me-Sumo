@@ -1,3 +1,4 @@
+
 import './App.css'
 
 function App() {
@@ -7,10 +8,8 @@ function App() {
     <>
       <div>
         
+      <h1>!Me Sumo!</h1>
       </div>
-      <h1>¡Me Sumo!</h1>
-      
-     
     </>
   )
 }
