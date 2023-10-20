@@ -16,15 +16,11 @@ public class ClubDTO {
     @NotBlank(message = "Title can't be blank")*/
     private String name;
     /*@Schema(required = true)
-    @NotBlank(message = "Description can't be blank")*/
-    private String description;
-    /*@Schema(required = true)
     @NotBlank(message = "ImageURL can't be blank")*/
     private Neighborhood neighborhood;
     private String address;
     private Set<Activity> activities;
     private Set<Amenity> amenities;
-
 
     public ClubDTO() {
     }
