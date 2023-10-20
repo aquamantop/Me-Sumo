@@ -1,0 +1,42 @@
+name: Build Frontend and Backend
+
+on:
+  push:
+    paths:
+      - 'frontend/**' # Ejecutar cuando haya cambios en la carpeta "frontend"
+      - 'backend/**'  # Ejecutar cuando haya cambios en la carpeta "backend"
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout código fuente
+      uses: actions/checkout@v2
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Instalar dependencias
+      run: npm install
+      working-directory: frontend
+
+    - name: Construir la aplicación React
+      run: npm run build
+      working-directory: frontend
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout código fuente
+      uses: actions/checkout@v2
+
+    - name: Configurar Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: 17
+
+    - name: Compilar la aplicación Java
+      run: mvn clean install
+      working-directory: backend
