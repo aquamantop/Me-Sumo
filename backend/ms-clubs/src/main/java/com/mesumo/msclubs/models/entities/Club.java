@@ -1,5 +1,6 @@
 package com.mesumo.msclubs.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,10 +27,7 @@ public class Club {
 
     private String address;
 
-    @ManyToMany(
-            cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "club_activity",
             joinColumns = @JoinColumn(name = "club_id"),
             inverseJoinColumns = @JoinColumn(name = "activity_id"))
