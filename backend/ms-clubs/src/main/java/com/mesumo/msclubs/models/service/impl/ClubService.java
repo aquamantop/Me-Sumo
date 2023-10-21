@@ -53,29 +53,33 @@ public class ClubService implements IClubService {
 
     @Override
     public ClubDTO update(ClubDTO dto) throws ResourceNotFoundException {
-        ClubDTO club = clubToDTO(repository.findById(dto.getId()).get());
+        Optional<Club> c = repository.findById(dto.getId());
+        ClubDTO club = null;
+        if (c.isPresent()) {
+            club = clubToDTO(c.get());
 
-        if (dto.getName() != null){
-            club.setName(dto.getName());
-        }
+            if (dto.getName() != null) {
+                club.setName(dto.getName());
+            }
 
-        if (dto.getNeighborhood() != null){
-            club.setNeighborhood(dto.getNeighborhood());
-        }
+            if (dto.getNeighborhood() != null) {
+                club.setNeighborhood(dto.getNeighborhood());
+            }
 
-        if (dto.getAddress() != null){
-            club.setAddress(dto.getAddress());
-        }
+            if (dto.getAddress() != null) {
+                club.setAddress(dto.getAddress());
+            }
 
-        if (dto.getActivities() != null){
-            club.setActivities(dto.getActivities());
-        }
+            if (dto.getActivities() != null) {
+                club.setActivities(dto.getActivities());
+            }
 
-        if (dto.getAmenities() != null){
-            club.setAmenities(dto.getAmenities());
-        }
+            if (dto.getAmenities() != null) {
+                club.setAmenities(dto.getAmenities());
+            }
 
-        repository.save(DTOToClub(club));
+            repository.save(DTOToClub(club));
+        } else System.err.println("Club not found with id: " + dto.getId());
 
         return club;
     }
