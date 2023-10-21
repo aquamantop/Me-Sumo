@@ -5,12 +5,14 @@ import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.repository.IActivityRepository;
 import com.mesumo.msclubs.models.service.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class ActivityService implements IActivityService {
 
     @Autowired

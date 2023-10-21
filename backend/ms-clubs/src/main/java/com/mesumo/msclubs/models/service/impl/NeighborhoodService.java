@@ -7,12 +7,14 @@ import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.repository.INeighborhood;
 import com.mesumo.msclubs.models.service.INeighborhoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class NeighborhoodService implements INeighborhoodService {
 
     @Autowired
