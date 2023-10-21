@@ -21,7 +21,7 @@ public class Club {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "neighborhoodId")
+    @JoinColumn(name = "neighborhood_id")
     private Neighborhood neighborhood;
 
     private String address;
