@@ -21,21 +21,25 @@ public class ClubService implements IClubService {
     }
 
     @Override
-    public ClubDTO findById(Long id) throws ResourceNotFoundException {
+    public Club findById(Long id) throws ResourceNotFoundException {
         Optional<Club> club = repository.findById(id);
 
         if (club.isEmpty()){
             throw new ResourceNotFoundException("Club not found");
         }
 
-        return clubToDTO(club.get());
+        return club.get();
     }
 
     @Override
-    public ClubDTO create(ClubDTO dto) {
-        Club club = repository.save(DTOToClub(dto));
-        dto.setId(club.getId());
-        return dto;
+    public Set<Club> findAll() {
+        List<Club> clubs = repository.findAll();
+        return new HashSet<>(clubs);
+    }
+
+    @Override
+    public Club create(Club club) {
+        return repository.save(club);
     }
 
     @Override
@@ -52,40 +56,49 @@ public class ClubService implements IClubService {
     }
 
     @Override
-    public ClubDTO update(ClubDTO dto) throws ResourceNotFoundException {
-        Optional<Club> c = repository.findById(dto.getId());
-        ClubDTO club = null;
-        if (c.isPresent()) {
-            club = clubToDTO(c.get());
+    public Club update(Club club) throws ResourceNotFoundException {
+        Optional<Club> newClub = repository.findById(club.getId());
+        if (newClub.isPresent()) {
 
-            if (dto.getName() != null) {
-                club.setName(dto.getName());
+            if (club.getName() != null) {
+                newClub.get().setName(club.getName());
             }
 
-            if (dto.getNeighborhood() != null) {
-                club.setNeighborhood(dto.getNeighborhood());
+            if (club.getNeighborhood() != null) {
+                newClub.get().setNeighborhood(club.getNeighborhood());
             }
 
-            if (dto.getAddress() != null) {
-                club.setAddress(dto.getAddress());
+            if (club.getAddress() != null) {
+                newClub.get().setAddress(club.getAddress());
             }
 
-            if (dto.getActivities() != null) {
-                club.setActivities(dto.getActivities());
+            if (club.getActivities() != null) {
+                newClub.get().setActivities(club.getActivities());
             }
 
-            if (dto.getAmenities() != null) {
-                club.setAmenities(dto.getAmenities());
+            if (club.getAmenities() != null) {
+                newClub.get().setAmenities(club.getAmenities());
             }
 
-            repository.save(DTOToClub(club));
-        } else System.err.println("Club not found with id: " + dto.getId());
+            repository.save(newClub.get());
+        } else System.err.println("Club not found with id: " + club.getId());
 
-        return club;
+        return newClub.get();
     }
 
     @Override
-    public Set<ClubDTO> findAll() {
+    public ClubDTO findByIdDTO(Long id) throws ResourceNotFoundException {
+        Optional<Club> club = repository.findById(id);
+
+        if (club.isEmpty()){
+            throw new ResourceNotFoundException("Club not found");
+        }
+
+        return clubToDTO(club.get());
+    }
+
+    @Override
+    public Set<ClubDTO> findAllDTO() {
         List<Club> clubs = repository.findAll();
         Set<ClubDTO> clubDTOSet = new HashSet<>();
 
@@ -99,26 +112,11 @@ public class ClubService implements IClubService {
 
     public ClubDTO clubToDTO (Club club){
         ClubDTO dto = new ClubDTO();
-        dto.setId(club.getId());
         dto.setName(club.getName());
         dto.setNeighborhood(club.getNeighborhood());
-        dto.setAddress(club.getAddress());
         dto.setActivities(club.getActivities());
-        dto.setAmenities(club.getAmenities());
 
         return dto;
-    }
-
-    public Club DTOToClub (ClubDTO dto){
-        Club club = new Club();
-        club.setId(dto.getId());
-        club.setName(dto.getName());
-        club.setNeighborhood(dto.getNeighborhood());
-        club.setAddress(dto.getAddress());
-        club.setActivities(dto.getActivities());
-        club.setAmenities(dto.getAmenities());
-
-        return club;
     }
 
 }
