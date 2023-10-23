@@ -1,8 +1,11 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.dto.ClubDTO;
+import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.entities.Club;
+import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
 import org.springframework.stereotype.Service;
@@ -111,12 +114,20 @@ public class ClubService implements IClubService {
     }
 
     public ClubDTO clubToDTO (Club club){
-        ClubDTO dto = new ClubDTO();
-        dto.setName(club.getName());
-        dto.setNeighborhood(club.getNeighborhood());
-        dto.setActivities(club.getActivities());
+        ClubDTO clubDTO = new ClubDTO();
+        clubDTO.setName(club.getName());
+        Neighborhood neighborhood = club.getNeighborhood();
+        clubDTO.setNeighborhood(NeighborhoodService.neighborhoodToDTO(neighborhood));
 
-        return dto;
+        Set<Activity> activities = club.getActivities();
+        Set<ActivityDTO> activityDTOSet = new HashSet<>();
+        for (Activity activity : activities) {
+            ActivityDTO dto = ActivityService.activityToDTO(activity);
+            activityDTOSet.add(dto);
+        }
+        clubDTO.setActivities(activityDTOSet);
+
+        return clubDTO;
     }
 
 }

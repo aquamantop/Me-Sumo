@@ -2,7 +2,9 @@ package com.mesumo.msclubs.models.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.dto.NeighborhoodDTO;
+import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.repository.INeighborhood;
 import com.mesumo.msclubs.models.service.INeighborhoodService;
@@ -62,5 +64,36 @@ public class NeighborhoodService implements INeighborhoodService {
         List<Neighborhood> neighborhoods = neighborhoodRepository.findAll();
 
         return new HashSet<>(neighborhoods);
+    }
+
+    @Override
+    public NeighborhoodDTO findByIdDTO(Long id) throws ResourceNotFoundException {
+        Optional<Neighborhood> neighborhood = neighborhoodRepository.findById(id);
+
+        if (neighborhood.isEmpty()){
+            throw new ResourceNotFoundException("NeighborhoodDTO not found");
+        }
+
+        return neighborhoodToDTO(neighborhood.get());
+    }
+
+    @Override
+    public Set<NeighborhoodDTO> findAllDTO() {
+        List<Neighborhood> neighborhoods = neighborhoodRepository.findAll();
+        Set<NeighborhoodDTO> neighborhoodDTOSet = new HashSet<>();
+
+        for (Neighborhood neighborhood : neighborhoods) {
+            NeighborhoodDTO dto = neighborhoodToDTO(neighborhood);
+            neighborhoodDTOSet.add(dto);
+        }
+
+        return neighborhoodDTOSet;
+    }
+
+    static NeighborhoodDTO neighborhoodToDTO(Neighborhood neighborhood) {
+        NeighborhoodDTO dto = new NeighborhoodDTO();
+        dto.setName(neighborhood.getName());
+        return dto;
+
     }
 }

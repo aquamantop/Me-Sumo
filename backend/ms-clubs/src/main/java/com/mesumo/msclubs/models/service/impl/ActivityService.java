@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.repository.IActivityRepository;
 import com.mesumo.msclubs.models.service.IActivityService;
@@ -49,4 +50,39 @@ public class ActivityService implements IActivityService {
 
         return new HashSet<>(activities);
     }
+
+    @Override
+    public ActivityDTO findByIdDTO(Long id) throws ResourceNotFoundException {
+        Optional<Activity> activity = activityRepository.findById(id);
+
+        if (activity.isEmpty()){
+            throw new ResourceNotFoundException("ActivityDTO not found");
+        }
+
+        return activityToDTO(activity.get());
+    }
+
+    @Override
+    public Set<ActivityDTO> findAllDTO() {
+        List<Activity> activities = activityRepository.findAll();
+        Set<ActivityDTO> activityDTOSet = new HashSet<>();
+
+        for (Activity activity : activities) {
+            ActivityDTO dto = activityToDTO(activity);
+            activityDTOSet.add(dto);
+        }
+
+        return activityDTOSet;
+    }
+
+    public static ActivityDTO activityToDTO(Activity activity){
+        ActivityDTO dto = new ActivityDTO();
+        dto.setName(activity.getName());
+        dto.setType(activity.getType());
+//        dto.setClubs(activity.getClubs());
+        dto.setCourts(activity.getCourts());
+
+        return dto;
+    }
+
 }

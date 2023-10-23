@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.service.impl.ActivityService;
 import org.springframework.http.HttpStatus;
@@ -43,4 +44,33 @@ public class ActivityController {
         }
         return response;
     }
+
+    @GetMapping("/DTO/{id}")
+    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+        ResponseEntity response = null;
+
+        try{
+            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
+
+        } catch (ResourceNotFoundException e){
+            e.printStackTrace();
+            response = new ResponseEntity("ActivityDTO not found with id: " + id, HttpStatus.NOT_FOUND);
+        }
+
+        return response;
+    }
+
+    @GetMapping("/listDTO")
+    public ResponseEntity getAllDTO() {
+        ResponseEntity response = null;
+        Set<ActivityDTO> list = service.findAllDTO();
+
+        if(list != null){
+            response = new ResponseEntity(list, HttpStatus.OK);
+        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+
+        return response;
+    }
+
+
 }

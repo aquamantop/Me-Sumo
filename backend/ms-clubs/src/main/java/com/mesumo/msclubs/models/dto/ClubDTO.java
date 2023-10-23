@@ -13,8 +13,8 @@ import java.util.Set;
 public class ClubDTO {
 
     private String name;
-    private Neighborhood neighborhood;
-    private Set<Activity> activities;
+    private NeighborhoodDTO neighborhood;
+    private Set<ActivityDTO> activities;
 
     public ClubDTO() {
     }
