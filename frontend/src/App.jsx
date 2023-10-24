@@ -18,8 +18,11 @@ function App() {
       },
       info: {
         main: "#FCBA7D"
-      }
+      },
+      background: {
+        paper: "#262526",
 
+      }
     }
   })
 
