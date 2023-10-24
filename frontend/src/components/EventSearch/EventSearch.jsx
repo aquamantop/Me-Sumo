@@ -7,14 +7,14 @@ import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOu
 function EventSearch() {
   return (
     <>
-    <Grid item xs={3}>
+  
       <Box
       sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
       }}>
-          <Typography variant='h5' component='h5' color='secondary'>
+          <Typography variant='h5' component='h5' color='primary.main'>
               Buscar Eventos
           </Typography>
           <TextField
@@ -36,7 +36,10 @@ function EventSearch() {
           <TextField
               id="outlined-basic"
               variant="outlined"
-              sx={{ mt: 2 }}
+              sx={{ 
+                mt: 2,
+              }}
+              
               label="Elegir Club"
               fullWidth 
               InputProps={{
@@ -51,14 +54,14 @@ function EventSearch() {
           />
       <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         sx={{ mt: 2 }}
         fullWidth
       >
         Botón
       </Button>
       </Box>
-    </Grid>
+
     </>
   )
 }
