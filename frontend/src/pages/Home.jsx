@@ -1,14 +1,19 @@
 import React from 'react'
-const id = [
-    '1',
-    '2',
-    '3'
-]
+import EventSearch from '../components/EventSearch/EventSearch'
+import EventShowcase from '../components/eventShowcase/EventShowcase'
+import { Grid } from '@mui/material'
+
 function Home() {
   return (
     <div>Home
         {/*Header, Body, Footer*/}
-        <Link to="/club">Ir a Club</Link>
+        <Grid container>
+            <EventSearch/>
+            <EventShowcase/>
+        </Grid>
+
+
+        
     </div>
   )
 }
