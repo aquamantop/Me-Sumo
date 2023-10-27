@@ -4,7 +4,8 @@ import './App.css'
 import Home from './pages/Home'
 import Club from './pages/Club'
 import { ThemeProvider, createTheme } from '@mui/material'
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
 
@@ -29,10 +30,12 @@ function App() {
   return (
     <>
     <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/club/:id' element={<Club/>}/>
       </Routes>
+      </LocalizationProvider>
     </ThemeProvider>
     </>
   )
