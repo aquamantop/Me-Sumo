@@ -45,8 +45,10 @@ public class MsClubsApplication {
 
 			Activity activity1 = new Activity();
 			activity1.setName("Futbol");
+			activity1.setType("5");
 			Activity activity2 = new Activity();
 			activity2.setName("Tenis");
+			activity2.setType("2");
 
 			Neighborhood neighborhood1 = new Neighborhood();
 			neighborhood1.setName("Monserrat");
@@ -77,6 +79,7 @@ public class MsClubsApplication {
 
 		};
 	}
+
 }
 
 
