@@ -3,11 +3,6 @@ import {
     Container,
     Grid,
     Typography,
-    Card,
-    CardContent,
-    CardMedia,
-    CardHeader,
-    Button,
     Paper
 } from "@mui/material";
 import EventCard from "../eventCard/EventCard";
@@ -21,6 +16,8 @@ function EventShowcase({keyword}) {
                         border: "2px solid",
                         borderColor: "secondary.main",
                         borderRadius: "10px",
+                        backgroundColor: 'linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)',
+                        background: 'linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)'
                         
                     }}
                 >
@@ -42,7 +39,7 @@ function EventShowcase({keyword}) {
                     </Box>
                     <Grid container >
                         {Array.from({ length: 3 }).map((_, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index} sx={{ padding: 2 }}>
+                            <Grid item xs={12} sm={6} md={4} key={index} sx={{ p: 2 }}>
                                 <EventCard/>
                             </Grid>
                         ))}
