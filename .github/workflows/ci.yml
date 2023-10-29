@@ -1,0 +1,46 @@
+name: Build Frontend and Backend
+
+on:
+  push:
+    branches: 
+      - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
+      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
+  pull_request:
+    branches: 
+      - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
+      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout código fuente
+      uses: actions/checkout@v2
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Instalar dependencias
+      run: npm install
+      working-directory: frontend
+
+    - name: Construir la aplicación React
+      run: npm run build
+      working-directory: frontend
+
+  build-backend:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs/pom.xml
+    - name: Execute jar
+      run: sudo kill -9 `sudo lsof -t -i:8080` & sudo java -jar /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs/target/ms-clubs.jar &
