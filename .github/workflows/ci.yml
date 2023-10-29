@@ -2,9 +2,13 @@ name: Build Frontend and Backend
 
 on:
   push:
-    paths:
-      - 'frontend/**' # Ejecutar cuando haya cambios en la carpeta "frontend"
-      - 'backend/**'  # Ejecutar cuando haya cambios en la carpeta "backend"
+    branches: 
+      - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
+      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
+  pull_request:
+    branches: 
+      - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
+      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
 
 jobs:
   build-frontend:
