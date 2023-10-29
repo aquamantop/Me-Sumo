@@ -18,17 +18,18 @@ import java.util.Set;
 @SpringBootApplication
 public class MsClubsApplication {
 
-	private final IClubRepository clubRepository;
-	private final INeighborhood neighborhoodRepository;
-	private final IAmenityRepository amenityRepository;
-	private final IActivityRepository activityRepository;
+	// TESTEANDO GITHUB ACTIONS
+//	private final IClubRepository clubRepository;
+//	private final INeighborhood neighborhoodRepository;
+//	private final IAmenityRepository amenityRepository;
+//	private final IActivityRepository activityRepository;
 
-	public MsClubsApplication(IClubRepository clubRepository, INeighborhood neighborhoodRepository, IAmenityRepository amenityRepository, IActivityRepository activityRepository) {
-		this.clubRepository = clubRepository;
-		this.neighborhoodRepository = neighborhoodRepository;
-		this.amenityRepository = amenityRepository;
-		this.activityRepository = activityRepository;
-	}
+//	public MsClubsApplication(IClubRepository clubRepository, INeighborhood neighborhoodRepository, IAmenityRepository amenityRepository, IActivityRepository activityRepository) {
+//		this.clubRepository = clubRepository;
+//		this.neighborhoodRepository = neighborhoodRepository;
+//		this.amenityRepository = amenityRepository;
+//		this.activityRepository = activityRepository;
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MsClubsApplication.class, args);
