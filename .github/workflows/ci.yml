@@ -2,13 +2,9 @@ name: Build Frontend and Backend
 
 on:
   push:
-    branches: 
-      # - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
-      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
+    branches: [ "frontend", "backend", "main" ]
   pull_request:
-    branches: 
-      # - frontend # Ejecutar cuando haya cambios en la carpeta "frontend"
-      - backend # Ejecutar cuando haya cambios en la carpeta "backend"
+    branches: [ "frontend", "backend", "main" ]
 
 jobs:
   # build-frontend:
@@ -31,7 +27,7 @@ jobs:
   #     working-directory: frontend
 
   build-backend:
-    runs-on: ip-172-31-23-219
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -40,13 +36,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+        
     - name: Build with Maven
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms_clubs
         mvn -B package --file /pom.xml
-    - name: Execute jar
+      working-directory: backend
+        
+    - name: Build app
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms_clubs
         sudo systemctl stop club.service
         cp target/ms_clubs.jar /home/ubuntu/me_sumo/club
         sudo systemctl start club.service
+      working-directory: backend
