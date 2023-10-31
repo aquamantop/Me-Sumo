@@ -6,15 +6,32 @@ import {
     TextField,
     InputAdornment,
     IconButton,
-    Autocomplete
+    Autocomplete,
+    Paper
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
 import CategoryIcon from '@mui/icons-material/Category';
-import {styled } from "@mui/material/styles";
-import { DatePicker, DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { styled } from "@mui/material/styles";
+import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
 
-const opciones = ['Futbol 5', 'Futbol 7', 'Futbol 11', 'Tenis', 'Basquet'];
+const activities = ['Futbol'];
+const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
+  ];
+  const barrios = [
+    "Palermo",
+    "Recoleta",
+    "San Telmo",
+    "La Boca",
+    "Belgrano",
+    "Villa Crespo",
+    "Caballito",
+    "Boedo",
+    "Colegiales",
+    "Núñez"
+  ];
+  
+  
 const CssIconButton = styled(IconButton)({
     color: "white",
     // '&.Mui-focused': {
@@ -29,10 +46,6 @@ const CssIconButton = styled(IconButton)({
 });
 
 const CssAutocomplete = styled(Autocomplete)({
-  // '& .MuiAutocomplete-option':{
-  //   color:'white',
-  //   backgroundColor: 'white'
-  // },
   "& .MuiAutocomplete-clearIndicator":{
     color:'white',
     '&:hover': {
@@ -45,6 +58,14 @@ const CssAutocomplete = styled(Autocomplete)({
       backgroundColor: 'rgb(255,255,255,0.1)', // Cambia 'your-hover-color' al color que desees al hacer hover
     },
   },
+  '& .MuiPaper-root':{
+      '& .MuiAutocomplete-listbox': {
+        '& .MuiAutocomplete-option': {
+          backgroundColor: 'red !important',
+          color: 'white !important'
+        }
+      }
+  }
 })
 
 const CssDesktopDatePicker = styled (DesktopDatePicker)({
@@ -131,8 +152,15 @@ const CssTextField = styled(TextField)({
         },
     },
 });
+
+const CustomPaper = styled(Paper)({
+    '& .MuiPaper-root':{
+        backgroundColor: 'red',
+
+    }
+})
 function EventSearch() {
-  
+    
     return (
         <>
             <Box
@@ -145,12 +173,14 @@ function EventSearch() {
                 <Typography variant="h5" component="h5" color="primary.main">
                     Buscar Eventos
                 </Typography>
+                
                 <CssAutocomplete
                 id="activity"
                 disablePortal
                 fullWidth
+                PaperComponent={CustomPaper}
                 sx={{'&button':{color:"white"}}}
-                options={opciones}
+                options={activities}
                 renderInput={(params)=>
                    <CssTextField
                    {...params}
@@ -178,7 +208,7 @@ function EventSearch() {
                 disablePortal
                 fullWidth
                 sx={{'&button':{color:"white"}}}
-                options={opciones}
+                options={categories}
                 renderInput={(params)=>
                    <CssTextField
                    {...params}
@@ -206,7 +236,7 @@ function EventSearch() {
                 disablePortal
                 fullWidth
                 sx={{'&button':{color:"white"}}}
-                options={opciones}
+                options={barrios}
                 renderInput={(params)=>
                    <CssTextField
                    {...params}
