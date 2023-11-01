@@ -2,12 +2,16 @@ package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.ActivityDTO;
+import com.mesumo.msclubs.models.dto.BookingDTO;
 import com.mesumo.msclubs.models.dto.ClubDTO;
 import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.entities.Club;
 import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.repository.IClubRepository;
+import com.mesumo.msclubs.models.repository.feign.BookingsFeignRepository;
 import com.mesumo.msclubs.models.service.IClubService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +22,12 @@ import java.util.Set;
 public class ClubService implements IClubService {
 
     private final IClubRepository repository;
+    private final BookingsFeignRepository bookingsFeignRepository;
 
-    public ClubService(IClubRepository repository) {
+
+    public ClubService(IClubRepository repository, BookingsFeignRepository bookingsFeignRepository) {
         this.repository = repository;
+        this.bookingsFeignRepository = bookingsFeignRepository;
     }
 
     @Override
@@ -111,6 +118,14 @@ public class ClubService implements IClubService {
         }
 
         return clubDTOSet;
+    }
+
+    @Override
+    public ClubDTO getClubWithAllBookings(Long clubId) {
+        ClubDTO clubDTO = clubToDTO(repository.findById(clubId).get());
+        clubDTO.setBookings((List<BookingDTO>) bookingsFeignRepository.getAll(String.valueOf(clubId)));
+
+        return clubDTO;
     }
 
     public ClubDTO clubToDTO (Club club){

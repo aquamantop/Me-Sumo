@@ -5,6 +5,8 @@ import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.entities.Neighborhood;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,6 +17,7 @@ public class ClubDTO {
     private String name;
     private NeighborhoodDTO neighborhood;
     private Set<ActivityDTO> activities;
+    private List<BookingDTO> bookings;
 
     public ClubDTO() {
     }

@@ -1,12 +1,14 @@
 package com.mesumo.msclubs.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mesumo.msclubs.models.dto.BookingDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,4 +40,5 @@ public class Club {
             joinColumns = @JoinColumn(name = "club_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id"))
     private Set<Amenity> amenities;
+
 }
