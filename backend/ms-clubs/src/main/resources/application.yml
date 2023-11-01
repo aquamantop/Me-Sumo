@@ -41,8 +41,8 @@ springdoc:
 
 eureka:
   instance:
-    hostname: localhost
-#    hostname: ec2-54-234-215-181.compute-1.amazonaws.com
+#    hostname: localhost
+    hostname: ec2-54-234-215-181.compute-1.amazonaws.com
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true
