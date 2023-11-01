@@ -30,8 +30,7 @@ public class User {
     @JoinColumn(name = "neighborhood_id")
     private Neighborhood neighborhood;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Activity> activities;
 
 }
