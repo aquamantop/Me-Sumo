@@ -110,6 +110,106 @@
 					]
 				},
 				{
+					"name": "user",
+					"item": [
+						{
+							"name": "get-all-users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/user/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-user-by-email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/user/search-email?email=test_mail@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"search-email"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "test_mail@gmail.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-user-by-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/user/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post-user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"role\":\"USER\",\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test-user\",\r\n    \"lastName\":\"test-user\",\r\n    \"email\":\"test_user4@gmail.com\",\r\n    \"password\":\"test\",\r\n    \"neigborhood\": {\r\n        \"neighborhood_id\":2\r\n    },\r\n    \"neighborhood\": {\r\n        \"neighborhoodId\": 2 // Replace with a valid neighborhood ID\r\n    },\r\n    \"activities\": [\r\n        {\r\n            \"name\":\"Voley\"   \r\n        }\r\n    ]\r\n}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/user/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"user",
+										"add"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "neighborhood",
 					"item": [
 						{
