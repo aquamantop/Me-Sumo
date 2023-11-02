@@ -65,8 +65,8 @@ public class ActivityController {
 
         if(activity != null){
             response = new ResponseEntity(activityService.create(activity), HttpStatus.CREATED);
-        } else response = new ResponseEntity("Complete the fields", HttpStatus.BAD_REQUEST);
-
+        }
+        
         return response;
     }
 
