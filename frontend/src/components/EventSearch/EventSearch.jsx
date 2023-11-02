@@ -158,6 +158,9 @@ const CustomPaper = styled(Paper)({
         color: 'white',//Color de la fuente
         '&:hover': {
             backgroundColor: "rgb(255,255,255, 0.1)",
+        },
+        '&&[aria-selected="true"].Mui-focused':{
+            backgroundColor: "green"
         }
       },
     '& .MuiAutocomplete-listbox':{

@@ -1,8 +1,10 @@
 import { Box, Link, Typography } from '@mui/material'
-
+import Header from '../components/header/Header'
+import Footer from '../components/footer/Footer'
 export default function LoginSuccess() {
   return (
     <>
+    <Header/>
       <Box
         display='flex'
         flexDirection='column'
@@ -11,7 +13,7 @@ export default function LoginSuccess() {
         backgroundColor='background.paper'
         align='center'
         flex={1}
-        sx={{ height: '100vh' }}
+        className='content'
       >
         <Typography
           fontSize={36}
@@ -24,7 +26,7 @@ export default function LoginSuccess() {
           canchas.
         </Typography>
         <Link
-          href='#'
+          href='/'
           fontFamily={'sans-serif'}
           underline='none'
           fontSize={36}
@@ -38,6 +40,7 @@ export default function LoginSuccess() {
           ¡Reservá ahora!
         </Link>
       </Box>
+      <Footer/>
     </>
   )
 }

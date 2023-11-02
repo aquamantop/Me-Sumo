@@ -12,10 +12,10 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#C3FD74',
+        main: '#C3FD74', //verde
       },
       secondary: {
-        main: '#62E8FF',
+        main: '#62E8FF', //azul
       },
       info: {
         main: '#FCBA7D',

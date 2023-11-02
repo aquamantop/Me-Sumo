@@ -23,7 +23,6 @@ function EventShowcase({keyword}) {
             <Container sx={{mb:2}}>
                 <Paper
                     sx={PaperSX}
-                    
                 >
                     <Box
                         sx={{
@@ -34,7 +33,6 @@ function EventShowcase({keyword}) {
                             position: 'relative',
                             zIndex: 1,
                             p: 2,
-                            
                         }}
                     >
                         <Typography variant="h5" color="primary.main">

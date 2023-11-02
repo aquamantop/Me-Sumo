@@ -8,7 +8,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import CustomInput from '../components/customInput/CustomInput'
 import { useNavigate } from 'react-router-dom'
-
+import Footer from '../components/footer/Footer'
+import Header from '../components/header/Header'
 export default function Login() {
   const navigate = useNavigate()
 
@@ -44,10 +45,11 @@ export default function Login() {
 
   return (
     <>
+    <Header/>
       <Box
         backgroundColor='background.paper'
         align='center'
-        sx={{ height: '100vh' }}
+        className='content'
       >
         <Typography
           fontSize={50}
@@ -154,6 +156,7 @@ export default function Login() {
           </Link>
         </Typography>
       </Box>
+      <Footer/>
     </>
   )
 }
