@@ -185,7 +185,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"role\":\"USER\",\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test-user\",\r\n    \"lastName\":\"test-user\",\r\n    \"email\":\"test_user4@gmail.com\",\r\n    \"password\":\"test\",\r\n    \"neigborhood\": {\r\n        \"neighborhood_id\":2\r\n    },\r\n    \"neighborhood\": {\r\n        \"neighborhoodId\": 2 // Replace with a valid neighborhood ID\r\n    },\r\n    \"activities\": [\r\n        {\r\n            \"name\":\"Voley\"   \r\n        }\r\n    ]\r\n}\r\n}",
+									"raw": "{\r\n    \"role\":\"USER\",\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test-user\",\r\n    \"lastName\":\"test-user\",\r\n    \"email\":\"test_user3@gmail.com\",\r\n    \"password\":\"test\",\r\n    \"neigborhood\": {\r\n        \"neighborhood_id\":2\r\n    },\r\n    \"neighborhood\": {\r\n        \"neighborhoodId\": 2\r\n    },\r\n    \"activities\": [\r\n        {\r\n            \"activity_id\":44   \r\n        }\r\n    ]\r\n}\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
