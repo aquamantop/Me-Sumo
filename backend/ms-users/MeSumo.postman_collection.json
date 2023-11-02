@@ -85,7 +85,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\":\"lele\"\r\n}",
+									"raw": "{\r\n    \"name\":\"Futbol\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -185,7 +185,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"role\":\"USER\",\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test-user\",\r\n    \"lastName\":\"test-user\",\r\n    \"email\":\"test_user3@gmail.com\",\r\n    \"password\":\"test\",\r\n    \"neigborhood\": {\r\n        \"neighborhood_id\":2\r\n    },\r\n    \"neighborhood\": {\r\n        \"neighborhoodId\": 2\r\n    },\r\n    \"activities\": [\r\n        {\r\n            \"activity_id\":44   \r\n        }\r\n    ]\r\n}\r\n}",
+									"raw": "{\r\n    \"role\":\"USER\",\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test-user\",\r\n    \"lastName\":\"test-user\",\r\n    \"email\":\"test_user12@gmail.com\",\r\n    \"password\":\"test\",\r\n    \"neighborhood\": {\r\n        \"neighborhoodId\": 2\r\n    },\r\n    \"activity\": [\r\n        {\r\n            \"activityId\":53   \r\n        }\r\n    ]\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,4 +20,9 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long activityId;
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "activity")
+    private List<User> users;
+
 }

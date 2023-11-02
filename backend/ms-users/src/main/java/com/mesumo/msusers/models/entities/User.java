@@ -30,7 +30,11 @@ public class User {
     @JoinColumn(name = "neighborhood_id")
     private Neighborhood neighborhood;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Activity> activities;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_activity",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "activity_id")})
+    private Set<Activity> activity;
+
 
 }
