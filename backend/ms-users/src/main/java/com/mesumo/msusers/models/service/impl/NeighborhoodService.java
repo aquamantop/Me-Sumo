@@ -2,7 +2,6 @@ package com.mesumo.msusers.models.service.impl;
 
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
-import com.mesumo.msusers.models.entities.Activity;
 import com.mesumo.msusers.models.entities.Neighborhood;
 import com.mesumo.msusers.models.repository.INeighborhoodRepository;
 import com.mesumo.msusers.models.service.INeighborhoodService;

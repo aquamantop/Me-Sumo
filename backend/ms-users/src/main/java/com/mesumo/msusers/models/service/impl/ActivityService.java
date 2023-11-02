@@ -5,7 +5,6 @@ import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.entities.Activity;
 import com.mesumo.msusers.models.repository.IActivityRepository;
 import com.mesumo.msusers.models.service.IActivityService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
