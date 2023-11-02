@@ -7,102 +7,207 @@
 	},
 	"item": [
 		{
-			"name": "User",
+			"name": "ms-user",
 			"item": [
 				{
-					"name": "get-all-activities",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/activity/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"activity",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get-activity-by-name",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/activity/search-name?name=Voley",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"activity",
-								"search-name"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Voley"
+					"name": "acitivity",
+					"item": [
+						{
+							"name": "get-all-activities",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/activity/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"activity",
+										""
+									]
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get-activity-by-id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/activity/44",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"activity",
-								"44"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "post-activity",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"lele\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "http://localhost:8080/activity/add",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"activity",
-								"add"
-							]
+						{
+							"name": "get-activity-by-name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/activity/search-name?name=Voley",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"activity",
+										"search-name"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Voley"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-activity-by-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/activity/44",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"activity",
+										"44"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post-activity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"lele\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/activity/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"activity",
+										"add"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "neighborhood",
+					"item": [
+						{
+							"name": "get-all-neighborhoods",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/neighborhood/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"neighborhood",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-neighborhood-by-name",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/neighborhood/search-name?name=Avellaneda",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"neighborhood",
+										"search-name"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Avellaneda"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-neighborhood-by-id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/neighborhood/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"neighborhood",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post-neighborhood",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Avellaneda\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/neighborhood/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"neighborhood",
+										"add"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
