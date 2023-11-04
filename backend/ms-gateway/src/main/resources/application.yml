@@ -13,7 +13,7 @@ spring:
         - id: ms-clubs
           uri: lb://ms-clubs
           predicates:
-            - Path=/club/**
+            - Path=/club/**, /neighborhood/**, /activity/**, /ping/**
 
 info:
   app:
@@ -22,9 +22,9 @@ info:
 eureka:
   instance:
 #    hostname: localhost
-    hostname: ec2-54-234-215-181.compute-1.amazonaws.com
+    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
   client:
-    registerWithEureka: true
+    registerWithEureka: false
     fetchRegistry: true
     serviceURL:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/

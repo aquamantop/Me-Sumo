@@ -21,16 +21,10 @@ public class ClubController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
+    public ResponseEntity getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findById(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findById(id), HttpStatus.OK);
 
         return response;
     }
@@ -59,47 +53,31 @@ public class ClubController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity update (@RequestBody Club club){
+    public ResponseEntity update (@RequestBody Club club) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
         if(club.getId() != null){
-            try {
-                response = new ResponseEntity(service.update(club), HttpStatus.OK);
-
-            } catch (ResourceNotFoundException e){
-                e.printStackTrace();
-            }
+            response = new ResponseEntity(service.update(club), HttpStatus.OK);
         } else response = new ResponseEntity("Complete id field", HttpStatus.BAD_REQUEST);
 
         return response;
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete (@PathVariable Long id) {
+    public ResponseEntity delete (@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try {
-            service.deleteById(id);
-            response = new ResponseEntity("Club deleted with id: " + id, HttpStatus.OK);
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.BAD_REQUEST);
-        }
+        service.deleteById(id);
+        response = new ResponseEntity("Club deleted with id: " + id, HttpStatus.OK);
 
         return response;
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }

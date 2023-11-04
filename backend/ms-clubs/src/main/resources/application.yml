@@ -27,10 +27,10 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
-    jackson:
-      serialization:
-        write_dates_as_timestamps: false
-      date-format: yyyy-MM-dd
+  jackson:
+     serialization:
+       write_dates_as_timestamps: false
+     date-format: yyyy-MM-dd
 
 springdoc:
   api-docs:
@@ -42,7 +42,7 @@ springdoc:
 eureka:
   instance:
 #    hostname: localhost
-    hostname: ec2-54-234-215-181.compute-1.amazonaws.com
+    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true

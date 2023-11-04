@@ -52,10 +52,9 @@ public class ClubService implements IClubService {
         if (club.isEmpty()){
             throw new ResourceNotFoundException("Club not found");
         }
-        else {
-            repository.deleteById(id);
-            System.out.println("Club delete with id: " + id);
-        }
+        repository.deleteById(id);
+        System.out.println("Club delete with id: " + id);
+
     }
 
     @Override
