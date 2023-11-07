@@ -1,2 +1,107 @@
-package com.mesumo.msbookings.models.service.impl;public class BookingService {
+package com.mesumo.msbookings.models.service.impl;
+
+import com.mesumo.msbookings.exceptions.ResourceNotFoundException;
+import com.mesumo.msbookings.models.entities.Booking;
+import com.mesumo.msbookings.models.repository.IBookingRepository;
+import com.mesumo.msbookings.models.service.IBookingService;
+import com.mesumo.msbookings.searchs.BookingSpecification;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public class BookingService implements IBookingService {
+
+    @Autowired
+    IBookingRepository bookingRepository;
+    @Override
+    public Booking findById(Long id) throws ResourceNotFoundException {
+        Optional<Booking> booking = bookingRepository.findById(id);
+        if(booking.isEmpty()){
+            throw new ResourceNotFoundException("Booking not found");
+        }
+        return booking.get();
+    }
+
+    @Override
+    public Booking create(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    @Override
+    public void deleteById(Long id) throws ResourceNotFoundException {
+        Optional<Booking> booking = bookingRepository.findById(id);
+        if(booking.isEmpty()){
+            throw new ResourceNotFoundException("Booking not found");
+        }else {
+            bookingRepository.deleteById(id);
+            System.out.println("Booking delete with id: " + id);
+        }
+
+    }
+
+    @Override
+    public Booking update(Booking booking) throws ResourceNotFoundException {
+        Optional<Booking> newBooking = bookingRepository.findById(booking.getId());
+        if (newBooking.isPresent()){
+
+            if (booking.getName() != null){
+                newBooking.get().setName(booking.getName());
+            }
+            if (booking.getSlot() != null){
+                newBooking.get().setSlot(booking.getSlot());
+            }
+            if (booking.getCreator() != null){
+                newBooking.get().setCreator(booking.getCreator());
+            }
+            if (booking.getDate() != null){
+                newBooking.get().setDate(booking.getDate());
+            }
+            if (booking.getStartTime() != null){
+                newBooking.get().setStartTime(booking.getStartTime());
+            }
+            if (booking.getEndTime() != null){
+                newBooking.get().setEndTime(booking.getEndTime());
+            }
+            if (booking.getParticipants() != 0){
+                newBooking.get().setParticipants(booking.getParticipants());
+            }
+            if (booking.getMessage() != null){
+                newBooking.get().setMessage(booking.getMessage());
+            }
+            if (!booking.isApproved()){
+                newBooking.get().setApproved(true);
+            }
+            if (booking.getGroup() != null){
+                newBooking.get().setGroup(booking.getGroup());
+            }
+
+            bookingRepository.save(newBooking.get());
+        }else System.err.println("Booking not found with id: " + booking.getId());
+
+        return newBooking.get();
+    }
+
+    @Override
+    public Set<Booking> findAll() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return new HashSet<>(bookings);
+    }
+
+    @Override
+    public List<Booking> filterBooking(Specification spec) {
+        List<Booking> listBookings = bookingRepository.findAll((Sort) spec);
+        Collections.shuffle(listBookings);
+        return listBookings;
+    }
+
+    public List<Booking> filterByDate(Date startDate, Date endDate){
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsByDate(startDate, endDate));
+        return filterBooking(spec);
+    }
+
 }

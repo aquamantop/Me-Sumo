@@ -3,7 +3,8 @@ package com.mesumo.msclubs.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.sql.Time;
+import java.util.Set;
 
 @Entity
 @Table
@@ -21,7 +22,8 @@ public class Slot {
     @JoinColumn (name = "court", nullable = false, referencedColumnName = "id")
     private Court court;
     private int capacity;
-    private LocalDate date;
-    private boolean available;
+    private Set<Day> days;
+    private Time startTime;
+    private Time endTime;
 
 }

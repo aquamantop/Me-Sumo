@@ -1,4 +1,4 @@
-package com.mesumo.msclubs.exceptions;
+package com.mesumo.msbookings.exceptions;
 
 public class ResourceNotFoundException extends Exception{
 

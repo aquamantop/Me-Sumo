@@ -1,4 +1,4 @@
-package com.mesumo.msclubs.exceptions;
+package com.mesumo.msbookings.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
