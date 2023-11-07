@@ -51,11 +51,11 @@ public class BookingService implements IBookingService {
             if (booking.getName() != null){
                 newBooking.get().setName(booking.getName());
             }
-            if (booking.getSlot() != null){
-                newBooking.get().setSlot(booking.getSlot());
+            if (booking.getSlotId() != null){
+                newBooking.get().setSlotId(booking.getSlotId());
             }
-            if (booking.getCreator() != null){
-                newBooking.get().setCreator(booking.getCreator());
+            if (booking.getCreatorId() != null){
+                newBooking.get().setCreatorId(booking.getCreatorId());
             }
             if (booking.getDate() != null){
                 newBooking.get().setDate(booking.getDate());
@@ -75,9 +75,9 @@ public class BookingService implements IBookingService {
             if (!booking.isApproved()){
                 newBooking.get().setApproved(true);
             }
-            if (booking.getGroup() != null){
+            /*if (booking.getGroup() != null){
                 newBooking.get().setGroup(booking.getGroup());
-            }
+            }*/
 
             bookingRepository.save(newBooking.get());
         }else System.err.println("Booking not found with id: " + booking.getId());

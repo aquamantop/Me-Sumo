@@ -8,11 +8,13 @@ import com.mesumo.msbookings.models.entities.Day;
 import com.mesumo.msbookings.models.repository.feign.IClubFeignClient;
 import com.mesumo.msbookings.models.service.IAvailabilityService;
 import com.mesumo.msbookings.models.service.IBookingService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.sql.Date;
 import java.util.*;
 
+@Service
 public class AvailabilityService implements IAvailabilityService {
 
     IClubFeignClient clubFeignClient;
@@ -56,9 +58,10 @@ public class AvailabilityService implements IAvailabilityService {
         List<Booking> bookings = bookingService.filterByDate(Date.valueOf(monthStart), Date.valueOf(monthEnd));
 
         for (Booking booking : bookings) {
-            Date bookingDate = (Date) booking.getDate();
-            if (availabilityCalendar.containsKey(bookingDate.toLocalDate())){
-                availabilityCalendar.get(bookingDate.toLocalDate()).remove(booking.getSlot());
+            LocalDate bookingDate = booking.getDate().toLocalDate();
+            if (availabilityCalendar.containsKey(bookingDate)) {
+                List<SlotDTO> calendarSlots = availabilityCalendar.get(bookingDate);
+                calendarSlots.removeIf(slot -> slot.getStartTime().equals(booking.getStartTime()) && slot.getEndTime().equals(booking.getEndTime()));
             }
         }
 

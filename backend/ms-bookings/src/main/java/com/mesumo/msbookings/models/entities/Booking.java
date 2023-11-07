@@ -4,26 +4,28 @@ import com.mesumo.msbookings.models.dto.SlotDTO;
 import com.mesumo.msbookings.models.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.relational.core.mapping.Table;
+
 
 import java.sql.Time;
 import java.sql.Date;
 import java.util.Set;
 
 @Entity
-@Table
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Booking {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    private SlotDTO slot;
+    private Long slotId;
 
-    private UserDTO creator;
+    private Long creatorId;
 
     private Date date;
 
@@ -37,6 +39,6 @@ public class Booking {
 
     private boolean approved;
 
-    Set<UserDTO> group;
+    //Set<UserDTO> group;
 
 }
