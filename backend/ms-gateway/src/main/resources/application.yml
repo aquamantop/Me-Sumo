@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: ${PORT:8090}
 
 spring:
   application:
@@ -11,7 +11,7 @@ spring:
           enabled: true
       routes:
         - id: ms-clubs
-          uri: lb://ms-clubs
+          uri: http://ec2-54-166-158-177.compute-1.amazonaws.com:8080
           predicates:
             - Path=/club/**, /neighborhood/**, /activity/**, /ping/**
 
@@ -24,7 +24,7 @@ eureka:
 #    hostname: localhost
     hostname: ec2-50-17-115-59.compute-1.amazonaws.com
   client:
-    registerWithEureka: false
+    registerWithEureka: true
     fetchRegistry: true
     serviceURL:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
@@ -36,4 +36,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: gateway
+        include: "*"
