@@ -9,6 +9,7 @@ import com.mesumo.msusers.models.service.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,6 +19,8 @@ public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository ;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -39,6 +42,7 @@ public class UserService implements IUserService {
     public User create(User user) throws ResourceAlreadyExistsException {
         Optional<User> userExists = userRepository.findByEmail(user.getEmail());
         if(userExists.isEmpty()) {
+            user.setPassword(passwordEncoder.encode( user.getPassword()));
             return userRepository.save(user);
         }
         throw new ResourceAlreadyExistsException("User already exists");
