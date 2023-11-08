@@ -45,12 +45,23 @@ public class NeighborhoodService implements INeighborhoodService {
 
     @Override
     public void deleteById(Long id) throws ResourceNotFoundException {
+        Optional<Neighborhood> neighborhood = neighborhoodRepository.findById(id);
+
+        if (neighborhood.isEmpty()){
+            throw new ResourceNotFoundException("Neighborhood not found");
+        }
+        neighborhoodRepository.deleteById(id);
+        System.out.println("Neighborhood deleted with id: " + id);
 
     }
 
     @Override
-    public Neighborhood update(Neighborhood activity) throws ResourceNotFoundException {
-        return null;
+    public Neighborhood update(Neighborhood neighborhood) throws ResourceNotFoundException {
+        Neighborhood neighborhoodExists = neighborhoodRepository.findById(neighborhood.getNeighborhoodId())
+                .orElseThrow(() -> new ResourceNotFoundException("Neighborhood id: " + neighborhood.getNeighborhoodId() + "not found"));
+
+        neighborhoodExists.setName(neighborhood.getName());
+        return neighborhoodRepository.save(neighborhoodExists);
     }
 
     @Override

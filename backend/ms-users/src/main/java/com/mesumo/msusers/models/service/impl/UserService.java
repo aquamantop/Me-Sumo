@@ -44,12 +44,27 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteById(Long id) throws ResourceNotFoundException {
+        Optional<User> user = userRepository.findById(id);
 
+        if (user.isEmpty()){
+            throw new ResourceNotFoundException("User not found");
+        }
+        userRepository.deleteById(id);
+        System.out.println("User deleted with id: " + id);
     }
 
     @Override
     public User update(User user) throws ResourceNotFoundException {
-        return null;
+
+        User userExists = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
+
+        userExists.setUserName(user.getUserName());
+        userExists.setFirstName(user.getFirstName());
+        userExists.setLastName(user.getLastName());
+        userExists.setEmail(user.getEmail());
+
+        return userRepository.save(userExists);
     }
 
     @Override

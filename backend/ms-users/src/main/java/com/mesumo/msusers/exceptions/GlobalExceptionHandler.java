@@ -21,6 +21,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<?> alredyExists(Exception exception, WebRequest req){
-        return new ResponseEntity<>("Error "+ exception.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>("Error "+ exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 }

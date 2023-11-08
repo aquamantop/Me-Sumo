@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "users", uniqueConstraints = @UniqueConstraint( columnNames = "email") )
 public class User {
 
     @Id
@@ -23,6 +24,7 @@ public class User {
     private String userName;
     private String firstName;
     private String lastName;
+    private String phoneNumber;
     private String email;
     private String password;
 

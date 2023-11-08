@@ -45,12 +45,23 @@ public class ActivityService implements IActivityService {
 
     @Override
     public void deleteById(Long id) throws ResourceNotFoundException {
+        Optional<Activity> activity = activityRepository.findById(id);
 
+        if (activity.isEmpty()){
+            throw new ResourceNotFoundException("Activity not found");
+        }
+        activityRepository.deleteById(id);
+        System.out.println("Activity deleted with id: " + id);
     }
 
     @Override
     public Activity update(Activity activity) throws ResourceNotFoundException {
-        return null;
+        System.out.println(activity.getActivityId());
+        Activity activityExists = activityRepository.findById(activity.getActivityId())
+                .orElseThrow(() -> new ResourceNotFoundException("Activity id: " + activity.getActivityId() + "not found"));
+
+        activityExists.setName(activity.getName());
+        return activityRepository.save(activityExists);
     }
 
     @Override
