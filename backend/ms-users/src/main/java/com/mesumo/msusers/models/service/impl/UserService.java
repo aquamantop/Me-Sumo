@@ -2,21 +2,23 @@ package com.mesumo.msusers.models.service.impl;
 
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
+
 import com.mesumo.msusers.models.entities.User;
 import com.mesumo.msusers.models.repository.IUserRepository;
 import com.mesumo.msusers.models.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository ;
+
+
 
     @Override
     public User findById(Long id) throws ResourceNotFoundException {
@@ -35,8 +37,8 @@ public class UserService implements IUserService {
 
     @Override
     public User create(User user) throws ResourceAlreadyExistsException {
-        User userExists = userRepository.findByEmail(user.getEmail());
-        if(userExists == null) {
+        Optional<User> userExists = userRepository.findByEmail(user.getEmail());
+        if(userExists.isEmpty()) {
             return userRepository.save(user);
         }
         throw new ResourceAlreadyExistsException("User already exists");
@@ -59,7 +61,7 @@ public class UserService implements IUserService {
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
 
-        userExists.setUserName(user.getUserName());
+        userExists.setUserName(user.getUsername());
         userExists.setFirstName(user.getFirstName());
         userExists.setLastName(user.getLastName());
         userExists.setEmail(user.getEmail());
@@ -69,10 +71,15 @@ public class UserService implements IUserService {
 
     @Override
     public User findByEmail(String email) throws ResourceNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if (user==null){
+        Optional<User> userExists = userRepository.findByEmail(email);
+        if (userExists.isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
-        return user;
+        return userExists.get();
     }
+
+
+
+
+
 }
