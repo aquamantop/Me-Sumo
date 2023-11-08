@@ -7,19 +7,22 @@ import {
 } from "@mui/material";
 import EventCard from "../eventCard/EventCard";
 
+const PaperSX = {
+    border: "2px solid",
+    borderColor: "secondary.main",
+    borderRadius: "10px",
+    backgroundColor:
+        "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)",
+    background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)",
+    transition: 'transform .2s',
+};
+
 function EventShowcase({keyword}) {
     return (
         
             <Container sx={{mb:2}}>
                 <Paper
-                    sx={{
-                        border: "2px solid",
-                        borderColor: "secondary.main",
-                        borderRadius: "10px",
-                        backgroundColor: 'linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)',
-                        background: 'linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)'
-                        
-                    }}
+                    sx={PaperSX}
                 >
                     <Box
                         sx={{
@@ -30,7 +33,6 @@ function EventShowcase({keyword}) {
                             position: 'relative',
                             zIndex: 1,
                             p: 2,
-                            
                         }}
                     >
                         <Typography variant="h5" color="primary.main">
