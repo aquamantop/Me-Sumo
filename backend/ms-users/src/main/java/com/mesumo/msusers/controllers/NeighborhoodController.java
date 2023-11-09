@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/neighborhood")
+@RequestMapping("/user-neighborhood")
 @CrossOrigin
 public class NeighborhoodController {
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/activity")
+@RequestMapping("/user-activity")
 @CrossOrigin
 public class ActivityController {
 
