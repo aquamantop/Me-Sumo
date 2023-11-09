@@ -21,7 +21,7 @@ public class ClubController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
+    public ResponseEntity<Club> getById(@PathVariable Long id) {
         ResponseEntity response = null;
 
         try{
