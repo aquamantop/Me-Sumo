@@ -1,27 +1,28 @@
 package com.mesumo.msbookings.models.service.impl;
 
-import com.mesumo.msbookings.models.dto.ActivityDTO;
-import com.mesumo.msbookings.models.dto.ClubDTO;
-import com.mesumo.msbookings.models.dto.SlotDTO;
-import com.mesumo.msbookings.models.entities.Booking;
-import com.mesumo.msbookings.models.entities.Day;
+import com.mesumo.msbookings.models.dto.*;
+import com.mesumo.msbookings.models.entities.DayEntity;
 import com.mesumo.msbookings.models.repository.feign.IClubFeignClient;
 import com.mesumo.msbookings.models.service.IAvailabilityService;
 import com.mesumo.msbookings.models.service.IBookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.sql.Date;
 import java.util.*;
 
 @Service
 public class AvailabilityService implements IAvailabilityService {
 
+    @Autowired
     IClubFeignClient clubFeignClient;
+    @Autowired
     IBookingService bookingService;
     @Override
-    public Map<LocalDate, List<SlotDTO>> getAvailableBookings(Long clubId, String activityName) {
-        ClubDTO club = clubFeignClient.getById(clubId);
+    public Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, String activityName) {
+
+        ClubDTO club = (ClubDTO) clubFeignClient.getById(clubId);
+
         ActivityDTO selectedActivity = null;
         for (ActivityDTO activity : club.getActivities()) {
             if (activity.getName().equals(activityName)) {
@@ -32,40 +33,44 @@ public class AvailabilityService implements IAvailabilityService {
         if (selectedActivity == null) {
             return null;
         }
-        Set<SlotDTO> slots = selectedActivity.getSlots();
-
-        Map<LocalDate, List<SlotDTO>> availabilityCalendar = new HashMap<>();
+        Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> availabilityCalendar = new HashMap<>();
         LocalDate monthStart = LocalDate.now();
         LocalDate monthEnd = monthStart.plusDays(30);
 
-        for (LocalDate date = monthStart; date.isBefore(monthEnd.plusDays(1)); date = date.plusDays(1)) {
-            availabilityCalendar.put(date, new ArrayList<>());
-        }
 
-        for (SlotDTO slot : slots) {
-            for (Day day : slot.getDays()) {
-                LocalDate dateSlot = monthStart;
-                while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
-                    dateSlot = dateSlot.plusDays(1);
-                }
-                while (!dateSlot.isAfter(monthEnd)) {
-                    availabilityCalendar.get(dateSlot).add(slot);
-                    dateSlot = dateSlot.plusWeeks(1);
+        for (CourtDTO court : selectedActivity.getCourts()) {
+
+            Set<SlotDTO> slots = court.getSlots();
+
+
+            for (SlotDTO slot : slots) {
+
+                SlotWithoutDaysDTO slotWithoutDays = new SlotWithoutDaysDTO();
+                slotWithoutDays.setId(slot.getId());
+                slotWithoutDays.setCapacity(slot.getCapacity());
+                slotWithoutDays.setStartTime(slot.getStartTime());
+                slotWithoutDays.setEndTime(slot.getEndTime());
+
+                for (DayEntity day : slot.getDays()) {
+                    LocalDate dateSlot = monthStart;
+                    while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
+                        dateSlot = dateSlot.plusDays(1);
+                    }
+                    while (!dateSlot.isAfter(monthEnd)) {
+                        if (!availabilityCalendar.containsKey(dateSlot)) {
+                            availabilityCalendar.put(dateSlot, new HashMap<>());
+                        }
+                        availabilityCalendar.computeIfAbsent(dateSlot, k -> new HashMap<>())
+                                .computeIfAbsent(court, k -> new ArrayList<>())
+                                .add(slotWithoutDays);
+                        dateSlot = dateSlot.plusWeeks(1);
+                    }
                 }
             }
-
         }
-        List<Booking> bookings = bookingService.filterByDate(Date.valueOf(monthStart), Date.valueOf(monthEnd));
-
-        for (Booking booking : bookings) {
-            LocalDate bookingDate = booking.getDate().toLocalDate();
-            if (availabilityCalendar.containsKey(bookingDate)) {
-                List<SlotDTO> calendarSlots = availabilityCalendar.get(bookingDate);
-                calendarSlots.removeIf(slot -> slot.getStartTime().equals(booking.getStartTime()) && slot.getEndTime().equals(booking.getEndTime()));
-            }
-        }
-
 
         return availabilityCalendar;
     }
+
+
 }

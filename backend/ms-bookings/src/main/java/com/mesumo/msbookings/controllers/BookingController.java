@@ -1,7 +1,9 @@
 package com.mesumo.msbookings.controllers;
 
 import com.mesumo.msbookings.exceptions.ResourceNotFoundException;
+import com.mesumo.msbookings.models.dto.CourtDTO;
 import com.mesumo.msbookings.models.dto.SlotDTO;
+import com.mesumo.msbookings.models.dto.SlotWithoutDaysDTO;
 import com.mesumo.msbookings.models.entities.Booking;
 import com.mesumo.msbookings.models.service.impl.AvailabilityService;
 import com.mesumo.msbookings.models.service.impl.BookingService;
@@ -56,7 +58,7 @@ public class BookingController {
     @GetMapping("/filter")
     public ResponseEntity filterByDate(@RequestParam Long clubId, @RequestParam String activityName) {
         ResponseEntity response = null;
-        Map<LocalDate, List<SlotDTO>> list = availabilityService.getAvailableBookings(clubId, activityName);
+        Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> list = availabilityService.getAvailableBookings(clubId, activityName);
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);

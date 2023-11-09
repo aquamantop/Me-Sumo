@@ -1,29 +1,33 @@
 package com.mesumo.msbookings.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mesumo.msbookings.models.entities.DayEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.util.Set;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlotDTO {
+public class CourtDTO {
     private Long id;
-    private int capacity;
+    private String name;
+    private int number;
+    private String urlImage;
+    private CourtType court_type;
 
-    private Set<DayEntity> days;
+    private boolean inside;
 
-    private Time startTime;
+    private Set<SlotDTO> slots;
 
-    private Time endTime;
-
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }

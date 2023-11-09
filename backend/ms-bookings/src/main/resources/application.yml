@@ -1,5 +1,7 @@
 
 spring:
+  application:
+    name: ms-bookings
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -33,6 +35,15 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
-
+eureka:
+  instance:
+    hostname: localhost
+    #hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 server:
   port: 8084

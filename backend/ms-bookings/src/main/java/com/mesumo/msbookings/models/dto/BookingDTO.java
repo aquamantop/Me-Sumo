@@ -1,29 +1,38 @@
 package com.mesumo.msbookings.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mesumo.msbookings.models.entities.DayEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.util.Set;
 
-
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class SlotDTO {
-    private Long id;
-    private int capacity;
+public class BookingDTO {
 
-    private Set<DayEntity> days;
+    private Long id;
+    private String name;
+
+    private Long slotId;
+
+    private Long creatorId;
+
+    private Date date;
 
     private Time startTime;
 
     private Time endTime;
 
+    private int participants;
+
+    private String message;
+
+    private boolean approved;
+
+    Set<UserDTO> group;
 }
