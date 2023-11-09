@@ -56,9 +56,9 @@ public class ActivityService implements IActivityService {
 
     @Override
     public Activity update(Activity activity) throws ResourceNotFoundException {
-        System.out.println(activity.getActivityId());
-        Activity activityExists = activityRepository.findById(activity.getActivityId())
-                .orElseThrow(() -> new ResourceNotFoundException("Activity id: " + activity.getActivityId() + "not found"));
+        System.out.println(activity.getId());
+        Activity activityExists = activityRepository.findById(activity.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Activity id: " + activity.getId() + "not found"));
 
         activityExists.setName(activity.getName());
         return activityRepository.save(activityExists);

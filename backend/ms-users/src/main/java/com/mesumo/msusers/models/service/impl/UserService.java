@@ -27,7 +27,7 @@ public class UserService implements IUserService {
     public User findById(Long id) throws ResourceNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()){
-            throw new ResourceNotFoundException("Activity not found");
+            throw new ResourceNotFoundException("User not found");
         }
         return user.get();
     }
@@ -65,10 +65,12 @@ public class UserService implements IUserService {
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
 
-        userExists.setUserName(user.getUsername());
-        userExists.setFirstName(user.getFirstName());
-        userExists.setLastName(user.getLastName());
-        userExists.setEmail(user.getEmail());
+        if (user.getUsername()!=null) userExists.setUserName(user.getUsername());
+        if (user.getFirstName()!=null) userExists.setFirstName(user.getFirstName());
+        if (user.getLastName()!=null) userExists.setLastName(user.getLastName());
+        if (user.getEmail()!=null) userExists.setEmail(user.getEmail());
+        if (user.getActivity()!=null) userExists.setActivity(user.getActivity());
+        if (user.getNeighborhood()!=null) userExists.setNeighborhood(user.getNeighborhood());
 
         return userRepository.save(userExists);
     }

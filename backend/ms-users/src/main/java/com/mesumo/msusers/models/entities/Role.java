@@ -1,5 +1,5 @@
 package com.mesumo.msusers.models.entities;
 
 public enum Role {
-    ADMIN, USER, CLUB
+    ROLE_ADMIN, ROLE_USER, ROLE_CLUB
 }

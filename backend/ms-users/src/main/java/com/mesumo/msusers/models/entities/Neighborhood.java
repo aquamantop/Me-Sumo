@@ -17,6 +17,6 @@ import lombok.Setter;
 public class Neighborhood {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long neighborhoodId;
+    private Long id;
     String name;
 }

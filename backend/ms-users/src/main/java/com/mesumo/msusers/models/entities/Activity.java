@@ -18,7 +18,7 @@ import java.util.Set;
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long activityId;
+    private Long id;
     private String name;
 
     @JsonIgnore

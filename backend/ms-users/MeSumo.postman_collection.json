@@ -39,7 +39,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"activityId\": 53,\r\n    \"name\": \"Fútbol\"\r\n}",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Fútbol\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -67,7 +67,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/activity/search-name?name=Voley",
+									"raw": "http://localhost:8080/activity/search-name?name=Fútbol",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -80,7 +80,7 @@
 									"query": [
 										{
 											"key": "name",
-											"value": "Voley"
+											"value": "Fútbol"
 										}
 									]
 								}
@@ -93,7 +93,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/activity/44",
+									"raw": "http://localhost:8080/activity/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -101,7 +101,7 @@
 									"port": "8080",
 									"path": [
 										"activity",
-										"44"
+										"1"
 									]
 								}
 							},
@@ -109,12 +109,23 @@
 						},
 						{
 							"name": "post-activity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\":\"Futbol\"\r\n}",
+									"raw": "{\r\n    \"name\":\"Voley\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -142,7 +153,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/activity/delete/53",
+									"raw": "http://localhost:8080/activity/delete/3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -151,7 +162,7 @@
 									"path": [
 										"activity",
 										"delete",
-										"53"
+										"3"
 									]
 								}
 							},
@@ -294,7 +305,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbl91c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY5OTQ5Mjk1NywiZXhwIjoxNjk5NDk0Mzk3fQ.3bluJiLAnLBUFXLaGXENSn47KnS1hVAa_bwjpRFcwHM",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbl91c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY5OTU2MTA0MSwiZXhwIjoxNjk5NTYyNDgxfQ.PUNESFMJi8rB3q-L6ODCUj3AsncI8LHW0vvbFL8xPug",
 											"type": "string"
 										}
 									]
@@ -303,7 +314,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"role\":\"CLUB\",\r\n    \"userName\":\"club-user\",\r\n    \"firstName\":\"club\",\r\n    \"lastName\":\"user\",\r\n    \"email\":\"club_user@gmail.com\",\r\n    \"password\":\"club\"\r\n}\r\n",
+									"raw": "{\r\n    \"role\":\"ROLE_CLUB\",\r\n    \"userName\":\"club-user\",\r\n    \"firstName\":\"club\",\r\n    \"lastName\":\"user\",\r\n    \"email\":\"club_user@gmail.com\",\r\n    \"password\":\"club\"\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -332,7 +343,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"activityId\": 53,\r\n    \"name\": \"Fútbol\"\r\n}",
+									"raw": "{   \"userId\":5,\r\n    \"activity\": [\r\n        {\r\n            \"id\":1\r\n        }\r\n    ],\r\n    \"neighborhood\": {\r\n        \"id\":1\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -360,7 +371,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/user/delete/53",
+									"raw": "http://localhost:8080/user/delete/3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -369,7 +380,7 @@
 									"path": [
 										"user",
 										"delete",
-										"53"
+										"3"
 									]
 								}
 							},
@@ -432,7 +443,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/neighborhood/2",
+									"raw": "http://localhost:8080/neighborhood/1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -440,7 +451,7 @@
 									"port": "8080",
 									"path": [
 										"neighborhood",
-										"2"
+										"1"
 									]
 								}
 							},
@@ -482,7 +493,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"activityId\": 53,\r\n    \"name\": \"Fútbol\"\r\n}",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Flores\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -505,21 +516,21 @@
 							"response": []
 						},
 						{
-							"name": "delete-activity Copy 2",
+							"name": "delete-neighborhood",
 							"request": {
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/activity/delete/53",
+									"raw": "http://localhost:8080/neighborhood/delete/2",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
-										"activity",
+										"neighborhood",
 										"delete",
-										"53"
+										"2"
 									]
 								}
 							},
@@ -532,12 +543,29 @@
 					"item": [
 						{
 							"name": "post-register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json(); \r",
+											"var token = jsonData.token; \r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"user\",\r\n    \"email\":\"test_user2@gmail.com\",\r\n    \"password\":\"test\"\r\n}\r\n",
+									"raw": "{\r\n    \"userName\":\"test-user\",\r\n    \"firstName\":\"test\",\r\n    \"lastName\":\"user\",\r\n    \"email\":\"test_user@gmail.com\",\r\n    \"password\":\"test\"\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -561,7 +589,24 @@
 						},
 						{
 							"name": "post-user-login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json(); \r",
+											"var token = jsonData.token; \r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -590,7 +635,24 @@
 						},
 						{
 							"name": "post-admin-login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json(); \r",
+											"var token = jsonData.token; \r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -619,7 +681,24 @@
 						},
 						{
 							"name": "post-club-login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json(); \r",
+											"var token = jsonData.token; \r",
+											"\r",
+											"pm.collectionVariables.set(\"token\", token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -649,6 +728,43 @@
 					]
 				}
 			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

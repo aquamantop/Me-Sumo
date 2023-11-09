@@ -57,8 +57,8 @@ public class NeighborhoodService implements INeighborhoodService {
 
     @Override
     public Neighborhood update(Neighborhood neighborhood) throws ResourceNotFoundException {
-        Neighborhood neighborhoodExists = neighborhoodRepository.findById(neighborhood.getNeighborhoodId())
-                .orElseThrow(() -> new ResourceNotFoundException("Neighborhood id: " + neighborhood.getNeighborhoodId() + "not found"));
+        Neighborhood neighborhoodExists = neighborhoodRepository.findById(neighborhood.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Neighborhood id: " + neighborhood.getId() + "not found"));
 
         neighborhoodExists.setName(neighborhood.getName());
         return neighborhoodRepository.save(neighborhoodExists);

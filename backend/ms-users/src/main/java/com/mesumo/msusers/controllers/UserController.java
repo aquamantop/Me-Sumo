@@ -100,7 +100,7 @@ public class UserController {
 //            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.BAD_REQUEST);
 //
         userService.deleteById(id);
-        return new ResponseEntity("Club deleted with id: " + id, HttpStatus.OK);
+        return new ResponseEntity("User deleted with id: " + id, HttpStatus.OK);
     }
 
 
