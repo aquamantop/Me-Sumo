@@ -1,5 +1,6 @@
 package com.mesumo.msclubs.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Court {
 
     @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn (name = "activy", nullable = false, referencedColumnName = "id")
+    @JsonIgnore
     private Activity activity;
 
     @Enumerated(EnumType.STRING)
