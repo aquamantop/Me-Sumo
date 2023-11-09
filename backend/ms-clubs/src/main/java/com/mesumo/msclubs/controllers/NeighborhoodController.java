@@ -23,16 +23,10 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Neighborhood> getById(@PathVariable Long id) {
+    public ResponseEntity<Neighborhood> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity<Neighborhood> response = null;
 
-        try{
-            response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 
         return response;
     }
@@ -50,16 +44,10 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("NeighborhoodDTO not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }

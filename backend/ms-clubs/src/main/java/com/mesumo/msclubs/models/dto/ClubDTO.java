@@ -11,9 +11,11 @@ import java.util.Set;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClubDTO {
-/*Ajuste el DTO para que las entidades complejas que lo componen sean también DTOs */
+
     private String name;
+
     private NeighborhoodDTO neighborhood;
+
     private Set<ActivityDTO> activities;
 
     public ClubDTO() {

@@ -16,20 +16,16 @@ import java.util.Set;
 public class ActivityController {
     private final ActivityService service;
 
-
     public ActivityController(ActivityService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getById(@PathVariable Long id) {
+    public ResponseEntity<Activity> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity<Activity> response = null;
-        try{
-            response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+
+        response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+
         return response;
     }
 
@@ -37,25 +33,21 @@ public class ActivityController {
     public ResponseEntity<Set<Activity>> getAll() {
         ResponseEntity<Set<Activity>> response = null;
         Set<Activity> set = service.findAll();
+
         if(set != null){
             response = new ResponseEntity<>(set, HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+
         return response;
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("ActivityDTO not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }
