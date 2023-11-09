@@ -289,6 +289,16 @@
 						{
 							"name": "post-role-club",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbl91c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY5OTQ5Mjk1NywiZXhwIjoxNjk5NDk0Mzk3fQ.3bluJiLAnLBUFXLaGXENSn47KnS1hVAa_bwjpRFcwHM",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -466,7 +476,7 @@
 							"response": []
 						},
 						{
-							"name": "update-",
+							"name": "update-neighborhood",
 							"request": {
 								"method": "PUT",
 								"header": [],
@@ -480,14 +490,14 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/activity/update",
+									"raw": "http://localhost:8080/neighborhood/update",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "8080",
 									"path": [
-										"activity",
+										"neighborhood",
 										"update"
 									]
 								}
