@@ -13,11 +13,11 @@ import { useNavigate } from 'react-router-dom'
 import CustomInput from '../components/customInput/CustomInput'
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
-import { useSignup } from '../hooks/useSignup'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function Register() {
   const navigate = useNavigate()
-  const { signup } = useSignup()
 
   const {
     watch,
@@ -38,13 +38,30 @@ export default function Register() {
   const [error, setError] = useState('')
 
   const onSubmit = handleSubmit(async (userData) => {
-    const { error: errorSignup, result } = await signup(userData.userName, userData.firstName, userData.lastName, userData.email, userData.password) 
-    console.log(userData)
-    if (!errorSignup) {
-      alert('Registro exitoso')
+
+    const response = await new Promise((resolve) => {
+        axios({
+          method: "POST",
+          url: 'http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/auth/register',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: userData,
+        })
+          .then((response) => resolve(response))
+          .catch((error) => resolve(error));
+    });
+
+    if (!error) {
+      Swal.fire({
+        title: "Registro exitoso!",
+        icon: "success",
+        timer: 1500
+      });
       navigate('/login')
     } else {
-      setError(errorSignup)
+      setError(error)
     }
   })
 
