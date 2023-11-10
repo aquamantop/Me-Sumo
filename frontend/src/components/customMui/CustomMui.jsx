@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 
 export const PaperSXX = {
     border: "2px solid",
@@ -10,6 +10,16 @@ export const PaperSXX = {
     background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)",
     transition: 'transform .2s',
 };
+
+// export const CustomBox = styled(Box)({
+//     border: "2px solid",
+//     borderColor: "secondary.main",
+//     borderRadius: "10px",
+//     margin: '-2px',
+//     position: 'relative',
+//     zIndex: 1,
+//     p: 2,
+// });
 
 export const CustomTextField = styled(TextField)({
     "& input": {

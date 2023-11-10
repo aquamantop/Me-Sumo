@@ -34,7 +34,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/club/:id' element={<Club />} />
+            <Route path='/club' element={<Club />} />
             <Route path='/login' element={<Login />} />
             <Route path='/login-success' element={<LoginSuccess />} />
             <Route path='/register' element={<Register />} />

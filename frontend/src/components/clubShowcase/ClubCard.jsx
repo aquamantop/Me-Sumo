@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardMedia, Typography, Box, Button } from "@mui/material";
+import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
 import eventoImagen from "../../assets/club-field.png"
 
 const ClubCard = () => {
@@ -42,10 +42,12 @@ const ClubCard = () => {
                         mt: 2,
                         mb: 2,
                     }}
-                >
-                    <Button variant="contained" color="secondary">
-                        Ver Más
-                    </Button>
+                >   
+                <Link href='/club' >
+                        <Button variant="contained" color="secondary">
+                            Ver Más
+                        </Button>
+                    </Link>
                 </Box>
             </Card>
         </>
