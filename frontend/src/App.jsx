@@ -7,6 +7,7 @@ import Club from './pages/Club'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import LoginSuccess from './pages/LoginSuccess'
+import EventCreate from './pages/EventCreate'
 
 function App() {
   const theme = createTheme({
@@ -35,6 +36,7 @@ function App() {
             <Route path='/club/:id' element={<Club />} />
             <Route path='/login' element={<Login />} />
             <Route path='/login-success' element={<LoginSuccess />} />
+            <Route path='/new-event' element={<EventCreate/>}/>
           </Routes>
         </LocalizationProvider>
       </ThemeProvider>
