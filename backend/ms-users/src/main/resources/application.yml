@@ -1,17 +1,22 @@
+server:
+  port: ${PORT:8081}
 
 spring:
+  application:
+    name: ms-users
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   #  Base de datos produccion
-  #  url: jdbc:mysql://db.ctd.academy/pi21023c02_GRUPO5?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-  #  username: pi21023c02_GRUPO5
-  #  password: eethoo7U
+    url: jdbc:mysql://db.ctd.academy/pi21023c02_GRUPO5?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    username: pi21023c02_GRUPO5
+    password: eethoo7U
 
   #   Base de datos docker
-    url: jdbc:mysql://localhost:3301/mesumo-users?createDatabaseIfNotExist=true&useUnicode=true&amp&characterEncoding=utf-8&autoReconnect=true
-    username: user
-    password: user
+#    url: jdbc:mysql://localhost:3301/mesumo-users?createDatabaseIfNotExist=true&useUnicode=true&amp&characterEncoding=utf-8&autoReconnect=true
+#    username: user
+#    password: user
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
@@ -27,12 +32,20 @@ spring:
         write_dates_as_timestamps: false
       date-format: yyyy-MM-dd
 
-#springdoc:
-#  api-docs:
-#    path: /api-docs
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    enabled: true
+eureka:
+  instance:
+    #    hostname: localhost
+    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
 
-#server:
-#  port: 8080
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
