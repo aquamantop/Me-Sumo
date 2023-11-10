@@ -7,6 +7,7 @@ import Club from './pages/Club'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import LoginSuccess from './pages/LoginSuccess'
+import Register from './pages/Register'
 import EventCreate from './pages/EventCreate'
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path='/club/:id' element={<Club />} />
             <Route path='/login' element={<Login />} />
             <Route path='/login-success' element={<LoginSuccess />} />
+            <Route path='/register' element={<Register />} />
             <Route path='/new-event' element={<EventCreate/>}/>
           </Routes>
         </LocalizationProvider>

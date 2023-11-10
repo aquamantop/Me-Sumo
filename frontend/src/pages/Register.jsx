@@ -1,4 +1,7 @@
 import PersonIcon from '@mui/icons-material/Person'
+import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp'
+import EmailSharpIcon from '@mui/icons-material/EmailSharp'
+import LockSharpIcon from '@mui/icons-material/LockSharp'
 import { Link } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -6,22 +9,27 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import CustomInput from '../components/customInput/CustomInput'
 import { useNavigate } from 'react-router-dom'
-import Footer from '../components/footer/Footer'
+import CustomInput from '../components/customInput/CustomInput'
 import Header from '../components/header/Header'
+import Footer from '../components/footer/Footer'
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate()
 
   const {
+    watch,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
     defaultValues: {
+      name: '',
+      lastName: '',
+      nickName: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
@@ -29,20 +37,9 @@ export default function Login() {
 
   const onSubmit = handleSubmit(async (userData) => {
     console.log(userData)
-    await signin(userData)
+    alert('Registro exitoso')
+    navigate('/login')
   })
-
-  const signin = async (userData) => {
-    const { email, password } = userData
-
-    if (email === 'test@gmail.com' && password === '123456') {
-      setError('')
-      console.log('Credenciales válidas, redireccionando')
-      navigate('/login-success')
-    } else {
-      setError('Credenciales inválidas')
-    }
-  }
 
   return (
     <>
@@ -50,7 +47,7 @@ export default function Login() {
       <Box
         backgroundColor='background.paper'
         align='center'
-        className='content'
+        sx={{ mb: 10, mx: 'auto', maxWidth: '1200px' }}
       >
         <Typography
           fontSize={50}
@@ -70,7 +67,7 @@ export default function Login() {
             marginBottom: '36px',
           }}
         >
-          ¿Qué actividad vas a hacer hoy?
+          ¡Qué alegría que te unas a nuestra comunidad!
         </Typography>
         <Stack
           sx={{ margin: 'auto', px: 5 }}
@@ -81,9 +78,54 @@ export default function Login() {
           onSubmit={onSubmit}
         >
           <CustomInput
+            name='name'
+            control={control}
+            placeholder='Nombre *'
+            error={!!errors.name}
+            helperText={errors?.name?.message}
+            type=''
+            rules={{
+              required: {
+                value: true,
+                message: 'El nombre es requerido',
+              },
+            }}
+            icon={<PersonIcon />}
+          />
+          <CustomInput
+            name='lastName'
+            control={control}
+            placeholder='Apellido *'
+            error={!!errors.lastName}
+            helperText={errors?.lastName?.message}
+            type=''
+            rules={{
+              required: {
+                value: true,
+                message: 'El apellido es requerido',
+              },
+            }}
+            icon={<PersonIcon />}
+          />
+          <CustomInput
+            name='nickName'
+            control={control}
+            placeholder='Apodo *'
+            error={!!errors.nickName}
+            helperText={errors?.nickName?.message}
+            type=''
+            rules={{
+              required: {
+                value: true,
+                message: 'El apodo es requerido',
+              },
+            }}
+            icon={<EmojiEmotionsSharpIcon />}
+          />
+          <CustomInput
             name='email'
             control={control}
-            placeholder='Email'
+            placeholder='Correo Electrónico *'
             error={!!errors.email}
             helperText={errors?.email?.message}
             type='email'
@@ -97,14 +139,14 @@ export default function Login() {
                 message: 'Correo no válido',
               },
             }}
-            icon={<PersonIcon />}
+            icon={<EmailSharpIcon />}
           />
 
           <CustomInput
             name='password'
             control={control}
             type='password'
-            placeholder='Contraseña'
+            placeholder='Contraseña *'
             error={!!errors.password}
             helperText={errors?.password?.message}
             rules={{
@@ -117,7 +159,28 @@ export default function Login() {
                 message: 'La contraseña debe tener al menos 6 caracteres',
               },
             }}
-            icon={<PersonIcon />}
+            icon={<LockSharpIcon />}
+          />
+          <CustomInput
+            name='confirmPassword'
+            control={control}
+            type='password'
+            placeholder='Repetir Contraseña *'
+            error={!!errors.confirmPassword}
+            helperText={errors?.confirmPassword?.message}
+            rules={{
+              required: {
+                value: true,
+                message: 'La contraseña es requerida',
+              },
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  const { password } = watch()
+                  return password === value || 'Las contraseñas no coinciden'
+                },
+              },
+            }}
+            icon={<LockSharpIcon />}
           />
 
           <Button
@@ -134,16 +197,17 @@ export default function Login() {
               letterSpacing: '2.86px',
             }}
           >
-            Iniciar Sesión
+            Registrarme
           </Button>
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              Por favor vuelva a intentarlo, sus credenciales son inválidas
+              Por favor vuelva a intentarlo, sus datos son inválidos
             </Typography>
           )}
         </Stack>
         <Typography
+          style={{ textWrap: 'balance' }}
           variant='h5'
           mt={'36px'}
           color='primary.main'
@@ -151,9 +215,9 @@ export default function Login() {
             letterSpacing: ' 4.68px',
           }}
         >
-          Todavía no tenés usuario?{' '}
-          <Link href='/register' underline='none' color='secondary.main'>
-            Registrate ;)
+          ¿Ya tienes una cuenta?{' '}
+          <Link href='/login' underline='none' color='secondary.main'>
+            Iniciar sesión
           </Link>
         </Typography>
       </Box>
