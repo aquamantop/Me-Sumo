@@ -1,36 +1,30 @@
-import {
-    Box,
-    Container,
-    Grid,
-    Typography,
-    Card,
-    CardContent,
-    CardMedia,
-    CardHeader,
-    Button,
-    Paper,
-} from "@mui/material";
-
+import React from "react";
+import { Card, CardContent, CardMedia, Typography, Box, Button } from "@mui/material";
 import eventoImagen from "../../assets/club-field.png"
 
-function EventCard() {
+const ClubCard = () => {
     return (
         <>
-            <Card 
-            variant="outlined" 
-            sx={{
-                border: "1px solid #434242",
-                transition: 'box-shadow 0.3s',
-                '&:hover':{
-                    boxShadow: '0 0 5px 5px rgb(195, 253, 116, 0.2)'
-                }
-                }}>
+            <Card
+                variant="outlined"
+                sx={{
+                    border: "1px solid #434242",
+                    transition: "box-shadow 0.3s",
+                    "&:hover": {
+                        boxShadow: "0 0 5px 5px rgb(195, 253, 116, 0.2)",
+                    },
+                }}
+            >
                 <CardContent>
                     <Typography variant="h6" color="primary.main">
                         Club: Deportivo Test FC
                     </Typography>
-                    <Typography variant="h6" color="primary.main">Nombre del Evento</Typography>
-                    <Typography variant="body2" color="secondary.main">Fecha: DD/MM/AAAA</Typography>
+                    <Typography variant="h6" color="primary.main">
+                        Evento: Futbol 5
+                    </Typography>
+                    <Typography variant="body2" color="secondary.main">
+                        Fecha: DD/MM/AAAA
+                    </Typography>
                     <Typography variant="body2" color="secondary.main">
                         Lugares Disponibles: X
                     </Typography>
@@ -50,12 +44,12 @@ function EventCard() {
                     }}
                 >
                     <Button variant="contained" color="secondary">
-                        Ver Detalles
+                        Ver Más
                     </Button>
                 </Box>
             </Card>
         </>
     );
-}
+};
 
-export default EventCard;
+export default ClubCard;

@@ -5,12 +5,12 @@ import {
     Typography,
     Paper
 } from "@mui/material";
-import EventCard from "../eventCard/EventCard";
+import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 
 function EventShowcase({keyword}) {
     return (
-        
+        <>
             <Container sx={{mb:2}}>
                 <Paper
                     sx={PaperSXX}
@@ -39,7 +39,7 @@ function EventShowcase({keyword}) {
                     </Grid>
                 </Paper>
             </Container>
-     
+        </>
     );
 }
 
