@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import CustomInput from '../components/customInput/CustomInput'
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -24,9 +26,9 @@ export default function Register() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: '',
+      firstName: '',
       lastName: '',
-      nickName: '',
+      userName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -36,9 +38,31 @@ export default function Register() {
   const [error, setError] = useState('')
 
   const onSubmit = handleSubmit(async (userData) => {
-    console.log(userData)
-    alert('Registro exitoso')
-    navigate('/login')
+
+    const response = await new Promise((resolve) => {
+        axios({
+          method: "POST",
+          url: 'http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/auth/register',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: userData,
+        })
+          .then((response) => resolve(response))
+          .catch((error) => resolve(error));
+    });
+
+    if (!error) {
+      Swal.fire({
+        title: "Registro exitoso!",
+        icon: "success",
+        timer: 1500
+      });
+      navigate('/login')
+    } else {
+      setError(error)
+    }
   })
 
   return (
@@ -78,11 +102,11 @@ export default function Register() {
           onSubmit={onSubmit}
         >
           <CustomInput
-            name='name'
+            name='firstName'
             control={control}
             placeholder='Nombre *'
-            error={!!errors.name}
-            helperText={errors?.name?.message}
+            error={!!errors.firstName}
+            helperText={errors?.firstName?.message}
             type=''
             rules={{
               required: {
@@ -108,11 +132,11 @@ export default function Register() {
             icon={<PersonIcon />}
           />
           <CustomInput
-            name='nickName'
+            name='userName'
             control={control}
             placeholder='Apodo *'
-            error={!!errors.nickName}
-            helperText={errors?.nickName?.message}
+            error={!!errors.userName}
+            helperText={errors?.userName?.message}
             type=''
             rules={{
               required: {
@@ -202,7 +226,7 @@ export default function Register() {
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              Por favor vuelva a intentarlo, sus datos son inválidos
+              { error.message }
             </Typography>
           )}
         </Stack>
