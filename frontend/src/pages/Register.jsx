@@ -13,9 +13,11 @@ import { useNavigate } from 'react-router-dom'
 import CustomInput from '../components/customInput/CustomInput'
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
+import { useSignup } from '../hooks/useSignup'
 
 export default function Register() {
   const navigate = useNavigate()
+  const { signup } = useSignup()
 
   const {
     watch,
@@ -24,9 +26,9 @@ export default function Register() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: '',
+      firstName: '',
       lastName: '',
-      nickName: '',
+      userName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -36,9 +38,14 @@ export default function Register() {
   const [error, setError] = useState('')
 
   const onSubmit = handleSubmit(async (userData) => {
+    const { error: errorSignup, result } = await signup(userData.userName, userData.firstName, userData.lastName, userData.email, userData.password) 
     console.log(userData)
-    alert('Registro exitoso')
-    navigate('/login')
+    if (!errorSignup) {
+      alert('Registro exitoso')
+      navigate('/login')
+    } else {
+      setError(errorSignup)
+    }
   })
 
   return (
@@ -78,11 +85,11 @@ export default function Register() {
           onSubmit={onSubmit}
         >
           <CustomInput
-            name='name'
+            name='firstName'
             control={control}
             placeholder='Nombre *'
-            error={!!errors.name}
-            helperText={errors?.name?.message}
+            error={!!errors.firstName}
+            helperText={errors?.firstName?.message}
             type=''
             rules={{
               required: {
@@ -108,11 +115,11 @@ export default function Register() {
             icon={<PersonIcon />}
           />
           <CustomInput
-            name='nickName'
+            name='userName'
             control={control}
             placeholder='Apodo *'
-            error={!!errors.nickName}
-            helperText={errors?.nickName?.message}
+            error={!!errors.userName}
+            helperText={errors?.userName?.message}
             type=''
             rules={{
               required: {
@@ -202,7 +209,7 @@ export default function Register() {
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              Por favor vuelva a intentarlo, sus datos son inválidos
+              { error.message }
             </Typography>
           )}
         </Stack>
