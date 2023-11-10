@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import { Box } from "@mui/system";
+import axios from 'axios';
+
+
 import {
     Typography,
     Button,
@@ -15,9 +18,10 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
 
-const activities = ['Futbol'];
+//const activities = ['Futbol'];
 const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
   ];
+  /*
   const barrios = [
     "Palermo",
     "Recoleta",
@@ -30,7 +34,7 @@ const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
     "Colegiales",
     "Núñez"
   ];
-  
+  */
   
 const CssIconButton = styled(IconButton)({
     color: "white",
@@ -168,7 +172,27 @@ const CustomPaper = styled(Paper)({
     }
 })
 function EventSearch() {
-    
+
+    const [activities, setActivities] = useState([]);
+    const [barrios, setBarrios] = useState([]);
+
+    useEffect(() => {
+        axios.get(`http://ec2-50-17-115-59.compute-1.amazonaws.com:8090/activity/`)
+            .then(response => {
+                setActivities(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching activities:', error);
+            });
+
+            axios.get(`http://ec2-50-17-115-59.compute-1.amazonaws.com:8090/neighborhood/`)
+            .then(response => {
+                setBarrios(response.data.map(item => item.name));
+            })
+            .catch(error => {
+                console.error('Error fetching neighborhoods:', error);
+            });
+    }, []);
     return (
         <>
             <Box
@@ -184,34 +208,34 @@ function EventSearch() {
                 </Typography>
                 
                 <CssAutocomplete
-                id="activity"
-                disablePortal
-                fullWidth
-                PaperComponent={CustomPaper}
-                sx={{'&button':{color:"white"}}}
-                options={activities}
-                renderInput={(params)=>
-                   <CssTextField
-                   {...params}
-                   label="Elegir Actividad"
-                    id="custom-css-outlined-input"
-                    fullWidth
-                    sx={{mt: 2}}
-                    
-                    InputProps={{
-                      ...params.InputProps,
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <CssIconButton>
-                                    <AccessibilityNewOutlinedIcon />
-                                </CssIconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                   
-                   />
-                  }
-                />
+    id="activity"
+    disablePortal
+    fullWidth
+    PaperComponent={CustomPaper}
+    sx={{ '&button': { color: "white" } }}
+    options={activities} 
+    getOptionLabel={(option) => option.name} 
+    renderInput={(params) => (
+        <CssTextField
+            {...params}
+            label="Elegir Actividad"
+            id="custom-css-outlined-input"
+            fullWidth
+            sx={{ mt: 2 }}
+            InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <CssIconButton>
+                            <AccessibilityNewOutlinedIcon />
+                        </CssIconButton>
+                    </InputAdornment>
+                ),
+            }}
+        />
+    )}
+/>
+
                 <CssAutocomplete
                 id="category"
                 disablePortal
@@ -241,7 +265,7 @@ function EventSearch() {
                    />
                   }
                 />
-                <CssAutocomplete
+<CssAutocomplete
                 id="nhood"
                 disablePortal
                 fullWidth
