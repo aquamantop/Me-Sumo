@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -25,11 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         return http
-                .csrf(csrf ->
-                        csrf
-                                .disable())
-                .authorizeHttpRequests(authRequest ->
-                        authRequest
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authRequest -> authRequest
                                 .requestMatchers("/auth/**").permitAll()
                                 //.requestMatchers("/user/add").permitAll()
                                 .requestMatchers("/user/add").hasRole("ADMIN")
