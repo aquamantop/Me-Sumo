@@ -7,8 +7,8 @@ import com.mesumo.msclubs.models.service.impl.ActivityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-import java.util.Set;
 
 @RestController
 @RequestMapping("/activity")
@@ -30,12 +30,12 @@ public class ActivityController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Activity>> getAll() {
-        ResponseEntity<Set<Activity>> response = null;
-        Set<Activity> set = service.findAll();
+    public ResponseEntity<List<Activity>> getAll() {
+        ResponseEntity<List<Activity>> response = null;
+        List<Activity> list = service.findAll();
 
-        if(set != null){
-            response = new ResponseEntity<>(set, HttpStatus.OK);
+        if(list != null){
+            response = new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
@@ -55,7 +55,7 @@ public class ActivityController {
     @GetMapping("/listDTO")
     public ResponseEntity getAllDTO() {
         ResponseEntity response = null;
-        Set<ActivityDTO> list = service.findAllDTO();
+        List<ActivityDTO> list = service.findAllDTO();
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);
