@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "frontend", "backend", "main" ]
 
-jobs:
+# jobs:
   # build-frontend:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -26,27 +26,27 @@ jobs:
   #     run: npm run build
   #     working-directory: frontend
 
-  build-backend:
-    runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
+  # build-backend:
+    # runs-on: self-hosted
+    # steps:
+    # - uses: actions/checkout@v3
+    # - name: Set up JDK 17
+    #   uses: actions/setup-java@v3
+    #   with:
+    #     java-version: '17'
+    #     distribution: 'temurin'
+    #     cache: maven
         
-    - name: Build with Maven
-      run: |
-        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
-        mvn -B package --file pom.xml
-      working-directory: backend
+    # - name: Build with Maven
+    #   run: |
+    #     cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
+    #     mvn -B package --file pom.xml
+    #   working-directory: backend
         
-    - name: Build app
-      run: |
-        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
-        sudo systemctl stop club.service
-        cp target/ms_clubs.jar /home/ubuntu/me_sumo/club
-        sudo systemctl start club.service
-      working-directory: backend
+    # - name: Build app
+    #   run: |
+    #     cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
+    #     sudo systemctl stop club.service
+    #     cp target/ms_clubs.jar /home/ubuntu/me_sumo/club
+    #     sudo systemctl start club.service
+    #   working-directory: backend
