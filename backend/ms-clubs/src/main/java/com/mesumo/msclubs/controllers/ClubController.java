@@ -7,7 +7,7 @@ import com.mesumo.msclubs.models.service.impl.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/club")
@@ -21,7 +21,7 @@ public class ClubController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Club> getById(@PathVariable Long id) {
+    public ResponseEntity<Club> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
         response = new ResponseEntity(service.findById(id), HttpStatus.OK);
@@ -32,7 +32,7 @@ public class ClubController {
     @GetMapping("/")
     public ResponseEntity getAll() {
         ResponseEntity response = null;
-        Set<Club> list = service.findAll();
+        List<Club> list = service.findAll();
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);
@@ -85,7 +85,7 @@ public class ClubController {
     @GetMapping("/listDTO")
     public ResponseEntity getAllDTO() {
         ResponseEntity response = null;
-        Set<ClubDTO> list = service.findAllDTO();
+        List<ClubDTO> list = service.findAllDTO();
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);

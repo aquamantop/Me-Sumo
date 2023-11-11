@@ -1,15 +1,13 @@
 package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
-import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.dto.NeighborhoodDTO;
 import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.service.impl.NeighborhoodService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/neighborhood")
@@ -32,14 +30,16 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Neighborhood>> getAll() {
-        ResponseEntity<Set<Neighborhood>> response = null;
-        Set<Neighborhood> set = service.findAll();
-        if (!set.isEmpty()) {
-            response = new ResponseEntity<>(set, HttpStatus.OK);
+    public ResponseEntity<List<Neighborhood>> getAll() {
+        ResponseEntity<List<Neighborhood>> response = null;
+        List<Neighborhood> list = service.findAll();
+
+        if (!list.isEmpty()) {
+            response = new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+
         return response;
     }
 
@@ -55,7 +55,7 @@ public class NeighborhoodController {
     @GetMapping("/listDTO")
     public ResponseEntity getAllDTO() {
         ResponseEntity response = null;
-        Set<NeighborhoodDTO> list = service.findAllDTO();
+        List<NeighborhoodDTO> list = service.findAllDTO();
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);

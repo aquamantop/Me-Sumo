@@ -5,8 +5,7 @@ import com.mesumo.msclubs.models.entities.Slot;
 import com.mesumo.msclubs.models.service.ISlotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/slot")
@@ -22,12 +21,14 @@ public class SlotController {
     @GetMapping("/")
     public ResponseEntity getAll() {
         ResponseEntity response = null;
-        Set<Slot> slots = slotService.findAll();
+        List<Slot> slots = slotService.findAll();
+
         if(slots != null){
             response = ResponseEntity.ok(slots);
         } else {
             response = ResponseEntity.notFound().build();
         }
+
         return response;
     }
 
@@ -35,11 +36,13 @@ public class SlotController {
     public ResponseEntity getById(Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
         Slot slot = slotService.findById(id);
+
         if(slot != null){
             response = ResponseEntity.ok(slot);
         } else {
             response = ResponseEntity.notFound().build();
         }
+
         return response;
     }
 
