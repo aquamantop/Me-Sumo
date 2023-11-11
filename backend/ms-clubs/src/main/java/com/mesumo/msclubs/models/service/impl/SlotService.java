@@ -6,11 +6,8 @@ import com.mesumo.msclubs.models.repository.ISlotRepository;
 import com.mesumo.msclubs.models.service.ISlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class SlotService implements ISlotService {
@@ -27,9 +24,8 @@ public class SlotService implements ISlotService {
     }
 
     @Override
-    public Set<Slot> findAll() {
-        List<Slot> slots = repository.findAll();
-        return new HashSet<>(slots);
+    public List<Slot> findAll() {
+        return repository.findAll();
     }
 
     @Override

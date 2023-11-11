@@ -9,10 +9,7 @@ import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ClubService implements IClubService {
@@ -35,9 +32,8 @@ public class ClubService implements IClubService {
     }
 
     @Override
-    public Set<Club> findAll() {
-        List<Club> clubs = repository.findAll();
-        return new HashSet<>(clubs);
+    public List<Club> findAll() {
+        return repository.findAll();
     }
 
     @Override
@@ -82,6 +78,10 @@ public class ClubService implements IClubService {
                 newClub.get().setAmenities(club.getAmenities());
             }
 
+            if(club.getUrl() != null){
+                newClub.get().setUrl(club.getUrl());
+            }
+
             repository.save(newClub.get());
         } else System.err.println("Club not found with id: " + club.getId());
 
@@ -100,16 +100,16 @@ public class ClubService implements IClubService {
     }
 
     @Override
-    public Set<ClubDTO> findAllDTO() {
+    public List<ClubDTO> findAllDTO() {
         List<Club> clubs = repository.findAll();
-        Set<ClubDTO> clubDTOSet = new HashSet<>();
+        List<ClubDTO> clubDTO = new ArrayList<>();
 
         for (Club club : clubs) {
             ClubDTO dto = clubToDTO(club);
-            clubDTOSet.add(dto);
+            clubDTO.add(dto);
         }
 
-        return clubDTOSet;
+        return clubDTO;
     }
 
     public ClubDTO clubToDTO (Club club){
@@ -125,6 +125,7 @@ public class ClubService implements IClubService {
             activityDTOSet.add(dto);
         }
         clubDTO.setActivities(activityDTOSet);
+        clubDTO.setUrl(club.getUrl());
 
         return clubDTO;
     }
