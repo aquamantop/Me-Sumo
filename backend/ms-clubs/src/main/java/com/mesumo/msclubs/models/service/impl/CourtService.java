@@ -6,11 +6,8 @@ import com.mesumo.msclubs.models.repository.ICourtRepository;
 import com.mesumo.msclubs.models.service.ICourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CourtService implements ICourtService {
@@ -27,9 +24,8 @@ public class CourtService implements ICourtService {
     }
 
     @Override
-    public Set<Court> findAll() {
-        List<Court> courts = repository.findAll();
-        return new HashSet<>(courts);
+    public List<Court> findAll() {
+        return repository.findAll();
     }
 
     @Override

@@ -7,11 +7,7 @@ import com.mesumo.msclubs.models.repository.IActivityRepository;
 import com.mesumo.msclubs.models.service.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ActivityService implements IActivityService {
@@ -44,11 +40,8 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public Set<Activity> findAll() {
-
-        List<Activity> activities = activityRepository.findAll();
-
-        return new HashSet<>(activities);
+    public List<Activity> findAll() {
+        return activityRepository.findAll();
     }
 
     @Override
@@ -63,23 +56,22 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public Set<ActivityDTO> findAllDTO() {
+    public List<ActivityDTO> findAllDTO() {
         List<Activity> activities = activityRepository.findAll();
-        Set<ActivityDTO> activityDTOSet = new HashSet<>();
+        List<ActivityDTO> activityDTO = new ArrayList<>();
 
         for (Activity activity : activities) {
             ActivityDTO dto = activityToDTO(activity);
-            activityDTOSet.add(dto);
+            activityDTO.add(dto);
         }
 
-        return activityDTOSet;
+        return activityDTO;
     }
 
     public static ActivityDTO activityToDTO(Activity activity){
         ActivityDTO dto = new ActivityDTO();
         dto.setName(activity.getName());
         dto.setType(activity.getType());
-//        dto.setClubs(activity.getClubs());
         dto.setCourts(activity.getCourts());
 
         return dto;
