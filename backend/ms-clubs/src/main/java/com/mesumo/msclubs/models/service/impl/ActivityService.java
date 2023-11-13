@@ -72,7 +72,7 @@ public class ActivityService implements IActivityService {
         ActivityDTO dto = new ActivityDTO();
         dto.setName(activity.getName());
         dto.setType(activity.getType());
-        dto.setCourts(activity.getCourts());
+        //dto.setCourts(activity.getCourts());
 
         return dto;
     }

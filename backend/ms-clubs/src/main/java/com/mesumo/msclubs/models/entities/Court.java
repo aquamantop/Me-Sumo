@@ -22,10 +22,23 @@ public class Court {
 
     private String urlImage;
 
-    @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn (name = "activy", nullable = false, referencedColumnName = "id")
-    @JsonIgnore
+//    @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+//    @JoinColumn (name = "activy", nullable = false, referencedColumnName = "id")
+//    @JsonIgnore
+//    private Activity activity;
+
+    //@JsonIgnore
+    @ManyToOne
+    //@JoinColumn(name = "club_id", referencedColumnName = "id")
+    @JoinColumn(name = "club_id")
+    private Club club;
+
+    //@JsonIgnore
+    @ManyToOne
+    //@JoinColumn(name = "activity_id", referencedColumnName = "id")
+    @JoinColumn(name = "activity_id")
     private Activity activity;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name="court_type")

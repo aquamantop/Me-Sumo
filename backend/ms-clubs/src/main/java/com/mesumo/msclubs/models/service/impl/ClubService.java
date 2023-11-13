@@ -69,10 +69,10 @@ public class ClubService implements IClubService {
             if (club.getAddress() != null) {
                 newClub.get().setAddress(club.getAddress());
             }
-
-            if (club.getActivities() != null) {
-                newClub.get().setActivities(club.getActivities());
-            }
+//
+//            if (club.getActivities() != null) {
+//                newClub.get().setActivities(club.getActivities());
+//            }
 
             if (club.getAmenities() != null) {
                 newClub.get().setAmenities(club.getAmenities());
@@ -118,13 +118,13 @@ public class ClubService implements IClubService {
         Neighborhood neighborhood = club.getNeighborhood();
         clubDTO.setNeighborhood(NeighborhoodService.neighborhoodToDTO(neighborhood));
 
-        Set<Activity> activities = club.getActivities();
-        Set<ActivityDTO> activityDTOSet = new HashSet<>();
-        for (Activity activity : activities) {
-            ActivityDTO dto = ActivityService.activityToDTO(activity);
-            activityDTOSet.add(dto);
-        }
-        clubDTO.setActivities(activityDTOSet);
+//        Set<Activity> activities = club.getActivities();
+//        Set<ActivityDTO> activityDTOSet = new HashSet<>();
+//        for (Activity activity : activities) {
+//            ActivityDTO dto = ActivityService.activityToDTO(activity);
+//            activityDTOSet.add(dto);
+//        }
+//        clubDTO.setActivities(activityDTOSet);
         clubDTO.setUrl(club.getUrl());
 
         return clubDTO;

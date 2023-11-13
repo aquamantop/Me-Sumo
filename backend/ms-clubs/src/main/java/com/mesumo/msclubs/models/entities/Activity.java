@@ -22,10 +22,7 @@ public class Activity {
 
     private String type;
 
-    @ManyToMany(mappedBy = "activities")
-    @JsonIgnore
-    private Set<Club> clubs;
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
+    //private Set<Court> courts;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
-    private Set<Court> courts;
 }

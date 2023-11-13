@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.entities.Club;
 import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.repository.ICourtRepository;
 import com.mesumo.msclubs.models.service.ICourtService;
@@ -48,4 +49,31 @@ public class CourtService implements ICourtService {
     public Court update(Court court) throws ResourceNotFoundException {
         return null;
     }
+
+    @Override
+    public List<Court> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException {
+        List<Court> court = repository.findByClubIdAndActivityId(clubId,activityId);
+        return court;
+    }
+
+
+
+
+
+
+    /*
+    @Override
+    public Court findByClubId(Long clubId, Long activityId) throws ResourceNotFoundException {
+        System.out.println(clubId + " " + activityId );
+        Court courtExists = repository.findByClubId(clubId,activityId);
+        return courtExists;
+    }*/
+
+    /*
+    @Override
+    public Court findByClubId2(Long clubId) {
+        Court courtExists = repository.findByClubId2(clubId);
+        System.out.println(courtExists.getClub());
+        return courtExists;
+    }*/
 }
