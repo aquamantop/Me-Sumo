@@ -3,6 +3,7 @@ package com.mesumo.msclubs.models.service.impl;
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.entities.Activity;
+import com.mesumo.msclubs.models.mappers.ActivityMapper;
 import com.mesumo.msclubs.models.repository.IActivityRepository;
 import com.mesumo.msclubs.models.service.IActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class ActivityService implements IActivityService {
 
     @Autowired
     IActivityRepository activityRepository;
+
+    private static final ActivityMapper activityMapper = new ActivityMapper();
 
     @Override
     public Activity findById(Long id) throws ResourceNotFoundException {
@@ -52,7 +55,7 @@ public class ActivityService implements IActivityService {
             throw new ResourceNotFoundException("ActivityDTO not found");
         }
 
-        return activityToDTO(activity.get());
+        return activityMapper.convertToDto(activity.get());
     }
 
     @Override
@@ -61,20 +64,11 @@ public class ActivityService implements IActivityService {
         List<ActivityDTO> activityDTO = new ArrayList<>();
 
         for (Activity activity : activities) {
-            ActivityDTO dto = activityToDTO(activity);
+            ActivityDTO dto = activityMapper.convertToDto(activity);
             activityDTO.add(dto);
         }
 
         return activityDTO;
-    }
-
-    public static ActivityDTO activityToDTO(Activity activity){
-        ActivityDTO dto = new ActivityDTO();
-        dto.setName(activity.getName());
-        dto.setType(activity.getType());
-        dto.setCourts(activity.getCourts());
-
-        return dto;
     }
 
 }

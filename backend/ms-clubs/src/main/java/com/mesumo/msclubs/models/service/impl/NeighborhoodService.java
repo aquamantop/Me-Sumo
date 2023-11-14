@@ -3,6 +3,7 @@ package com.mesumo.msclubs.models.service.impl;
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.NeighborhoodDTO;
 import com.mesumo.msclubs.models.entities.Neighborhood;
+import com.mesumo.msclubs.models.mappers.NeighborhoodMapper;
 import com.mesumo.msclubs.models.repository.INeighborhood;
 import com.mesumo.msclubs.models.service.INeighborhoodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class NeighborhoodService implements INeighborhoodService {
 
     @Autowired
     INeighborhood neighborhoodRepository;
+
+    private static final NeighborhoodMapper neighborhoodMapper = new NeighborhoodMapper();
 
     @Override
     public Neighborhood findById(Long id) throws ResourceNotFoundException {
@@ -51,7 +54,7 @@ public class NeighborhoodService implements INeighborhoodService {
             throw new ResourceNotFoundException("NeighborhoodDTO not found");
         }
 
-        return neighborhoodToDTO(neighborhood.get());
+        return neighborhoodMapper.convertToDto(neighborhood.get());
     }
 
     @Override
@@ -60,17 +63,11 @@ public class NeighborhoodService implements INeighborhoodService {
         List<NeighborhoodDTO> neighborhoodDTOS = new ArrayList<>();
 
         for (Neighborhood neighborhood : list) {
-            NeighborhoodDTO dto = neighborhoodToDTO(neighborhood);
+            NeighborhoodDTO dto = neighborhoodMapper.convertToDto(neighborhood);
             neighborhoodDTOS.add(dto);
         }
 
         return neighborhoodDTOS;
     }
 
-    static NeighborhoodDTO neighborhoodToDTO(Neighborhood neighborhood) {
-        NeighborhoodDTO dto = new NeighborhoodDTO();
-        dto.setName(neighborhood.getName());
-
-        return dto;
-    }
 }

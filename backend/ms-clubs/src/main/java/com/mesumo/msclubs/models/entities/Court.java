@@ -12,7 +12,6 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Court {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +21,14 @@ public class Court {
 
     private String urlImage;
 
-    @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn (name = "activy", nullable = false, referencedColumnName = "id")
     @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "club_id")
+    private Club club;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
     private Activity activity;
 
     @Enumerated(EnumType.STRING)

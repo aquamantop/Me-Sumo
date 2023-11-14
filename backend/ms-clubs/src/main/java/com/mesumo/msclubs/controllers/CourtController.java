@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.CourtDTO;
 import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.service.ICourtService;
 import org.springframework.http.ResponseEntity;
@@ -74,4 +75,19 @@ public class CourtController {
         }
         return response;
     }
+
+    @GetMapping("/club-activity")
+    public ResponseEntity getByClubId(@RequestParam Long clubId, @RequestParam Long activityId ) throws ResourceNotFoundException {
+        ResponseEntity response = null;
+        System.out.println("HASTA ACA LLEGA CONTROLLER");
+
+        List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
+        if(courts != null){
+            response = ResponseEntity.ok(courts);
+        } else {
+            response = ResponseEntity.notFound().build();
+        }
+        return response;
+    }
+
 }

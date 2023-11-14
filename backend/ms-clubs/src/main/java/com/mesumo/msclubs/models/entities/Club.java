@@ -38,4 +38,5 @@ public class Club {
     private Set<Amenity> amenities;
 
     private String url;
+
 }

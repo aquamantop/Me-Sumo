@@ -1,5 +1,7 @@
 package com.mesumo.msusers.auth;
 
+import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
+import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
-    {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ResourceAlreadyExistsException {
         return ResponseEntity.ok(authService.register(request));
     }
 }
