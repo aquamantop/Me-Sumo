@@ -1,5 +1,7 @@
 package com.mesumo.msusers.auth;
 
+import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
+import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.jwt.JwtService;
 import com.mesumo.msusers.models.entities.Role;
 import com.mesumo.msusers.models.entities.User;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 
 import lombok.RequiredArgsConstructor;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +37,8 @@ public class AuthService {
 
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) throws ResourceAlreadyExistsException {
+
         User user = User.builder()
                 .userName(request.getUserName())
                 .firstName(request.getFirstName())
@@ -42,12 +48,16 @@ public class AuthService {
                 .role(Role.ROLE_USER)
                 .build();
 
+        Optional<User> userExists =  userRepository.findByEmail(user.getEmail());
+        if(!userExists.isEmpty()) {
+            throw new ResourceAlreadyExistsException(": Cannot finish your registration. User with email: "+ user.getEmail() +" already exists");
+        }
+
         userRepository.save(user);
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
-
     }
 
 }
