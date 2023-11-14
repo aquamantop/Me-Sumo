@@ -19,12 +19,11 @@ public class BookingSpecification implements Specification<Booking> {
 
     }
 
-    public static Specification<Booking> bookingsByDate(Date startDate, Date endDate) {
+    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, java.sql.Date date) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.and(
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("date"), startDate),
-                    criteriaBuilder.lessThanOrEqualTo(root.get("date"), endDate)
-            );
+                    criteriaBuilder.equal(root.get("slotId"), slotId),
+                    criteriaBuilder.equal(root.get("date"), date));
         };
     }
 

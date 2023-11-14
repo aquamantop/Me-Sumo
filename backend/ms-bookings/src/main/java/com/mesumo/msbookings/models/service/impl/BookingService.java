@@ -93,14 +93,19 @@ public class BookingService implements IBookingService {
 
     @Override
     public List<Booking> filterBooking(Specification spec) {
-        List<Booking> listBookings = bookingRepository.findAll((Sort) spec);
-        Collections.shuffle(listBookings);
+        List<Booking> listBookings = bookingRepository.findAll(spec);
         return listBookings;
     }
 
-    public List<Booking> filterByDate(Date startDate, Date endDate){
+    @Override
+    public List<Booking> filterByDate(Date startDate, Date endDate) {
+        return null;
+    }
+
+    @Override
+    public List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date){
         Specification<Booking> spec = new BookingSpecification();
-        spec = spec.and(BookingSpecification.bookingsByDate(startDate, endDate));
+        spec = spec.and(BookingSpecification.bookingsBySlotAndDate(slotId,date));
         return filterBooking(spec);
     }
 
