@@ -1,6 +1,5 @@
 package com.mesumo.msclubs.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,14 +25,12 @@ public class Club {
 
     private String address;
 
-    //@JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "club_activity",
             joinColumns = @JoinColumn(name = "club_id"),
             inverseJoinColumns = @JoinColumn(name = "activity_id"))
     private Set<Activity> activities;
 
-    //@JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "club_amenity",
             joinColumns = @JoinColumn(name = "club_id"),
@@ -42,6 +39,4 @@ public class Club {
 
     private String url;
 
-    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "club")
-    //private Set<Court> courts;
 }

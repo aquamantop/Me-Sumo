@@ -1,9 +1,9 @@
 package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.CourtDTO;
 import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.service.ICourtService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -76,15 +76,12 @@ public class CourtController {
         return response;
     }
 
-
-    @GetMapping("/club")
+    @GetMapping("/club-activity")
     public ResponseEntity getByClubId(@RequestParam Long clubId, @RequestParam Long activityId ) throws ResourceNotFoundException {
         ResponseEntity response = null;
-        //System.out.println(court.getClub().getId());
-        //System.out.println(court.getActivity().getId());
+        System.out.println("HASTA ACA LLEGA CONTROLLER");
 
-        //Court courtExists = courtService.findByClubId(court.getClub().getId(),court.getActivity().getId());
-        List<Court> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
+        List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
         if(courts != null){
             response = ResponseEntity.ok(courts);
         } else {
@@ -93,19 +90,4 @@ public class CourtController {
         return response;
     }
 
-    /*
-    @GetMapping("/club/{id}")
-    public ResponseEntity getByClubId(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
-        //System.out.println(court.getClub().getId());
-        //System.out.println(court.getActivity().getId());
-
-        Court courtExists = courtService.findByClubId2(id);
-        if(courtExists != null){
-            response = ResponseEntity.ok(courtExists);
-        } else {
-            response = ResponseEntity.notFound().build();
-        }
-        return response;
-    }*/
 }

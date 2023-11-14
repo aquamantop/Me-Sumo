@@ -1,11 +1,9 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
-import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.dto.ClubDTO;
-import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.entities.Club;
-import com.mesumo.msclubs.models.entities.Neighborhood;
+import com.mesumo.msclubs.models.mappers.ClubMapper;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,8 @@ import java.util.*;
 public class ClubService implements IClubService {
 
     private final IClubRepository repository;
+
+    private static final ClubMapper clubMapper = new ClubMapper();
 
     public ClubService(IClubRepository repository) {
         this.repository = repository;
@@ -69,10 +69,10 @@ public class ClubService implements IClubService {
             if (club.getAddress() != null) {
                 newClub.get().setAddress(club.getAddress());
             }
-//
-//            if (club.getActivities() != null) {
-//                newClub.get().setActivities(club.getActivities());
-//            }
+
+            if (club.getActivities() != null) {
+                newClub.get().setActivities(club.getActivities());
+            }
 
             if (club.getAmenities() != null) {
                 newClub.get().setAmenities(club.getAmenities());
@@ -96,7 +96,7 @@ public class ClubService implements IClubService {
             throw new ResourceNotFoundException("Club not found");
         }
 
-        return clubToDTO(club.get());
+        return clubMapper.convertToDto(club.get());
     }
 
     @Override
@@ -105,27 +105,9 @@ public class ClubService implements IClubService {
         List<ClubDTO> clubDTO = new ArrayList<>();
 
         for (Club club : clubs) {
-            ClubDTO dto = clubToDTO(club);
+            ClubDTO dto = clubMapper.convertToDto(club);
             clubDTO.add(dto);
         }
-
-        return clubDTO;
-    }
-
-    public ClubDTO clubToDTO (Club club){
-        ClubDTO clubDTO = new ClubDTO();
-        clubDTO.setName(club.getName());
-        Neighborhood neighborhood = club.getNeighborhood();
-        clubDTO.setNeighborhood(NeighborhoodService.neighborhoodToDTO(neighborhood));
-
-//        Set<Activity> activities = club.getActivities();
-//        Set<ActivityDTO> activityDTOSet = new HashSet<>();
-//        for (Activity activity : activities) {
-//            ActivityDTO dto = ActivityService.activityToDTO(activity);
-//            activityDTOSet.add(dto);
-//        }
-//        clubDTO.setActivities(activityDTOSet);
-        clubDTO.setUrl(club.getUrl());
 
         return clubDTO;
     }
