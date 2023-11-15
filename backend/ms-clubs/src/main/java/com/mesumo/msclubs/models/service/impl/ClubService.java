@@ -2,12 +2,15 @@ package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.ClubDTO;
+import com.mesumo.msclubs.models.entities.Activity;
+import com.mesumo.msclubs.models.entities.Amenity;
 import com.mesumo.msclubs.models.entities.Club;
 import com.mesumo.msclubs.models.mappers.ClubMapper;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ClubService implements IClubService {
@@ -71,11 +74,35 @@ public class ClubService implements IClubService {
             }
 
             if (club.getActivities() != null) {
-                newClub.get().setActivities(club.getActivities());
+                Set<Activity> newActivities = newClub.get().getActivities();
+                Set<Activity> activities = club.getActivities();
+                activities.forEach(activity -> {
+                    AtomicInteger cont = new AtomicInteger();
+                    newActivities.forEach(activity1 -> {
+                        if (Objects.equals(activity.getId(), activity1.getId())){
+                            cont.getAndIncrement();
+                        }
+                    });
+                    if(cont.get() == 0) {
+                        newClub.get().getActivities().add(activity);
+                    }
+                });
             }
 
             if (club.getAmenities() != null) {
-                newClub.get().setAmenities(club.getAmenities());
+                Set<Amenity> newAmenities = newClub.get().getAmenities();
+                Set<Amenity> amenities = club.getAmenities();
+                amenities.forEach(amenity -> {
+                    AtomicInteger cont = new AtomicInteger();
+                    newAmenities.forEach(amenity1 -> {
+                        if (Objects.equals(amenity.getId(), amenity1.getId())){
+                            cont.getAndIncrement();
+                        }
+                    });
+                    if(cont.get() == 0) {
+                        newClub.get().getAmenities().add(amenity);
+                    }
+                });
             }
 
             if(club.getUrl() != null){
