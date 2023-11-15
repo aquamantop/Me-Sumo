@@ -1,0 +1,53 @@
+name: Eureka & Api Gateway 
+
+on:
+  push:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-discovery/**'
+      - 'backend/ms-gateway/**'
+  pull_request:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-discovery/**'
+      - 'backend/ms-gateway/**'
+
+jobs:
+ build-backend:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Maven package Eureka
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-gateway
+        mvn -B package --file pom.xml
+      working-directory: backend
+
+    - name: Maven package Api Gateway
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-discovery
+        mvn -B package --file pom.xml
+      working-directory: backend
+        
+    - name: Build Eureka
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-gateway
+        sudo systemctl stop eureka.service
+        cp target/ms_discovery.jar /home/ubuntu/app/eureka
+        sudo systemctl start eureka.service
+      working-directory: backend
+      
+    - name: Build Api Gateway
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-discovery
+        sudo systemctl stop gateway.service
+        cp target/ms_gateway.jar /home/ubuntu/app/gateway
+        sudo systemctl start gateway.service
+      working-directory: backend
