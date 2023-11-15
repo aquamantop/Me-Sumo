@@ -13,7 +13,7 @@ spring:
         - id: ms-clubs
           uri: http://ec2-54-166-158-177.compute-1.amazonaws.com:8080
           predicates:
-            - Path=/club/**, /neighborhood/**, /activity/**
+            - Path=/club/**, /neighborhood/**, /activity/**, /court/**
         - id: ms-users
           uri: http://ec2-3-85-198-231.compute-1.amazonaws.com:8081
           predicates:

@@ -19,8 +19,6 @@ public class Court {
 
     private String name;
 
-    private String urlImage;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "club_id")

@@ -18,8 +18,6 @@ public class CourtDTO {
 
     private String name;
 
-    private String urlImage;
-
     private CourtClubDTO club;
 
     private CourtActivityDTO activity;
