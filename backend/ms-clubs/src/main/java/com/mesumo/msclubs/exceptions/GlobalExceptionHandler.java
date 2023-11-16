@@ -18,4 +18,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> notFound(Exception exception, WebRequest req){
         return new ResponseEntity<>("Error "+ exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
 }

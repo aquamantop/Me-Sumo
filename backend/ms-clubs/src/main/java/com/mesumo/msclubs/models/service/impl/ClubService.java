@@ -1,23 +1,23 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
-import com.mesumo.msclubs.models.dto.ActivityDTO;
 import com.mesumo.msclubs.models.dto.ClubDTO;
 import com.mesumo.msclubs.models.entities.Activity;
+import com.mesumo.msclubs.models.entities.Amenity;
 import com.mesumo.msclubs.models.entities.Club;
-import com.mesumo.msclubs.models.entities.Neighborhood;
+import com.mesumo.msclubs.models.mappers.ClubMapper;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ClubService implements IClubService {
 
     private final IClubRepository repository;
+
+    private static final ClubMapper clubMapper = new ClubMapper();
 
     public ClubService(IClubRepository repository) {
         this.repository = repository;
@@ -35,9 +35,8 @@ public class ClubService implements IClubService {
     }
 
     @Override
-    public Set<Club> findAll() {
-        List<Club> clubs = repository.findAll();
-        return new HashSet<>(clubs);
+    public List<Club> findAll() {
+        return repository.findAll();
     }
 
     @Override
@@ -52,10 +51,9 @@ public class ClubService implements IClubService {
         if (club.isEmpty()){
             throw new ResourceNotFoundException("Club not found");
         }
-        else {
-            repository.deleteById(id);
-            System.out.println("Club delete with id: " + id);
-        }
+        repository.deleteById(id);
+        System.out.println("Club delete with id: " + id);
+
     }
 
     @Override
@@ -76,11 +74,39 @@ public class ClubService implements IClubService {
             }
 
             if (club.getActivities() != null) {
-                newClub.get().setActivities(club.getActivities());
+                Set<Activity> newActivities = newClub.get().getActivities();
+                Set<Activity> activities = club.getActivities();
+                activities.forEach(activity -> {
+                    AtomicInteger cont = new AtomicInteger();
+                    newActivities.forEach(activity1 -> {
+                        if (Objects.equals(activity.getId(), activity1.getId())){
+                            cont.getAndIncrement();
+                        }
+                    });
+                    if(cont.get() == 0) {
+                        newClub.get().getActivities().add(activity);
+                    }
+                });
             }
 
             if (club.getAmenities() != null) {
-                newClub.get().setAmenities(club.getAmenities());
+                Set<Amenity> newAmenities = newClub.get().getAmenities();
+                Set<Amenity> amenities = club.getAmenities();
+                amenities.forEach(amenity -> {
+                    AtomicInteger cont = new AtomicInteger();
+                    newAmenities.forEach(amenity1 -> {
+                        if (Objects.equals(amenity.getId(), amenity1.getId())){
+                            cont.getAndIncrement();
+                        }
+                    });
+                    if(cont.get() == 0) {
+                        newClub.get().getAmenities().add(amenity);
+                    }
+                });
+            }
+
+            if(club.getUrl() != null){
+                newClub.get().setUrl(club.getUrl());
             }
 
             repository.save(newClub.get());
@@ -97,35 +123,18 @@ public class ClubService implements IClubService {
             throw new ResourceNotFoundException("Club not found");
         }
 
-        return clubToDTO(club.get());
+        return clubMapper.convertToDto(club.get());
     }
 
     @Override
-    public Set<ClubDTO> findAllDTO() {
+    public List<ClubDTO> findAllDTO() {
         List<Club> clubs = repository.findAll();
-        Set<ClubDTO> clubDTOSet = new HashSet<>();
+        List<ClubDTO> clubDTO = new ArrayList<>();
 
         for (Club club : clubs) {
-            ClubDTO dto = clubToDTO(club);
-            clubDTOSet.add(dto);
+            ClubDTO dto = clubMapper.convertToDto(club);
+            clubDTO.add(dto);
         }
-
-        return clubDTOSet;
-    }
-
-    public ClubDTO clubToDTO (Club club){
-        ClubDTO clubDTO = new ClubDTO();
-        clubDTO.setName(club.getName());
-        Neighborhood neighborhood = club.getNeighborhood();
-        clubDTO.setNeighborhood(NeighborhoodService.neighborhoodToDTO(neighborhood));
-
-        Set<Activity> activities = club.getActivities();
-        Set<ActivityDTO> activityDTOSet = new HashSet<>();
-        for (Activity activity : activities) {
-            ActivityDTO dto = ActivityService.activityToDTO(activity);
-            activityDTOSet.add(dto);
-        }
-        clubDTO.setActivities(activityDTOSet);
 
         return clubDTO;
     }

@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8090}
+
+spring:
+  application:
+    name: ms-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: ms-clubs
+          uri: http://ec2-54-166-158-177.compute-1.amazonaws.com:8080
+          predicates:
+            - Path=/club/**, /neighborhood/**, /activity/**, /court/**
+        - id: ms-users
+          uri: http://ec2-3-85-198-231.compute-1.amazonaws.com:8081
+          predicates:
+            - Path=/user/**, /user-neighborhood/**, /user-activity/**, /auth/**
+
+info:
+  app:
+    name: ${spring.application.name}
+
+eureka:
+  instance:
+#    hostname: localhost
+    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceURL:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,21 +1,30 @@
 package com.mesumo.msclubs.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mesumo.msclubs.models.entities.Activity;
-import com.mesumo.msclubs.models.entities.Neighborhood;
+import com.mesumo.msclubs.models.entities.Amenity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClubDTO {
-/*Ajuste el DTO para que las entidades complejas que lo componen sean también DTOs */
+
     private String name;
+
     private NeighborhoodDTO neighborhood;
+
+    private String address;
+
     private Set<ActivityDTO> activities;
 
-    public ClubDTO() {
-    }
+    private Set<Amenity> amenities;
+
+    private String Url;
+
 }

@@ -1,21 +1,23 @@
 package com.mesumo.msclubs;
 
-import com.mesumo.msclubs.models.entities.Activity;
-import com.mesumo.msclubs.models.entities.Amenity;
-import com.mesumo.msclubs.models.entities.Club;
-import com.mesumo.msclubs.models.entities.Neighborhood;
-import com.mesumo.msclubs.models.repository.IActivityRepository;
-import com.mesumo.msclubs.models.repository.IAmenityRepository;
-import com.mesumo.msclubs.models.repository.IClubRepository;
-import com.mesumo.msclubs.models.repository.INeighborhood;
-import org.springframework.boot.CommandLineRunner;
+//import com.mesumo.msclubs.models.entities.Activity;
+//import com.mesumo.msclubs.models.entities.Amenity;
+//import com.mesumo.msclubs.models.entities.Club;
+//import com.mesumo.msclubs.models.entities.Neighborhood;
+//import com.mesumo.msclubs.models.repository.IActivityRepository;
+//import com.mesumo.msclubs.models.repository.IAmenityRepository;
+//import com.mesumo.msclubs.models.repository.IClubRepository;
+//import com.mesumo.msclubs.models.repository.INeighborhood;
+//import org.springframework.boot.CommandLineRunner;
+//import org.springframework.context.annotation.Bean;
+//import java.util.HashSet;
+//import java.util.Set;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class MsClubsApplication {
 
 	// TESTEANDO GITHUB ACTIONS
