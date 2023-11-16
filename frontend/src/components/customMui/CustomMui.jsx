@@ -11,15 +11,15 @@ export const PaperSXX = {
     transition: 'transform .2s',
 };
 
-// export const CustomBox = styled(Box)({
-//     border: "2px solid",
-//     borderColor: "secondary.main",
-//     borderRadius: "10px",
-//     margin: '-2px',
-//     position: 'relative',
-//     zIndex: 1,
-//     p: 2,
-// });
+export const BoxSX = {
+    border: "2px solid",
+    borderColor: "secondary.main",
+    borderRadius: "10px",
+    margin: '-2px',
+    position: 'relative',
+    zIndex: 1,
+    p: 2,
+};
 
 export const CustomTextField = styled(TextField)({
     "& input": {
