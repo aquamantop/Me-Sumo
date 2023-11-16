@@ -10,6 +10,8 @@ import CustomInput from '../components/customInput/CustomInput'
 import { useNavigate } from 'react-router-dom'
 import Footer from '../components/footer/Footer'
 import Header from '../components/header/Header'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -29,20 +31,34 @@ export default function Login() {
 
   const onSubmit = handleSubmit(async (userData) => {
     console.log(userData)
-    await signin(userData)
-  })
+      const response = await new Promise((resolve) => {
+        axios({
+          method: "POST",
+          url: 'http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/auth/login',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          data: userData,
+        })
+          .then((response) => resolve(response))
+          .catch((error) => resolve(error));
+      });
+    
+    console.log(response)
 
-  const signin = async (userData) => {
-    const { email, password } = userData
-
-    if (email === 'test@gmail.com' && password === '123456') {
+    if (!error) {
       setError('')
-      console.log('Credenciales válidas, redireccionando')
+      Swal.fire({
+        title: "Ingreso exitoso!",
+        icon: "success",
+        timer: 1500
+      });
       navigate('/login-success')
     } else {
       setError('Credenciales inválidas')
     }
-  }
+  })
 
   return (
     <>
