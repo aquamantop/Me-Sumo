@@ -32,13 +32,6 @@ spring:
        write_dates_as_timestamps: false
      date-format: yyyy-MM-dd
 
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    enabled: true
-
 eureka:
   instance:
 #    hostname: localhost
@@ -49,3 +42,9 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
