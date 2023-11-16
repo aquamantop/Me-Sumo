@@ -18,4 +18,6 @@ public enum Day {
     public String getDisplayName() {
         return displayName;
     }
+  
 }
+

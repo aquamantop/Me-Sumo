@@ -32,7 +32,7 @@ public class Slot {
     private Set<DayEntity> days;
   
     private Time startTime;
-  
+
     private Time endTime;
 
 }
