@@ -11,13 +11,20 @@ spring:
           enabled: true
       routes:
         - id: ms-clubs
+#          uri: http://localhost:8080
           uri: http://ec2-54-166-158-177.compute-1.amazonaws.com:8080
           predicates:
             - Path=/club/**, /neighborhood/**, /activity/**, /court/**
         - id: ms-users
+#          uri: http://localhost:8081
           uri: http://ec2-3-85-198-231.compute-1.amazonaws.com:8081
           predicates:
             - Path=/user/**, /user-neighborhood/**, /user-activity/**, /auth/**
+        - id: ms-bookings
+#          uri: http://localhost:8080
+          uri: http://ec2-54-198-112-83.compute-1.amazonaws.com:8084
+          predicates:
+            - Path=/booking/**
 
 info:
   app:
@@ -41,3 +48,9 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

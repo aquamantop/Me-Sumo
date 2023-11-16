@@ -6,10 +6,8 @@ import com.mesumo.msbookings.models.repository.IBookingRepository;
 import com.mesumo.msbookings.models.service.IBookingService;
 import com.mesumo.msbookings.searchs.BookingSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
@@ -114,6 +112,5 @@ public class BookingService implements IBookingService {
         spec = spec.and(BookingSpecification.bookingsApproved(approved));
         return filterBooking(spec);
     }
-
 
 }

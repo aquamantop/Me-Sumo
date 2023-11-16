@@ -31,7 +31,7 @@ public class CourtController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(Long id) throws ResourceNotFoundException {
+    public ResponseEntity getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
         Court court = courtService.findById(id);
         if(court != null){
