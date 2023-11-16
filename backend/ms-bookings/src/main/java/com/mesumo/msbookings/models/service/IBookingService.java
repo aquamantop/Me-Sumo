@@ -20,5 +20,5 @@ public interface IBookingService {
     List<Booking> filterBooking(Specification spec);
     List<Booking> filterByDate(Date startDate, Date endDate);
 
-    List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date);
+    List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date, boolean approved);
 }

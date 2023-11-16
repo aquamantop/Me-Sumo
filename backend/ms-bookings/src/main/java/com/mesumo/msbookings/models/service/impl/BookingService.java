@@ -103,10 +103,17 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date){
+    public List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date, boolean approved) {
         Specification<Booking> spec = new BookingSpecification();
-        spec = spec.and(BookingSpecification.bookingsBySlotAndDate(slotId,date));
+        spec = spec.and(BookingSpecification.bookingsBySlotAndDate(slotId,date,approved));
         return filterBooking(spec);
     }
+
+    public List<Booking> filterByApproved(boolean approved) {
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(approved));
+        return filterBooking(spec);
+    }
+
 
 }

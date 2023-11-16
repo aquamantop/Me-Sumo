@@ -19,13 +19,22 @@ public class BookingSpecification implements Specification<Booking> {
 
     }
 
-    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, java.sql.Date date) {
+    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, java.sql.Date date, boolean approved) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("slotId"), slotId),
-                    criteriaBuilder.equal(root.get("date"), date));
+                    criteriaBuilder.equal(root.get("date"), date),
+                    criteriaBuilder.equal(root.get("approved"), approved));
         };
     }
+
+    public static Specification<Booking> bookingsApproved(boolean approved) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("approved"), approved));
+        };
+    }
+
 
     @Override
     public Predicate toPredicate(Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
