@@ -14,13 +14,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(value = "login")
+    @PostMapping(value = "/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
     {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping(value = "register")
+    @PostMapping(value = "/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ResourceAlreadyExistsException {
         return ResponseEntity.ok(authService.register(request));
     }
