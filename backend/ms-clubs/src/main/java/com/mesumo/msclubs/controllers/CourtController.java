@@ -79,7 +79,6 @@ public class CourtController {
     @GetMapping("/club-activity")
     public ResponseEntity getByClubId(@RequestParam Long clubId, @RequestParam Long activityId ) throws ResourceNotFoundException {
         ResponseEntity response = null;
-        System.out.println("HASTA ACA LLEGA CONTROLLER");
 
         List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
         if(courts != null){
@@ -89,5 +88,4 @@ public class CourtController {
         }
         return response;
     }
-
 }

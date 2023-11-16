@@ -70,4 +70,5 @@ public class SlotService implements ISlotService {
             throw new ResourceNotFoundException("Slot not found");
         }
     }
+
 }
