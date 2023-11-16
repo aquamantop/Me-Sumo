@@ -1,3 +1,5 @@
+server:
+  port: 8084
 
 spring:
   application:
@@ -29,21 +31,13 @@ spring:
         write_dates_as_timestamps: false
       date-format: yyyy-MM-dd
 
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    enabled: true
 eureka:
   instance:
-    hostname: localhost
-    #hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+#    hostname: localhost
+    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
-server:
-  port: 8084

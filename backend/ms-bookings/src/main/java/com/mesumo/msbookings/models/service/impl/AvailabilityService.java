@@ -8,11 +8,8 @@ import com.mesumo.msbookings.models.service.IAvailabilityService;
 import com.mesumo.msbookings.models.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.*;
-
-
 
 @Service
 public class AvailabilityService implements IAvailabilityService {
@@ -21,10 +18,11 @@ public class AvailabilityService implements IAvailabilityService {
     IClubFeignClient clubFeignClient;
     @Autowired
     IBookingService bookingService;
+
     @Override
     public Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, String activityName) {
 
-        ClubDTO club = (ClubDTO) clubFeignClient.getById(clubId);
+        ClubDTO club = clubFeignClient.getById(clubId);
 
         ActivityDTO selectedActivity = null;
         for (ActivityDTO activity : club.getActivities()) {
