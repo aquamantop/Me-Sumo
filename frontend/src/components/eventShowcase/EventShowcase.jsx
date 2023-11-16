@@ -5,24 +5,15 @@ import {
     Typography,
     Paper
 } from "@mui/material";
-import EventCard from "../eventCard/EventCard";
-
-const PaperSX = {
-    border: "2px solid",
-    borderColor: "secondary.main",
-    borderRadius: "10px",
-    backgroundColor:
-        "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)",
-    background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 100%)",
-    transition: 'transform .2s',
-};
+import EventCard from "./EventCard";
+import { PaperSXX } from "../customMui/CustomMui";
 
 function EventShowcase({keyword}) {
     return (
-        
+        <>
             <Container sx={{mb:2}}>
                 <Paper
-                    sx={PaperSX}
+                    sx={PaperSXX}
                 >
                     <Box
                         sx={{
@@ -44,11 +35,11 @@ function EventShowcase({keyword}) {
                             <Grid item xs={12} sm={6} md={4} key={index} sx={{ p: 2 }}>
                                 <EventCard/>
                             </Grid>
-                        ))}
+                        ))} 
                     </Grid>
                 </Paper>
             </Container>
-     
+        </>
     );
 }
 

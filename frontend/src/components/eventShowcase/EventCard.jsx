@@ -1,14 +1,10 @@
 import {
     Box,
-    Container,
-    Grid,
     Typography,
     Card,
     CardContent,
     CardMedia,
-    CardHeader,
-    Button,
-    Paper,
+    Button
 } from "@mui/material";
 
 import eventoImagen from "../../assets/club-field.png"
