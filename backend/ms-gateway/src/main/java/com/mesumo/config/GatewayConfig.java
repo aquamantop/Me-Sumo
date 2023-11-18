@@ -3,7 +3,6 @@ package com.mesumo.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -17,7 +16,7 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class GatewayConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityWebFilterChain (ServerHttpSecurity http) {
@@ -26,14 +25,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable);
         http
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.POST,"/auth/**").permitAll()
-                        .pathMatchers(HttpMethod.POST,"/club/add").hasAnyRole("CLUB", "ADMIN")
-                        .pathMatchers(HttpMethod.PUT,"/club/update").hasAnyRole("CLUB", "ADMIN")
-                        .pathMatchers(HttpMethod.DELETE,"/club/delete/{id}").hasAnyRole("CLUB", "ADMIN")
-                        .pathMatchers("/neighborhood/**").permitAll()
-                        .pathMatchers("/activity/**").permitAll()
-                        .pathMatchers("/user/**").hasRole("ADMIN")
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()
                 );
 
         return http.build();
