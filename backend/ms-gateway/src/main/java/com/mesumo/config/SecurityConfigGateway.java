@@ -16,7 +16,7 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
-public class GatewayConfig {
+public class SecurityConfigGateway {
 
     @Bean
     public SecurityWebFilterChain springSecurityWebFilterChain (ServerHttpSecurity http) {
