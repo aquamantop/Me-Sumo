@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/court")
-@CrossOrigin
 public class CourtController {
     ICourtService courtService;
 

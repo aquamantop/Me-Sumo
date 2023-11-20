@@ -13,7 +13,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/user-neighborhood")
-@CrossOrigin
 public class NeighborhoodController {
 
     @Autowired

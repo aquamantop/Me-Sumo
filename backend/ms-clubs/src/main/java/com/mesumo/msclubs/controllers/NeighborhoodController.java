@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/neighborhood")
-@CrossOrigin
 public class NeighborhoodController {
 
     private final NeighborhoodService service;
