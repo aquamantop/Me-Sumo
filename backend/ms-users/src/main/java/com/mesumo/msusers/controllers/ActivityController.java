@@ -13,7 +13,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/user-activity")
-@CrossOrigin
 public class ActivityController {
 
     @Autowired

@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/club")
-@CrossOrigin
 public class ClubController {
 
     private final ClubService service;

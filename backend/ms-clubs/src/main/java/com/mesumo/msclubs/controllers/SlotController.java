@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/slot")
-@CrossOrigin
 public class SlotController {
 
     ISlotService slotService;

@@ -21,7 +21,7 @@ spring:
           predicates:
             - Path=/user/**, /user-neighborhood/**, /user-activity/**, /auth/**
         - id: ms-bookings
-#          uri: http://localhost:8080
+#          uri: http://localhost:8084
           uri: http://ec2-54-198-112-83.compute-1.amazonaws.com:8084
           predicates:
             - Path=/booking/**
@@ -51,6 +51,4 @@ management:
 
 logging:
   level:
-    org:
-      springframework:
-        security: DEBUG
+    org.springframework.security: DEBUG

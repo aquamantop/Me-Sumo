@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FeignConfig {
+
     private final AccessTokenInterceptor accessTokenInterceptor;
 
     @Bean
     public RequestInterceptor requestInterceptor() {
         return accessTokenInterceptor;
     }
+
 }
 

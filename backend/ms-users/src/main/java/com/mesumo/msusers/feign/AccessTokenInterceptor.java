@@ -1,4 +1,4 @@
-package com.mesumo.msbookings.config.feign;
+package com.mesumo.msusers.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
