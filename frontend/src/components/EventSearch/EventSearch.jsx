@@ -154,9 +154,17 @@ const CssTextField = styled(TextField)({
 });
 
 const CustomPaper = styled(Paper)({
-    '& .MuiPaper-root':{
-        backgroundColor: 'red',
-
+    '& .MuiAutocomplete-option': {
+        color: 'white',//Color de la fuente
+        '&:hover': {
+            backgroundColor: "rgb(255,255,255, 0.1)",
+        },
+        '&&[aria-selected="true"].Mui-focused':{
+            backgroundColor: "green"
+        }
+      },
+    '& .MuiAutocomplete-listbox':{
+        backgroundColor: 'rgb(255,255,255, 0.1)',//Color del fondo 
     }
 })
 function EventSearch() {
@@ -168,6 +176,7 @@ function EventSearch() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    mx:2
                 }}
             >
                 <Typography variant="h5" component="h5" color="primary.main">
@@ -207,6 +216,7 @@ function EventSearch() {
                 id="category"
                 disablePortal
                 fullWidth
+                PaperComponent={CustomPaper}
                 sx={{'&button':{color:"white"}}}
                 options={categories}
                 renderInput={(params)=>
@@ -235,6 +245,7 @@ function EventSearch() {
                 id="nhood"
                 disablePortal
                 fullWidth
+                PaperComponent={CustomPaper}
                 sx={{'&button':{color:"white"}}}
                 options={barrios}
                 renderInput={(params)=>
