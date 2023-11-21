@@ -37,7 +37,7 @@ const ClubCard = ({ club }) => {
           component="img"
           alt="Imagen del Evento"
           height="200"
-          image={eventoImagen}
+          image={ club.url ? club.url : eventoImagen }
         />
         <Box
           sx={{

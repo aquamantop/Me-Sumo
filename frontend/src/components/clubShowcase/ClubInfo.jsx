@@ -5,6 +5,9 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
 
 export const ClubInfo = ({ club }) => {
+
+  const images = [{original: club.url, thumbnail: club.url}]
+
   return (
     <>
       <Grid container >
@@ -18,8 +21,7 @@ export const ClubInfo = ({ club }) => {
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}>
             <ImageGallery
-                items={[{original: "https://me-sumo-img.s3.amazonaws.com/01_futbol-retiro-caba.jpeg",
-                thumbnail: "https://me-sumo-img.s3.amazonaws.com/01_futbol-retiro-caba.jpeg"}]}
+                items={images}
                 showThumbnails={0}
                 showBullets={0}
                 showFullscreenButton={0}
