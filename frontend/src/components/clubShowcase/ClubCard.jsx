@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
 import eventoImagen from "../../assets/club-field.png"
 
-const ClubCard = ({name, address, neighborhood, activities}) => {
+const ClubCard = ({ club }) => {
   return (
     <>
       <Card
@@ -17,17 +17,17 @@ const ClubCard = ({name, address, neighborhood, activities}) => {
       >
         <CardContent>
           <Typography variant="h6" color="primary.main">
-            Club: {name}
+            Club: {club.name}
           </Typography>
           <Typography variant="h6" color="primary.main">
-            Dirección: {address}
+            Dirección: {club.address}
           </Typography>
           <Typography variant="body2" color="secondary.main">
-            Barrio: {neighborhood.name}
+            Barrio: {club.neighborhood.name}
           </Typography>
           <Typography variant="body2" color="secondary.main">
             Actvividades: {
-              activities.map((activity) => {
+              club.activities.map((activity) => {
                 return activity.name+" "+activity.type+", "
               })
             }
@@ -47,7 +47,7 @@ const ClubCard = ({name, address, neighborhood, activities}) => {
             mb: 2,
           }}
         >
-          <Link href='/club' >
+          <Link href={`/club/${club.id}`} >
             <Button variant="contained" color="secondary">
               Ver Más
             </Button>
