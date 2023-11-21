@@ -1,24 +1,10 @@
 import { Grid, Typography, Box, Link, Button, Card } from "@mui/material";
 import EventCard from "../eventShowcase/EventCard";
 import { BoxSX } from "../customMui/CustomMui";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-const images = [
-  {
-    original: "https://picsum.photos/id/1018/1000/600/",
-    thumbnail: "https://picsum.photos/id/1018/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1015/1000/600/",
-    thumbnail: "https://picsum.photos/id/1015/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1019/1000/600/",
-    thumbnail: "https://picsum.photos/id/1019/250/150/",
-  },
-];
+import ImageGallery from "react-image-gallery";
 
-export const ClubInfo = () => {
+export const ClubInfo = ({ club }) => {
   return (
     <>
       <Grid container >
@@ -31,12 +17,13 @@ export const ClubInfo = () => {
           </Typography>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}>
-              <ImageGallery
-                items={images}
+            <ImageGallery
+                items={[{original: "https://me-sumo-img.s3.amazonaws.com/01_futbol-retiro-caba.jpeg",
+                thumbnail: "https://me-sumo-img.s3.amazonaws.com/01_futbol-retiro-caba.jpeg"}]}
                 showThumbnails={0}
                 showBullets={0}
                 showFullscreenButton={0}
-                showPlayButton={0}
+                showPlayButton={0} 
               />
             </Grid>
             <Grid item xs={6}>
@@ -57,8 +44,12 @@ export const ClubInfo = () => {
                   p:1
                 }}>
                 <Typography variant="body1" color="primary.main">Servicios del Club</Typography>
-                
-              </Card>
+                {
+                  club.amenities.map((amenitie, index) => {
+                    return <Typography variant="body2" color="secondary.main" key={index} >{amenitie.name}</Typography>
+                  })
+                }
+                </Card>
             </Grid>
           </Grid>
           <Box mt={2} textAlign="center">
