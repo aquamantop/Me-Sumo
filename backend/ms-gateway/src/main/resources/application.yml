@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: ms-gateway
+
   cloud:
     gateway:
       discovery:
@@ -34,6 +35,7 @@ eureka:
   instance:
 #    hostname: localhost
     hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+
   client:
     registerWithEureka: true
     fetchRegistry: true
