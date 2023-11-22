@@ -31,5 +31,5 @@ jobs:
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-bookings
         sudo systemctl stop booking.service
-        cp target/ms_discovery.jar /home/ubuntu/booking
+        cp target/ms_bookings.jar /home/ubuntu/booking
         sudo systemctl start booking.service

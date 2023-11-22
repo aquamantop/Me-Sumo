@@ -31,5 +31,5 @@ jobs:
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         sudo systemctl stop user.service
-        cp target/ms_discovery.jar /home/ubuntu/user
+        cp target/ms_users.jar /home/ubuntu/user
         sudo systemctl start user.service

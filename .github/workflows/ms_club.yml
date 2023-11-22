@@ -31,5 +31,5 @@ jobs:
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
         sudo systemctl stop eureka.service
-        cp target/ms_discovery.jar /home/ubuntu/app/eureka
+        cp target/ms_clubs.jar /home/ubuntu/app/eureka
         sudo systemctl start eureka.service
