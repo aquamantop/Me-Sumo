@@ -4,10 +4,12 @@ import com.mesumo.msbookings.config.feign.FeignConfig;
 import com.mesumo.msbookings.models.dto.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "ms-users", configuration = FeignConfig.class)
+@FeignClient(url = "http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/user", name = "ms-users", configuration = FeignConfig.class)
 public interface IUserFeignClient {
-    @GetMapping("/users")
-    UserDTO getById(@RequestParam Long id);
+
+    @GetMapping("/{id}")
+    UserDTO getById(@PathVariable Long id);
+
 }

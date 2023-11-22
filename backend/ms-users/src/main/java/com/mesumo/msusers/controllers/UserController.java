@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Set;
 
 @RestController
@@ -24,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/search-email")
-    public ResponseEntity<User> getByEmail(@RequestParam("email") String email) throws ResourceNotFoundException {
+    public ResponseEntity<User> getByEmail(@RequestParam String email) throws ResourceNotFoundException {
         return new ResponseEntity<>(userService.findByEmail(email), HttpStatus.OK);
     }
 
