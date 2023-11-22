@@ -13,7 +13,7 @@ spring:
       routes:
         - id: ms-clubs
 #          uri: http://localhost:8080
-          uri: http://ec2-54-166-158-177.compute-1.amazonaws.com:8080
+          uri: http://ec2-34-229-118-35.compute-1.amazonaws.com:8080
           predicates:
             - Path=/club/**, /neighborhood/**, /activity/**, /court/**
         - id: ms-users
