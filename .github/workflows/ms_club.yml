@@ -30,6 +30,6 @@ jobs:
     - name: Build Club
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
-        sudo systemctl stop eureka.service
-        cp target/ms_clubs.jar /home/ubuntu/app/eureka
-        sudo systemctl start eureka.service
+        sudo systemctl stop club.service
+        cp target/ms_clubs.jar /home/ubuntu/app/club
+        sudo systemctl start club.service
