@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class UserFeignRepository implements IUserFeignClient{
 
 
-    @Qualifier("userFeignRepository")
+    @Qualifier("com.mesumo.msbookings.models.repository.feign.IUserFeignClient")
     @Autowired
     private final IUserFeignClient feignClient;
 
