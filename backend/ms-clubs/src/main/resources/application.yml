@@ -35,7 +35,7 @@ spring:
 eureka:
   instance:
 #    hostname: localhost
-    hostname: ec2-50-17-115-59.compute-1.amazonaws.com
+    hostname: ec2-107-21-182-26.compute-1.amazonaws.com
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     registerWithEureka: true
