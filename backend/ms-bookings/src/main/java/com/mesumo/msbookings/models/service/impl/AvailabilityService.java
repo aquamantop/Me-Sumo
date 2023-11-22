@@ -7,6 +7,7 @@ import com.mesumo.msbookings.models.repository.feign.IClubFeignClient;
 import com.mesumo.msbookings.models.service.IAvailabilityService;
 import com.mesumo.msbookings.models.service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.*;
@@ -14,8 +15,10 @@ import java.util.*;
 @Service
 public class AvailabilityService implements IAvailabilityService {
 
+    @Qualifier("com.mesumo.msbookings.models.repository.feign.IClubFeignClient")
     @Autowired
     IClubFeignClient clubFeignClient;
+
     @Autowired
     IBookingService bookingService;
 
@@ -38,25 +41,20 @@ public class AvailabilityService implements IAvailabilityService {
         LocalDate monthStart = LocalDate.now();
         LocalDate monthEnd = monthStart.plusDays(30);
 
-
         for (CourtDTO court : selectedActivity.getCourts()) {
 
             Set<SlotDTO> slots = court.getSlots();
 
-
             for (SlotDTO slot : slots) {
-
-
                 SlotWithoutDaysDTO slotWithoutDays = new SlotWithoutDaysDTO();
                 slotWithoutDays.setId(slot.getId());
                 slotWithoutDays.setCapacity(slot.getCapacity());
                 slotWithoutDays.setStartTime(slot.getStartTime());
                 slotWithoutDays.setEndTime(slot.getEndTime());
 
-
                 for (DayEntity day : slot.getDays()) {
                     LocalDate dateSlot = monthStart;
-                    List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), java.sql.Date.valueOf(dateSlot), true);
+                    List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
 
                     while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
                         dateSlot = dateSlot.plusDays(1);
@@ -66,20 +64,17 @@ public class AvailabilityService implements IAvailabilityService {
                             availabilityCalendar.put(dateSlot, new HashMap<>());
                         }
 
-
                         if (bookings.isEmpty()) {
                             availabilityCalendar.computeIfAbsent(dateSlot, k -> new HashMap<>())
                                     .computeIfAbsent(court, k -> new ArrayList<>())
                                     .add(slotWithoutDays);
                         }
 
-
                         dateSlot = dateSlot.plusWeeks(1);
-                        bookings = bookingService.filterBySlotAndDate(slot.getId(), java.sql.Date.valueOf(dateSlot), true);
+                        bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
                     }
                     bookings = null;
                 }
-
             }
         }
 

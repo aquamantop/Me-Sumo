@@ -58,7 +58,6 @@ public class CourtService implements ICourtService {
     @Override
     public List<CourtDTO> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException {
         List<Court> courts = repository.findByClubIdAndActivityId(clubId, activityId);
-        System.out.println("HASTA ACA LLEGA SERVICE");
 
         if(courts.isEmpty()) throw new ResourceNotFoundException("Courts not found");
 

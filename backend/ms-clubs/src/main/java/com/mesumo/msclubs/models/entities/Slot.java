@@ -3,7 +3,7 @@ package com.mesumo.msclubs.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
@@ -31,8 +31,8 @@ public class Slot {
             inverseJoinColumns = @JoinColumn(name = "day_entity_id"))
     private Set<DayEntity> days;
   
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 
 }

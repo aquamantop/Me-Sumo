@@ -40,6 +40,4 @@ public class Booking {
 
     private boolean approved;
 
-    //Set<UserDTO> group;
-
 }
