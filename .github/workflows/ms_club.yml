@@ -11,8 +11,8 @@ on:
       - 'backend/ms-clubs/**'
 
 jobs:
- build-clubs:
-    runs-on: [self-hosted, linux, X64, clubs]
+ build-club:
+    runs-on: [self-hosted, linux, X64, api-1]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -22,12 +22,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Maven package Clubs
+    - name: Maven package Club
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
         mvn -B package --file pom.xml
         
-    - name: Build Clubs
+    - name: Build Club
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
         sudo systemctl stop eureka.service
