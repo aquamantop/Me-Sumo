@@ -11,11 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 import lombok.RequiredArgsConstructor;
-
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -23,8 +19,11 @@ import java.util.Optional;
 public class AuthService {
 
     private final IUserRepository userRepository;
+
     private final JwtService jwtService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) {
@@ -34,7 +33,6 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(token)
                 .build();
-
     }
 
     public AuthResponse register(RegisterRequest request) throws ResourceAlreadyExistsException {

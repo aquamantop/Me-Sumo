@@ -1,5 +1,9 @@
 package com.mesumo.msbookings.models.dto;
 
 public enum Role {
-    ADMIN, USER, CLUB
+
+    ROLE_ADMIN,
+    ROLE_USER,
+    ROLE_CLUB
+
 }
