@@ -12,7 +12,7 @@ on:
 
 jobs:
  build-users:
-    runs-on: discovery
+    runs-on: [self-hosted, linux, X64, discovery]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
