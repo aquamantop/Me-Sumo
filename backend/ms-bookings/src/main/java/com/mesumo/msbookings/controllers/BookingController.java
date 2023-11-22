@@ -72,7 +72,19 @@ public class BookingController {
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+        } else response = new ResponseEntity("Empty map", HttpStatus.NOT_FOUND);
+
+        return response;
+    }
+
+    @GetMapping("/court_slots")
+    public ResponseEntity filterByCourtAndSlots(@RequestParam Long clubId, @RequestParam Long courtId, @RequestParam String activityName) {
+        ResponseEntity response = null;
+        Map<CourtDTO, Map<LocalDate,List<SlotWithoutDaysDTO>>> map = availabilityService.getAvailableBookingsByCourt(clubId, courtId, activityName);
+
+        if(map != null){
+            response = new ResponseEntity(map, HttpStatus.OK);
+        } else response = new ResponseEntity("Empty map", HttpStatus.NOT_FOUND);
 
         return response;
     }
