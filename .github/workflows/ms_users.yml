@@ -11,8 +11,8 @@ on:
       - 'backend/ms-users/**'
 
 jobs:
- build-users:
-    runs-on: discovery
+ build-user:
+    runs-on: [self-hosted, linux, X64, api-2]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -22,14 +22,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Maven package Users
+    - name: Maven package User
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         mvn -B package --file pom.xml
         
-    - name: Build Users
+    - name: Build User
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         sudo systemctl stop user.service
-        cp target/ms_discovery.jar /home/ubuntu/user
+        cp target/ms_users.jar /home/ubuntu/user
         sudo systemctl start user.service

@@ -11,8 +11,8 @@ on:
       - 'backend/ms-bookings/**'
 
 jobs:
- build-bookings:
-    runs-on: bookings
+ build-booking:
+    runs-on: [self-hosted, linux, X64, api-3]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -22,14 +22,14 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Maven package Bookings
+    - name: Maven package Booking
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-bookings
         mvn -B package --file pom.xml
         
-    - name: Build Bookings
+    - name: Build Booking
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-bookings
         sudo systemctl stop booking.service
-        cp target/ms_discovery.jar /home/ubuntu/booking
+        cp target/ms_bookings.jar /home/ubuntu/booking
         sudo systemctl start booking.service

@@ -8,6 +8,7 @@ import com.mesumo.msbookings.searchs.BookingSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -15,6 +16,7 @@ public class BookingService implements IBookingService {
 
     @Autowired
     IBookingRepository bookingRepository;
+
     @Override
     public Booking findById(Long id) throws ResourceNotFoundException {
         Optional<Booking> booking = bookingRepository.findById(id);
@@ -38,7 +40,6 @@ public class BookingService implements IBookingService {
             bookingRepository.deleteById(id);
             System.out.println("Booking delete with id: " + id);
         }
-
     }
 
     @Override
@@ -73,9 +74,6 @@ public class BookingService implements IBookingService {
             if (!booking.isApproved()){
                 newBooking.get().setApproved(true);
             }
-            /*if (booking.getGroup() != null){
-                newBooking.get().setGroup(booking.getGroup());
-            }*/
 
             bookingRepository.save(newBooking.get());
         }else System.err.println("Booking not found with id: " + booking.getId());
@@ -96,14 +94,14 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public List<Booking> filterByDate(Date startDate, Date endDate) {
+    public List<Booking> filterByDate(LocalDate startDate, LocalDate endDate) {
         return null;
     }
 
     @Override
-    public List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date, boolean approved) {
+    public List<Booking> filterBySlotAndDate(Long slotId, LocalDate date, boolean approved) {
         Specification<Booking> spec = new BookingSpecification();
-        spec = spec.and(BookingSpecification.bookingsBySlotAndDate(slotId,date,approved));
+        spec = spec.and(BookingSpecification.bookingsBySlotAndDate(slotId, date, approved));
         return filterBooking(spec);
     }
 

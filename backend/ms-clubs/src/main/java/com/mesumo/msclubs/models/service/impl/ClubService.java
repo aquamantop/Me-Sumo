@@ -87,6 +87,7 @@ public class ClubService implements IClubService {
                         newActivities.add(activity);
                     }
                 });
+                newClub.get().setActivities(newActivities);
             }
 
             if (club.getAmenities() != null) {
@@ -103,6 +104,7 @@ public class ClubService implements IClubService {
                         newAmenities.add(amenity);
                     }
                 });
+                newClub.get().setAmenities(newAmenities);
             }
 
             if(club.getUrl() != null){

@@ -67,7 +67,7 @@ public class UserService implements IUserService {
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
         if (user.getEmail() != null) userExists.setEmail(user.getEmail());
-        if(user.getPhoneNumber() != null) userExists.setPhoneNumber(user.getPhoneNumber());
+        if (user.getPhoneNumber() != null) userExists.setPhoneNumber(user.getPhoneNumber());
         if (user.getActivity() != null) {
             Set<Activity> list = userExists.getActivity();
             Set<Activity> newList = user.getActivity();
@@ -78,10 +78,11 @@ public class UserService implements IUserService {
                         cont.getAndIncrement();
                     }
                 });
-                if(cont.get() == 0) {
+                if (cont.get() == 0) {
                     list.add(activity);
                 }
             });
+            userExists.setActivity(list);
         }
         if (user.getNeighborhood() != null) userExists.setNeighborhood(user.getNeighborhood());
 
