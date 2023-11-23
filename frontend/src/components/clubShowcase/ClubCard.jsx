@@ -9,6 +9,7 @@ const ClubCard = ({ club }) => {
         variant="outlined"
         sx={{
           border: "1px solid #434242",
+          height: "400px",
           transition: "box-shadow 0.3s",
           "&:hover": {
             boxShadow: "0 0 5px 5px rgb(195, 253, 116, 0.2)",
@@ -36,8 +37,11 @@ const ClubCard = ({ club }) => {
         <CardMedia
           component="img"
           alt="Imagen del Evento"
-          height="200"
-          image={ club.url ? club.url : eventoImagen }
+          maxHeight="200"
+          image={club.url ? club.url : eventoImagen}
+          /* sx={{
+            objectFit: "cover"
+          }} */
         />
         <Box
           sx={{
