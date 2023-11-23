@@ -2,16 +2,14 @@ package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.CourtDTO;
-import com.mesumo.msclubs.models.dto.SlotWithoutDaysDTO;
 import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.service.ICourtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/court")
@@ -93,15 +91,5 @@ public class CourtController {
         return response;
     }
 
-    @GetMapping("/court_slots")
-    public ResponseEntity getCourtSlots(@RequestParam Long clubId, @RequestParam Long courtId, @RequestParam String activityName) {
-        ResponseEntity response = null;
-        Map<CourtDTO, Map<LocalDate,List<SlotWithoutDaysDTO>>> map = courtService.getCourtSlots(clubId, courtId, activityName);
 
-        if(map != null){
-            response = new ResponseEntity(map, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty map", HttpStatus.NOT_FOUND);
-
-        return response;
-    }
 }

@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalTime;
@@ -18,10 +19,19 @@ public class Slot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne (cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn (name = "court", nullable = false, referencedColumnName = "id")
-    @JsonIgnore
     private Court court;
+
+    @JsonIgnore
+    public Court getCourt() {
+        return court;
+    }
+
+    @JsonProperty("court")
+    public void setCourt(Court court) {
+        this.court = court;
+    }
 
     private int capacity;
 

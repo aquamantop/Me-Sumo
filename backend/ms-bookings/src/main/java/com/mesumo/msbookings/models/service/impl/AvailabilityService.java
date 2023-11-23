@@ -124,7 +124,7 @@ public class AvailabilityService implements IAvailabilityService {
 
             for (DayEntity day : slot.getDays()) {
                 LocalDate dateSlot = monthStart;
-                List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), java.sql.Date.valueOf(dateSlot), true);
+                List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
 
                 while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
                     dateSlot = dateSlot.plusDays(1);
@@ -144,7 +144,7 @@ public class AvailabilityService implements IAvailabilityService {
                     }
 
                     dateSlot = dateSlot.plusWeeks(1);
-                    bookings = bookingService.filterBySlotAndDate(slot.getId(), java.sql.Date.valueOf(dateSlot), true);
+                    bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
                 }
                 bookings = null;
             }

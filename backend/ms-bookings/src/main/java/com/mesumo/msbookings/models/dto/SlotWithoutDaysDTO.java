@@ -1,13 +1,12 @@
 package com.mesumo.msbookings.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mesumo.msbookings.models.entities.DayEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
+import java.time.LocalTime;
 
 
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class SlotWithoutDaysDTO {
     private int capacity;
 
 
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 }

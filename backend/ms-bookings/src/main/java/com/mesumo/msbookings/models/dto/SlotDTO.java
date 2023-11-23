@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Set;
 
 
@@ -22,8 +22,8 @@ public class SlotDTO {
 
     private Set<DayEntity> days;
 
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 
 }
