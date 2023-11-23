@@ -69,6 +69,10 @@ public class ClubService implements IClubService {
                 newClub.get().setNeighborhood(club.getNeighborhood());
             }
 
+            if (club.getDescription() != null) {
+                newClub.get().setDescription(club.getDescription());
+            }
+
             if (club.getAddress() != null) {
                 newClub.get().setAddress(club.getAddress());
             }
