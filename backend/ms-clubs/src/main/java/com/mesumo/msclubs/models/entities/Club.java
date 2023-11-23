@@ -19,6 +19,8 @@ public class Club {
 
     private String name;
 
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "neighborhood_id")
     private Neighborhood neighborhood;
