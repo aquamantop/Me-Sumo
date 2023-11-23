@@ -8,6 +8,8 @@ import com.mesumo.msclubs.models.repository.ICourtRepository;
 import com.mesumo.msclubs.models.service.ICourtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +60,6 @@ public class CourtService implements ICourtService {
     @Override
     public List<CourtDTO> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException {
         List<Court> courts = repository.findByClubIdAndActivityId(clubId, activityId);
-        System.out.println("HASTA ACA LLEGA SERVICE");
 
         if(courts.isEmpty()) throw new ResourceNotFoundException("Courts not found");
 

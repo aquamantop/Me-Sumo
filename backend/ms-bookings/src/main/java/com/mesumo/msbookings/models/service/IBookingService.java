@@ -3,8 +3,7 @@ package com.mesumo.msbookings.models.service;
 import com.mesumo.msbookings.models.entities.Booking;
 import com.mesumo.msbookings.exceptions.ResourceNotFoundException;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +17,8 @@ public interface IBookingService {
     Set<Booking> findAll();
 
     List<Booking> filterBooking(Specification spec);
-    List<Booking> filterByDate(Date startDate, Date endDate);
+    List<Booking> filterByDate(LocalDate startDate, LocalDate endDate);
 
-    List<Booking> filterBySlotAndDate(Long slotId, java.sql.Date date, boolean approved);
+    List<Booking> filterBySlotAndDate(Long slotId, LocalDate date, boolean approved);
+
 }

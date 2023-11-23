@@ -32,7 +32,7 @@ public class SlotController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(Long id) throws ResourceNotFoundException {
+    public ResponseEntity getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
         Slot slot = slotService.findById(id);
 

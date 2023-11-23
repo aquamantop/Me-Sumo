@@ -6,8 +6,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BookingSpecification implements Specification<Booking> {
     public static Specification<Booking> allBookings() {
@@ -19,7 +18,7 @@ public class BookingSpecification implements Specification<Booking> {
 
     }
 
-    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, java.sql.Date date, boolean approved) {
+    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, LocalDate date, boolean approved) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("slotId"), slotId),
@@ -35,9 +34,9 @@ public class BookingSpecification implements Specification<Booking> {
         };
     }
 
-
     @Override
     public Predicate toPredicate(Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return null;
     }
+
 }
