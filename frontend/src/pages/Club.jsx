@@ -19,7 +19,7 @@ const Club = () => {
     useEffect(() => {
         axios({
             method: "GET",
-            url: `http://ec2-50-17-115-59.compute-1.amazonaws.com:8090/club/${id}`,
+            url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/club/${id}`,
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json"

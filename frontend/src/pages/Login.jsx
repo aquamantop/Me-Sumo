@@ -33,7 +33,7 @@ export default function Login() {
     const response = await new Promise((resolve) => {
       axios({
         method: "POST",
-        url: "http://ec2-50-17-115-59.compute-1.amazonaws.com:8090/auth/login",
+        url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"

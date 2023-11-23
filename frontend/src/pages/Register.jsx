@@ -42,7 +42,7 @@ export default function Register() {
     const response = await new Promise((resolve) => {
         axios({
           method: "POST",
-          url: 'http://ec2-50-17-115-59.compute-1.amazonaws.com:8090/auth/register',
+          url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/register',
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
