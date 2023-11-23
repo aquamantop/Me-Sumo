@@ -1,22 +1,21 @@
 import { Grid, Typography, Box, Link, Button, Card } from "@mui/material";
 import EventCard from "../eventShowcase/EventCard";
-import { BoxSX } from "../customMui/CustomMui";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
+import CourtCard from "./courtCard/CourtCard";
 
 export const ClubInfo = ({ club }) => {
 
-  const images = [{original: club.url, thumbnail: club.url}]
+  const { description, amenities, url, activities  } = club
+
+  const images = [{original: url, thumbnail: url}]
 
   return (
     <>
       <Grid container >
         <Grid item xs={12} md={9}  p={2} sx={{borderBottom: {xs:'2px solid #62E8FF', md:'none'}, borderRight: {xs:'none', md:'2px solid #62E8FF'}}}>
           <Typography variant="h6" color="primary.main">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-            enim ad minim veniam, quis nosproident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
+            { description }
           </Typography>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}>
@@ -37,7 +36,9 @@ export const ClubInfo = ({ club }) => {
                   p:1
                 }}>
                 <Typography variant="body1" color="primary.main">Horarios</Typography>
-                <Typography></Typography>
+                <Typography variant="body2" color="secondary.main">Lunes, Martes, Miercoles, Jueves, Viernes: 10:00 a 0:00 am</Typography>
+                <Typography variant="body2" color="secondary.main">Sabado: 10:00 a 0:00 am</Typography>
+                <Typography variant="body2" color="secondary.main">Feriados: 10:00 a 0:00 am</Typography>
               </Card>
               <Card
                 sx={{
@@ -47,11 +48,20 @@ export const ClubInfo = ({ club }) => {
                 }}>
                 <Typography variant="body1" color="primary.main">Servicios del Club</Typography>
                 {
-                  club.amenities.map((amenitie, index) => {
+                  amenities.map((amenitie, index) => {
                     return <Typography variant="body2" color="secondary.main" key={index} >{amenitie.name}</Typography>
                   })
                 }
                 </Card>
+            </Grid>
+            <Grid container >
+              {activities.map((activity, index) => (
+                activity.courts.map((court) => {
+                  return <Grid item xs={12} sm={6} key={index+court.id} sx={{ p: 1 }}>
+                      <CourtCard court={court}/>
+                  </Grid>
+                })
+              ))} 
             </Grid>
           </Grid>
           <Box mt={2} textAlign="center">
