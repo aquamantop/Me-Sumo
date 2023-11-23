@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import {
     Typography,
@@ -14,22 +14,25 @@ import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOu
 import CategoryIcon from '@mui/icons-material/Category';
 import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import axios from "axios"
 
-const activities = ['Futbol'];
-const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
-  ];
-  const barrios = [
-    "Palermo",
-    "Recoleta",
-    "San Telmo",
-    "La Boca",
-    "Belgrano",
-    "Villa Crespo",
-    "Caballito",
-    "Boedo",
-    "Colegiales",
-    "Núñez"
-  ];
+
+
+// const activities = ['Futbol'];
+// const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
+//   ];
+//   const barrios = [
+//     "Palermo",
+//     "Recoleta",
+//     "San Telmo",
+//     "La Boca",
+//     "Belgrano",
+//     "Villa Crespo",
+//     "Caballito",
+//     "Boedo",
+//     "Colegiales",
+//     "Núñez"
+//   ];
   
   
 const CssIconButton = styled(IconButton)({
@@ -169,6 +172,62 @@ const CustomPaper = styled(Paper)({
 })
 function EventSearch() {
     
+    const [neighborhoods, setNeighborhoods] = useState([]);
+    const [activities, setActivities] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true); 
+
+
+    useEffect(() => {
+      axios({
+        method: "GET",
+        url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/neighborhood/",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then((response) => {
+          setNeighborhoods(response.data.map(item => item.name))
+          setLoading(false)
+      })
+      .catch((error) => setError(error))
+
+      axios({
+        method: "GET",
+        url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/activity/",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then((response) => {
+          const uniqueNamesSet = new Set(response.data.map(item => item.name));
+          const uniqueNamesList = [uniqueNamesSet];
+          setActivities(uniqueNamesList)
+          setLoading(false)
+          console.log(activities)
+      })
+      .catch((error) => setError(error))
+
+      axios({
+        method: "GET",
+        url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/activity/",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then((response) => {
+          setCategories(response.data.map(item => item.name + " " + item.type))
+          setLoading(false)
+      })
+      .catch((error) => setError(error))
+    }, [])
+
+
     return (
         <>
             <Box
@@ -247,7 +306,7 @@ function EventSearch() {
                 fullWidth
                 PaperComponent={CustomPaper}
                 sx={{'&button':{color:"white"}}}
-                options={barrios}
+                options={neighborhoods}
                 renderInput={(params)=>
                    <CssTextField
                    {...params}

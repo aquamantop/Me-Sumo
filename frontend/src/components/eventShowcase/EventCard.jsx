@@ -1,15 +1,9 @@
-import {
-    Box,
-    Typography,
-    Card,
-    CardContent,
-    CardMedia,
-    Button
-} from "@mui/material";
-
+import { Box, Typography, Card, CardContent, CardMedia, Button } from "@mui/material";
 import eventoImagen from "../../assets/club-field.png"
+import React, { useEffect, useState } from "react";
+import axios from "axios"
 
-function EventCard() {
+function EventCard({ booking }) {
     return (
         <>
             <Card 
@@ -25,10 +19,11 @@ function EventCard() {
                     <Typography variant="h6" color="primary.main">
                         Club: Deportivo Test FC
                     </Typography>
-                    <Typography variant="h6" color="primary.main">Nombre del Evento</Typography>
-                    <Typography variant="body2" color="secondary.main">Fecha: DD/MM/AAAA</Typography>
+                    <Typography variant="h6" color="primary.main">{booking.name}</Typography>
+                    <Typography variant="body2" color="secondary.main">Fecha: {booking.date}</Typography>
+                    <Typography variant="body2" color="secondary.main">Inicio: {booking.startTime}</Typography>
                     <Typography variant="body2" color="secondary.main">
-                        Lugares Disponibles: X
+                        Lugares Disponibles: {booking.participants} 
                     </Typography>
                 </CardContent>
                 <CardMedia
