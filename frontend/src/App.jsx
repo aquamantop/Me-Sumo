@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import LoginSuccess from './pages/LoginSuccess'
 import Register from './pages/Register'
 import EventCreate from './pages/EventCreate'
+import Booking from './pages/Booking'
 
 function App() {
   const theme = createTheme({
@@ -34,10 +35,11 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/club' element={<Club />} />
+            <Route path='/club/:id' element={<Club />} />
             <Route path='/login' element={<Login />} />
             <Route path='/login-success' element={<LoginSuccess />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/booking/:id' element={<Booking />} />
             <Route path='/new-event' element={<EventCreate/>}/>
           </Routes>
         </LocalizationProvider>

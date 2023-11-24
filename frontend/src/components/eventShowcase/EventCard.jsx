@@ -1,5 +1,4 @@
-import { Box, Typography, Card, CardContent, CardMedia, Button } from "@mui/material";
-import eventoImagen from "../../assets/club-field.png"
+import { Box, Typography, Card, CardContent, CardMedia, Button, Link } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
 
@@ -71,9 +70,11 @@ function EventCard({ booking }) {
         mb: 2,
       }}
     >
-      <Button variant="contained" color="secondary">
-        Ver Detalles
-      </Button>
+      <Link href={`/booking/${booking.id}`} >
+        <Button variant="contained" color="secondary">
+          Ver Detalles
+        </Button>
+      </Link>
     </Box>
     </Card>
   </>
