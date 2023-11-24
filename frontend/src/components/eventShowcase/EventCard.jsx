@@ -6,46 +6,11 @@ import axiosInstance from "../../hooks/api/axiosConfig";
 
 function EventCard({ booking }) {
 
-  //const [clubs, setClubs] = useState([]);
-  //const [slots, setSlots] = useState([]);
   const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-
-    // axiosInstance.get('/club/')
-    // .then((response) => {
-    //   setClubs(response.data)
-    //   setLoading(false)
-    // })
-    // .catch((error) => setError(error))
-
-  //   axiosInstance.get('/slot/')
-  //   .then((response) => {
-  //     const slotIds = response.data.map(item => item.id);
-  //     //setSlots(response.data)
-  //     setLoading(false)
-  //     console.log(slotIds)
-  //     const slotsClub = slotIds.map(async (slotId) => {
-  //         const slotResponse = await axiosInstance.get(`/slot/getWithCourt/${slotId}`);
-  //         const { id, name, url } = slotResponse.data.court.club;
-  //         const availability = slotResponse.data.capacity - booking.participants;
-  //         const cardData = {
-  //           slotId,
-  //           name,
-  //           url,
-  //           capacity}
-  //         console.log(cardData);
-  //         return cardData;
-  //       });
-  //       setSlots(slotsClub)
-  //     //console.log(slotsData);
-  //   })
-  //   .catch((error) => setError(error)) 
-
-  // }, [])
-
     console.log(booking.slotId)
     axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
     .then((response) => {
