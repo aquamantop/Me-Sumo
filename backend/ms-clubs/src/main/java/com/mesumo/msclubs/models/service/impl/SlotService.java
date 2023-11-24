@@ -1,7 +1,9 @@
 package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.SlotDTO;
 import com.mesumo.msclubs.models.entities.Slot;
+import com.mesumo.msclubs.models.mappers.SlotMapper;
 import com.mesumo.msclubs.models.repository.ISlotRepository;
 import com.mesumo.msclubs.models.service.ISlotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class SlotService implements ISlotService {
 
     @Autowired
     ISlotRepository repository;
+
+    private static final SlotMapper slotMapper = new SlotMapper();
+
     @Override
     public Slot findById(Long id) throws ResourceNotFoundException {
         Optional<Slot> slot = repository.findById(id);
@@ -69,6 +74,16 @@ public class SlotService implements ISlotService {
         } else {
             throw new ResourceNotFoundException("Slot not found");
         }
+    }
+
+    @Override
+    public SlotDTO getSlotWithCourtById(Long id) throws ResourceNotFoundException {
+        Optional<Slot> slot = repository.findById(id);
+
+        if(slot.isEmpty()) throw new ResourceNotFoundException("Slot not found");
+
+        return slotMapper.convertToDto(slot.get());
+
     }
 
 }

@@ -1,20 +1,18 @@
 package com.mesumo.msclubs.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mesumo.msclubs.models.entities.CourtType;
-import com.mesumo.msclubs.models.entities.Slot;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
-@NoArgsConstructor
-@AllArgsConstructor
-public class CourtDTO {
+public class SlotCourtDTO {
+
+    private Long id;
 
     private String name;
 
@@ -25,7 +23,5 @@ public class CourtDTO {
     private CourtType court_type;
 
     private boolean inside;
-
-    private Set<Slot> slots;
 
 }
