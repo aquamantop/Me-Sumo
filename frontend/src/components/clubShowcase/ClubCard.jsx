@@ -20,7 +20,7 @@ const ClubCard = ({ club }) => {
           <Typography variant="h6" color="primary.main">
             Club: {club.name}
           </Typography>
-          <Typography variant="h6" color="primary.main">
+          <Typography variant="h6" color="primary.main" sx={{ fontSize: '14px' }}>
             Dirección: {club.address}
           </Typography>
           <Typography variant="body2" color="secondary.main">
