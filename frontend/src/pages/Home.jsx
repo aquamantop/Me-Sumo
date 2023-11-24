@@ -20,12 +20,14 @@ function Home() {
       <Grid
         container
         className="content"
-        sx={{ height:"auto", mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop:'30px'}}
+        sx={{ mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop:'30px'}}
       >
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={16} sm={5} sx={{ position: 'fixed', width: '20%', top: '150px', left: '20px', height: '100vh', overflowY: 'auto' }}>
           <EventSearch />
         </Grid>
-        <Grid item xs={16} sm={9} sx={{ overflowY: 'auto', scrollbarWidth: 'thin',
+        <Grid item xs={16} sm={2}>
+        </Grid>
+        <Grid item xs={16} sm={9} sx={{ height: '80vh', overflowY: 'auto' , scrollbarWidth: 'thin',
         '&::-webkit-scrollbar': {
           width: '8px', // Ancho de la barra de desplazamiento
           height: '60px'
@@ -43,7 +45,23 @@ function Home() {
           <Tabs 
           textColor="secondary"
           indicatorColor="secondary"
-          sx={{...TabsSX}}
+          sx={{ marginLeft:'30px',
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              minWidth: 'auto',
+              padding: '2px 10px',
+              fontSize: '20px',
+              fontWeight: 500,
+              marginLeft: '10px',
+              // backgroundColor: '#5DBE7A',
+              borderRadius: '10px 10px 0 0',
+              border: '1px solid #3FEBBD',
+              '&.Mui-selected': { // Estilos para la pestaña seleccionada
+                color: '#000', // Color del texto
+                backgroundColor: '#3FEBBD', // Color de fondo
+              },
+            },
+          }}
           value={tabValue} 
           onChange={handleChangeTab}>
             <Tab sx={{color:"#62E8FF" }} label="Eventos"/>

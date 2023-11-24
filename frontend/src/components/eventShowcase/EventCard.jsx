@@ -66,15 +66,24 @@ function EventCard({ booking }) {
       sx={{
         display: "flex",
         justifyContent: "center",
-        mt: 2,
-        mb: 2,
+        mt: 0,
+        mb: 0,
       }}
     >
-      <Link href={`/event/${booking.id}`} >
-        <Button variant="contained" color="secondary">
-          Ver Detalles
-        </Button>
-      </Link>
+    <Link href={`/event/${booking.id}`} >
+    <Button fullWidth height="100%"
+        variant="contained"
+        color="background"
+        sx={{ my: 0, height:'100%', borderColor: '#3FEBBD', fontWeight:700,
+            borderWidth: '2px', // Puedes ajustar el grosor del borde según tus necesidades
+            borderStyle: 'solid', color:'#3FEBBD', '&:hover': {
+            backgroundColor: '#3FEBBD', // Cambia el color de fondo al pasar el ratón sobre el botón
+            color:"#03081B"
+        },}}
+    >
+        Ver Más
+    </Button>
+    </Link>
     </Box>
     </Card>
   </>

@@ -331,11 +331,16 @@ function EventSearch() {
                  />
                 <Button
                     variant="contained"
-                    color="secondary"
-                    sx={{ my: 2 }}
+                    color="background"
+                    sx={{ my: 3, height:'50px', borderColor: '#3FEBBD', fontWeight:700,
+                    borderWidth: '2px', // Puedes ajustar el grosor del borde según tus necesidades
+                    borderStyle: 'solid', color:'#3FEBBD', '&:hover': {
+                        backgroundColor: '#3FEBBD', // Cambia el color de fondo al pasar el ratón sobre el botón
+                        color:"#03081B"
+                      },}}
                     fullWidth
                 >
-                    Botón
+                    Aplicar
                 </Button>
             </Box>
         </>
