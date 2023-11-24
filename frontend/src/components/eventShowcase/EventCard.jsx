@@ -23,7 +23,7 @@ function EventCard({ booking }) {
         "clubName": name,
         "bookingName":booking.name,
         "bookingDate":booking.date,
-        "bookingstartTime":booking.startTime,
+        "bookingStartTime":booking.startTime,
         "bookingAvailability": availability,
         "clubUrl":url
       }
@@ -53,7 +53,7 @@ function EventCard({ booking }) {
       </Typography>
       <Typography variant="h6" color="primary.main">{info.bookingName}</Typography>
       <Typography variant="body2" color="secondary.main">Fecha: {info.bookingDate}</Typography>
-      <Typography variant="body2" color="secondary.main">Inicio: {info.bookingstartTime}</Typography>
+      <Typography variant="body2" color="secondary.main">Inicio: {info.bookingStartTime}</Typography>
       <Typography variant="body2" color="secondary.main">
         Lugares Disponibles: {info.bookingAvailability} 
       </Typography>

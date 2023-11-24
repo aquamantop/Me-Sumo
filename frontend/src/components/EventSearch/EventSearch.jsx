@@ -18,24 +18,6 @@ import axios from "axios"
 import  axiosInstance  from "../../hooks/api/axiosConfig";
 
 
-
-
-// const activities = ['Futbol'];
-// const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
-//   ];
-//   const barrios = [
-//     "Palermo",
-//     "Recoleta",
-//     "San Telmo",
-//     "La Boca",
-//     "Belgrano",
-//     "Villa Crespo",
-//     "Caballito",
-//     "Boedo",
-//     "Colegiales",
-//     "Núñez"
-//   ];
-  
   
 const CssIconButton = styled(IconButton)({
     color: "white",
@@ -183,14 +165,6 @@ function EventSearch() {
 
 
     useEffect(() => {
-    //   axios({
-    //     method: "GET",
-    //     url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/neighborhood/",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json"
-    //     }
-    //   })
         axiosInstance.get('/neighborhood/')
         .then((response) => {
           setNeighborhoods(response.data.map(item => item.name))
@@ -198,14 +172,6 @@ function EventSearch() {
       })
       .catch((error) => setError(error))
 
-    //   axios({
-    //     method: "GET",
-    //     url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/activity/",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json"
-    //     }
-    //   })
         axiosInstance.get('/activity/')
         .then((response) => {
           const uniqueNamesSet = new Set(response.data.map(item => item.name));
@@ -216,14 +182,6 @@ function EventSearch() {
       })
       .catch((error) => setError(error))
 
-    //   axios({
-    //     method: "GET",
-    //     url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/activity/",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json"
-    //     }
-    //   })
         axiosInstance.get('/activity/')
         .then((response) => {
           setCategories(response.data.map(item => item.name + " " + item.type))
