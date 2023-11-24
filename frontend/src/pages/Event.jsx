@@ -23,9 +23,9 @@ const Booking = () => {
       axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
       .then((response) => {
         const { name, url } = response.data.court.club;
-        console.log("Capacity "+ response.data.capacity)
-        console.log("Slot "+ booking.participants)
-        console.log(response.data.capacity - booking.participants)
+        // console.log("Capacity "+ response.data.capacity)
+        // console.log("Slot "+ booking.participants)
+        // console.log(response.data.capacity - booking.participants)
         const availability = response.data.capacity - booking.participants;
         const category = response.data.court.activity.name +" " + response.data.court.activity.type;
         const cardData = {
@@ -39,7 +39,7 @@ const Booking = () => {
           "clubUrl":url
         }
         setInfo(cardData);
-        console.log(cardData);
+        // console.log(cardData);
         setLoading(false);
         return cardData;
       })
@@ -54,7 +54,7 @@ const Booking = () => {
     {!loading && (
       <>
         <Header />
-        <Container className="content" sx={{my:2}}>
+        <Container className="content" sx={{my:0}}>
           <Paper sx={PaperSXX}>
             <Box
               sx={{
@@ -67,12 +67,12 @@ const Booking = () => {
                 p: 2,
               }}
             >
-              <Typography variant="h3" color="primary.main">
+              <Typography variant="h5" color="primary.main">
                 <span style={{color: theme.palette.primary.main }}>Club: </span> 
                 <span style={{color: theme.palette.primary.main }}>{info.clubName}</span>
               </Typography>
             </Box>
-            <Grid container spacing={2} sx={{height:"60vh"}}>
+            <Grid container spacing={2} sx={{height:"50vh"}}>
               <Grid Grid item xs={12} sm={6}>
                 <Box
                   display="flex"
@@ -110,9 +110,10 @@ const Booking = () => {
                 <Box
                   display="flex"
                   flexDirection="column"
-                  m={2}                 
+                  m={2}
+                  marginTop={-5}                 
                 >
-                  <Typography variant="h4" color="primary.main">
+                  <Typography variant="h6" color="primary.main">
                     Participantes
                   </Typography>
                 </Box>
@@ -122,10 +123,11 @@ const Booking = () => {
                   <Box
                     display="flex"
                     flexDirection="column"
-                    m={1} 
+                    m={0} 
                     sx={{backgroundColor:"white",
-                      height:"35vh",
-                      borderRadius:"20px"
+                      height:"25vh",
+                      borderRadius:"10px",
+                      marginTop:"-10px"
                     }}
                   >
                   </Box>

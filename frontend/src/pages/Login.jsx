@@ -13,9 +13,12 @@ import Header from "../components/header/Header"
 import axios from "axios"
 import Swal from "sweetalert2"
 import axiosInstance from "../hooks/api/axiosConfig";
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { useUserContext } from '../hooks/userContext'
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { loginUser } = useUserContext();
 
   const {
     handleSubmit,
@@ -30,7 +33,10 @@ export default function Login() {
 
   const [error, setError] = useState("")
 
+
   const onSubmit = handleSubmit(async (userData) => {
+    
+
     const response = await new Promise((resolve) => {
       // axios({
       //   method: "POST",
@@ -50,6 +56,7 @@ export default function Login() {
     })
 
     if (!error) {
+      loginUser(userData);
       setError("")
       Swal.fire({
         title: "Ingreso exitoso!",
@@ -139,18 +146,9 @@ export default function Login() {
           />
 
           <Button
-            variant="contained"
-            type="submit"
-            sx={{
-              backgroundColor: "secondary.main",
-              borderRadius: "3px",
-              color: "black",
-              "&.MuiButtonBase-root:hover": {
-                bgcolor: "white"
-              },
-              height: "40px",
-              letterSpacing: "2.86px"
-            }}
+            variant='contained'
+            type='submit'
+            sx={{...ButtonSX}}
           >
             Iniciar Sesión
           </Button>
@@ -169,9 +167,9 @@ export default function Login() {
             letterSpacing: " 4.68px"
           }}
         >
-          Todavía no tenés usuario?{" "}
-          <Link href="/register" underline="none" color="secondary.main">
-            Registrate ;)
+          Todavía no tenés usuario?{' '}
+          <Link href='/register' underline='none' color='secondary.main'>
+            Registrate ;
           </Link>
         </Typography>
       </Box>

@@ -18,7 +18,7 @@ function EventShowcase({keyword}) {
     .then((response) => {
       setBookings(response.data)
       setLoading(false)
-      console.log(response.data)
+    //   console.log(response.data)
     })
     .catch((error) => setError(error))
   }, [])
