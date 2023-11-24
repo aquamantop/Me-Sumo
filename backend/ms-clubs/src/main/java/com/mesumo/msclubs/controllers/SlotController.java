@@ -1,8 +1,10 @@
 package com.mesumo.msclubs.controllers;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
+import com.mesumo.msclubs.models.dto.SlotDTO;
 import com.mesumo.msclubs.models.entities.Slot;
 import com.mesumo.msclubs.models.service.ISlotService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -76,6 +78,17 @@ public class SlotController {
         } else {
             response = ResponseEntity.badRequest().build();
         }
+        return response;
+    }
+
+    @GetMapping("/getWithCourt/{id}")
+    public ResponseEntity<SlotDTO> getSlotWithCourtById (@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<SlotDTO> response = null;
+
+        if(id > 0){
+            response = new ResponseEntity<>(slotService.getSlotWithCourtById(id), HttpStatus.OK);
+        } else response = ResponseEntity.badRequest().build();
+
         return response;
     }
   

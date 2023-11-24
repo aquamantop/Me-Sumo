@@ -1,15 +1,15 @@
 package com.mesumo.msclubs.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.Set;
 
 @Entity
+@Table
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Activity {

@@ -1,6 +1,5 @@
 package com.mesumo.msclubs.feign;
 
-import com.mesumo.msclubs.feign.AccessTokenInterceptor;
 import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
