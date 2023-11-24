@@ -22,6 +22,12 @@ public class BookingDTO {
 
     private Long creatorId;
 
+    private Long clubId;
+
+    private String clubName;
+
+    private Long courtId;
+
     private Date date;
 
     private Time startTime;

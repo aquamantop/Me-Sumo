@@ -56,6 +56,12 @@ public class BookingService implements IBookingService {
             if (booking.getCreatorId() != null){
                 newBooking.get().setCreatorId(booking.getCreatorId());
             }
+            if (booking.getClubId() != null){
+                newBooking.get().setClubId(booking.getClubId());
+            }
+            if (booking.getCourtId() != null){
+                newBooking.get().setCourtId(booking.getCourtId());
+            }
             if (booking.getDate() != null){
                 newBooking.get().setDate(booking.getDate());
             }
@@ -108,6 +114,13 @@ public class BookingService implements IBookingService {
     public List<Booking> filterByApproved(boolean approved) {
         Specification<Booking> spec = new BookingSpecification();
         spec = spec.and(BookingSpecification.bookingsApproved(approved));
+        return filterBooking(spec);
+    }
+
+    public List<Booking> filterByClubAndApproved(Long clubId, boolean approved) {
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(approved));
+        spec = spec.and(BookingSpecification.bookingsByClub(clubId));
         return filterBooking(spec);
     }
 

@@ -65,6 +65,18 @@ public class BookingController {
         return response;
     }
 
+    @GetMapping("/approved/{id}")
+    public ResponseEntity filterByClubAndApproved(@PathVariable Long id, @RequestParam boolean approved) {
+        ResponseEntity response = null;
+        List<Booking> list = service.filterByClubAndApproved(id, approved);
+
+        if(list != null){
+            response = new ResponseEntity(list, HttpStatus.OK);
+        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+
+        return response;
+    }
+
     @GetMapping("/club_activity")
     public ResponseEntity filterByClubAndActivity(@RequestParam Long clubId, @RequestParam String activityName) {
         ResponseEntity response = null;

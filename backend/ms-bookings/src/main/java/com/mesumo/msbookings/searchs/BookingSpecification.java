@@ -34,6 +34,13 @@ public class BookingSpecification implements Specification<Booking> {
         };
     }
 
+    public static Specification<Booking> bookingsByClub(Long clubId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("clubId"), clubId));
+        };
+    }
+
     @Override
     public Predicate toPredicate(Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return null;
