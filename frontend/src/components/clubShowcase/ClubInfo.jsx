@@ -54,11 +54,12 @@ export const ClubInfo = ({ club }) => {
                 }
                 </Card>
             </Grid>
+            <Typography variant="h5" color="primary.main"p={1} >Canchas y disponibilidad</Typography>
             <Grid container >
               {activities.map((activity, index) => (
                 activity.courts.map((court) => {
                   return <Grid item xs={12} sm={6} key={index+court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court}/>
+                      <CourtCard court={court} activityName={activity.name}/>
                   </Grid>
                 })
               ))} 

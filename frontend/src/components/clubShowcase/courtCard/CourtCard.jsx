@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, Button, Link } from "@mui/material";
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import CustomCalendar from "./customCalendar/CustomCalendar";
 
-const CourtCard = ({ court }) => {
+const CourtCard = ({ court, activityName }) => {
 
   const { name, court_type, inside } = court
 
@@ -15,7 +15,7 @@ const CourtCard = ({ court }) => {
       case "CEMENTO":
         return "Cemento";
       default:
-        return "LALALALA";
+        return "N/A";
     }
   })();
 
@@ -38,11 +38,7 @@ const CourtCard = ({ court }) => {
           <Typography variant="body2" color="secondary.main">
             { field } | { inside ? "Techada" : "No Techada" }
           </Typography>
-          <StaticDatePicker
-            sx={{
-              bgcolor: "white"
-            }}
-          />
+          <CustomCalendar courtId={ court.id } activityName={ activityName }/>
         </CardContent>
         <Box
           sx={{
