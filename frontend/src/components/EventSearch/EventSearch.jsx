@@ -116,6 +116,9 @@ const CssTimePicker = styled(TimePicker)({
         borderColor: "#6F7E8C",
     },
 },
+'& .css-exqui8-MuiPaper-root-MuiDialog-paper' : {
+    backgroundColor:'white'
+},
 })
 
 const CssTextField = styled(TextField)({
@@ -179,11 +182,10 @@ function EventSearch() {
 
         axiosInstance.get('/activity/')
         .then((response) => {
-          const uniqueNamesSet = new Set(response.data.map(item => item.name));
-          const uniqueNamesList = [uniqueNamesSet];
-          setActivities(uniqueNamesList)
-          setLoading(false)
-          console.log(activities)
+           const uniqueNamesSet = new Set(response.data.map(item => item.name));
+           const uniqueNamesList = [...uniqueNamesSet];
+           setActivities(uniqueNamesList)
+           setLoading(false)
       })
       .catch((error) => setError(error))
 
