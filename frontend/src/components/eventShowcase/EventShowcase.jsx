@@ -14,7 +14,7 @@ function EventShowcase({keyword}) {
        
   useEffect(() => {
 
-    axiosInstance.get('/booking/')
+    axiosInstance.get('/booking/approved?approved=false')
     .then((response) => {
       setBookings(response.data)
       setLoading(false)
