@@ -69,7 +69,7 @@ const Booking = () => {
             >
               <Typography variant="h3" color="primary.main">
                 <span style={{color: theme.palette.primary.main }}>Club: </span> 
-                <span style={{color: theme.palette.secondary.main }}>{info.clubName}</span>
+                <span style={{color: theme.palette.primary.main }}>{info.clubName}</span>
               </Typography>
             </Box>
             <Grid container spacing={2} sx={{height:"60vh"}}>
@@ -87,7 +87,7 @@ const Booking = () => {
                     <span style={{color: theme.palette.primary.main }}>Fecha: </span>
                     <span style={{color: theme.palette.secondary.main }}>{info.bookingDate + " " + info.bookingStartTime}</span>
                   </Typography>
-                  <Typography variant="h6" color="orange">
+                  <Typography variant="h6" color="#FCBA7D">
                     Quedan {info.bookingAvailability} lugares
                   </Typography>
                 </Box>
@@ -101,7 +101,7 @@ const Booking = () => {
                   <Typography variant="h6">
                     <span style={{color: theme.palette.primary.main }}>Mensaje del organizador:</span>
                     <br />
-                    <span style={{color: theme.palette.secondary.main, fontStyle: 'italic', fontWeight:200 }}>{info.bookingMessage}</span>
+                    <span style={{color: "white" , fontStyle: 'italic', fontWeight:200 }}>{info.bookingMessage}</span>
                   </Typography>
                 </Box>
               </Grid>
