@@ -1,17 +1,17 @@
-import PersonIcon from '@mui/icons-material/Person'
-import { Link } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import CustomInput from '../components/customInput/CustomInput'
-import { useNavigate } from 'react-router-dom'
-import Footer from '../components/footer/Footer'
-import Header from '../components/header/Header'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import PersonIcon from "@mui/icons-material/Person"
+import { Link } from "@mui/material"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import CustomInput from "../components/customInput/CustomInput"
+import { useNavigate } from "react-router-dom"
+import Footer from "../components/footer/Footer"
+import Header from "../components/header/Header"
+import axios from "axios"
+import Swal from "sweetalert2"
 import { ButtonSX } from '../components/customMui/CustomMui'
 import { useUserContext } from '../hooks/userContext'
 
@@ -22,15 +22,15 @@ export default function Login() {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     defaultValues: {
-      email: '',
-      password: '',
-    },
+      email: "",
+      password: ""
+    }
   })
 
-  const [error, setError] = useState('')
+  const [error, setError] = useState("")
 
   const onSubmit = handleSubmit(async (userData) => {
     console.log(userData)
@@ -52,16 +52,15 @@ export default function Login() {
 
     if (!error) {
       loginUser(userData);
-      
-      setError('')
+      setError("")
       Swal.fire({
         title: "Ingreso exitoso!",
         icon: "success",
         timer: 1500
-      });
-      navigate('/login-success')
+      })
+      navigate("/login-success")
     } else {
-      setError('Credenciales inválidas')
+      setError("Credenciales inválidas")
     }
   })
 
@@ -69,74 +68,74 @@ export default function Login() {
     <>
       <Header />
       <Box
-        backgroundColor='background.paper'
-        align='center'
-        className='content'
+        backgroundColor="background.paper"
+        align="center"
+        className="content"
       >
         <Typography
           fontSize={50}
-          color='primary.main'
+          color="primary.main"
           sx={{
-            letterSpacing: 13,
+            letterSpacing: 13
           }}
         >
           ¡Hola!
         </Typography>
         <Typography
           fontSize={36}
-          color='primary.main'
+          color="primary.main"
           sx={{
-            fontWeight: 'regular',
-            letterSpacing: ' 4.68px',
-            marginBottom: '36px',
+            fontWeight: "regular",
+            letterSpacing: " 4.68px",
+            marginBottom: "36px"
           }}
         >
           ¿Qué actividad vas a hacer hoy?
         </Typography>
         <Stack
-          sx={{ margin: 'auto', px: 5 }}
-          component='form'
+          sx={{ margin: "auto", px: 5 }}
+          component="form"
           maxWidth={500}
           spacing={2}
           m={2}
           onSubmit={onSubmit}
         >
           <CustomInput
-            name='email'
+            name="email"
             control={control}
-            placeholder='Email'
+            placeholder="Email"
             error={!!errors.email}
             helperText={errors?.email?.message}
-            type='email'
+            type="email"
             rules={{
               required: {
                 value: true,
-                message: 'El correo es requerido',
+                message: "El correo es requerido"
               },
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                message: 'Correo no válido',
-              },
+                message: "Correo no válido"
+              }
             }}
             icon={<PersonIcon />}
           />
 
           <CustomInput
-            name='password'
+            name="password"
             control={control}
-            type='password'
-            placeholder='Contraseña'
+            type="password"
+            placeholder="Contraseña"
             error={!!errors.password}
             helperText={errors?.password?.message}
             rules={{
               required: {
                 value: true,
-                message: 'La contraseña es requerida',
+                message: "La contraseña es requerida"
               },
               pattern: {
                 value: /^.{6,}$/,
-                message: 'La contraseña debe tener al menos 6 caracteres',
-              },
+                message: "La contraseña debe tener al menos 6 caracteres"
+              }
             }}
             icon={<PersonIcon />}
           />
@@ -150,17 +149,17 @@ export default function Login() {
           </Button>
 
           {error && (
-            <Typography variant='body2' color='error.main'>
+            <Typography variant="body2" color="error.main">
               Por favor vuelva a intentarlo, sus credenciales son inválidas
             </Typography>
           )}
         </Stack>
         <Typography
-          variant='h5'
-          mt={'36px'}
-          color='primary.main'
+          variant="h5"
+          mt={"36px"}
+          color="primary.main"
           sx={{
-            letterSpacing: ' 4.68px',
+            letterSpacing: " 4.68px"
           }}
         >
           Todavía no tenés usuario?{' '}
