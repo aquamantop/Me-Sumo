@@ -3,6 +3,7 @@ import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axios from "axios"
+import { axiosInstance } from "../../axiosConfig";
 
 
 function EventShowcase({keyword}) {
@@ -13,14 +14,15 @@ function EventShowcase({keyword}) {
 
        
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/",
-      headers: {
-        Accept: "application/json",
-       "Content-Type": "application/json"
-      }
-    })
+    // axios({
+    //   method: "GET",
+    //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/",
+    //   headers: {
+    //     Accept: "application/json",
+    //    "Content-Type": "application/json"
+    //   }
+    // })
+    axiosInstance.get('/booking/')
     .then((response) => {
       setBookings(response.data)
       setLoading(false)
