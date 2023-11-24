@@ -3,7 +3,7 @@ import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axios from "axios"
-import { axiosInstance } from "../../hooks/api/axiosConfig";
+import axiosInstance from "../../hooks/api/axiosConfig";
 
 
 function EventShowcase({keyword}) {

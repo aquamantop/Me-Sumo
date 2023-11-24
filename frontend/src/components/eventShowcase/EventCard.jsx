@@ -2,7 +2,7 @@ import { Box, Typography, Card, CardContent, CardMedia, Button } from "@mui/mate
 import eventoImagen from "../../assets/club-field.png"
 import React, { useEffect, useState } from "react";
 import axios from "axios"
-import { axiosInstance } from "../../hooks/api/axiosConfig";
+import axiosInstance from "../../hooks/api/axiosConfig";
 
 function EventCard({ booking }) {
 
@@ -20,6 +20,11 @@ function EventCard({ booking }) {
     //     "Content-Type": "application/json"
     //   }
     // })
+
+    // const response = axiosInstance.get('/slot/');
+    // const slotIds = response.data.map(slot => slot.id);
+    // console.log(slotIds);
+
     axiosInstance.get('/club/')
     .then((response) => {
       setClubs(response.data)
