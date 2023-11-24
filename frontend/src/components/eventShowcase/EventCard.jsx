@@ -1,7 +1,6 @@
 import { Box, Typography, Card, CardContent, CardMedia, Button } from "@mui/material";
 import eventoImagen from "../../assets/club-field.png"
 import React, { useEffect, useState } from "react";
-import axios from "axios"
 import axiosInstance from "../../hooks/api/axiosConfig";
 
 function EventCard({ booking }) {

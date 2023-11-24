@@ -2,7 +2,6 @@ import { Box, Container, Grid, Typography, Paper } from "@mui/material";
 import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
-import axios from "axios"
 import axiosInstance from "../../hooks/api/axiosConfig";
 
 
@@ -14,7 +13,7 @@ function EventShowcase({keyword}) {
 
        
   useEffect(() => {
-    
+
     axiosInstance.get('/booking/')
     .then((response) => {
       setBookings(response.data)
