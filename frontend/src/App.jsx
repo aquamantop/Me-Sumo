@@ -9,6 +9,7 @@ import Login from './pages/Login'
 import LoginSuccess from './pages/LoginSuccess'
 import Register from './pages/Register'
 import EventCreate from './pages/EventCreate'
+import { UserProvider } from './hooks/userContext'
 
 function App() {
   const theme = createTheme({
@@ -17,7 +18,8 @@ function App() {
         main: '#C3FD74', //verde
       },
       secondary: {
-        main: '#62E8FF', //azul
+        // main: '#62E8FF', //azul
+        main: '#3FEBBD'
       },
       info: {
         main: '#FCBA7D',
@@ -32,14 +34,16 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/club' element={<Club />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/login-success' element={<LoginSuccess />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/new-event' element={<EventCreate/>}/>
-          </Routes>
+          <UserProvider>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/club' element={<Club />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/login-success' element={<LoginSuccess />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/new-event' element={<EventCreate/>}/>
+            </Routes>
+          </UserProvider>
         </LocalizationProvider>
       </ThemeProvider>
     </>

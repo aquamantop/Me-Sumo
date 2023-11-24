@@ -15,6 +15,7 @@ import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { ButtonSX } from '../components/customMui/CustomMui'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -210,16 +211,7 @@ export default function Register() {
           <Button
             variant='contained'
             type='submit'
-            sx={{
-              backgroundColor: 'secondary.main',
-              borderRadius: '3px',
-              color: 'black',
-              '&.MuiButtonBase-root:hover': {
-                bgcolor: 'white',
-              },
-              height: '40px',
-              letterSpacing: '2.86px',
-            }}
+            sx={{...ButtonSX}}
           >
             Registrarme
           </Button>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
-import eventoImagen from "../../assets/club-field.png"
+import eventoImagen from "../../assets/club-field.png";
+import { ButtonSX } from "../customMui/CustomMui";
 
 const ClubCard = () => {
   return (
@@ -39,14 +40,14 @@ const ClubCard = () => {
           sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 2,
-            mb: 2,
+            mt: 0,
+            mb: 0,
           }}
         >
-          <Link href='/club' >
-            <Button variant="contained" color="secondary">
+          <Link href='/club' sx={{width:"100%"}}>
+            <Button variant="contained" fullWidth sx={{...ButtonSX}}>
               Ver Más
-            </Button>
+            </Button> 
           </Link>
         </Box>
       </Card>

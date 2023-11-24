@@ -6,7 +6,7 @@ import { BoxSX } from "../customMui/CustomMui";
 
 const ClubShowcase = () => {
   return (
-    <Container sx={{ mb: 2 }}>
+    <Container sx={{ mb: 2}}>
       <Paper sx={PaperSXX}>
         <Box sx={BoxSX}>
           <Typography variant="h5" color="primary.main">

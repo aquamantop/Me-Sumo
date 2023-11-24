@@ -12,9 +12,12 @@ import Footer from '../components/footer/Footer'
 import Header from '../components/header/Header'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { useUserContext } from '../hooks/userContext'
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { loginUser } = useUserContext();
 
   const {
     handleSubmit,
@@ -34,7 +37,7 @@ export default function Login() {
       const response = await new Promise((resolve) => {
         axios({
           method: "POST",
-          url: 'http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/auth/login',
+          url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login',
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -42,12 +45,14 @@ export default function Login() {
           data: userData,
         })
           .then((response) => resolve(response))
-          .catch((error) => resolve(error));
+          .catch((error) => setError(error));
       });
     
     console.log(response)
 
     if (!error) {
+      loginUser(userData);
+      
       setError('')
       Swal.fire({
         title: "Ingreso exitoso!",
@@ -139,16 +144,7 @@ export default function Login() {
           <Button
             variant='contained'
             type='submit'
-            sx={{
-              backgroundColor: 'secondary.main',
-              borderRadius: '3px',
-              color: 'black',
-              '&.MuiButtonBase-root:hover': {
-                bgcolor: 'white',
-              },
-              height: '40px',
-              letterSpacing: '2.86px',
-            }}
+            sx={{...ButtonSX}}
           >
             Iniciar Sesión
           </Button>
@@ -169,7 +165,7 @@ export default function Login() {
         >
           Todavía no tenés usuario?{' '}
           <Link href='/register' underline='none' color='secondary.main'>
-            Registrate ;)
+            Registrate ;
           </Link>
         </Typography>
       </Box>

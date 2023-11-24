@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import eventoImagen from "../../assets/club-field.png"
-
+import { ButtonSX } from "../customMui/CustomMui";
 function EventCard() {
     return (
         <>
@@ -40,13 +40,16 @@ function EventCard() {
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "center",
-                        mt: 2,
-                        mb: 2,
+                        justifyContent: "flex-end",
+                        mt: 0,
+                        mb: 0,
                     }}
                 >
-                    <Button variant="contained" color="secondary">
-                        Ver Detalles
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        sx={{ ...ButtonSX, }}>
+                        Ver Más
                     </Button>
                 </Box>
             </Card>

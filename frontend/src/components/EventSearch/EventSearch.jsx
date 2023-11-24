@@ -13,7 +13,9 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
 import CategoryIcon from '@mui/icons-material/Category';
 import { styled } from "@mui/material/styles";
-import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { ButtonSX } from "../customMui/CustomMui";
+
 
 const activities = ['Futbol'];
 const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
@@ -176,7 +178,10 @@ function EventSearch() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    mx:2
+                    mx:2,
+                    position: "sticky",
+                    top: "140px"
+
                 }}
             >
                 <Typography variant="h5" component="h5" color="primary.main">
@@ -270,7 +275,6 @@ function EventSearch() {
                    />
                   }
                 />
-                
                 <CssDesktopDatePicker
                   label='Elegir Fecha'
                   inputFormat="dd.MM.yyyy"
@@ -298,13 +302,14 @@ function EventSearch() {
                     textField: { fullWidth: true },
                   }}
                  />
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ my: 2 }}
-                    fullWidth
-                >
-                    Botón
+                <Button 
+                variant="contained" 
+                fullWidth 
+                sx={{
+                    ...ButtonSX,
+                    m:2
+                    }} >
+                    Buscar
                 </Button>
             </Box>
         </>
