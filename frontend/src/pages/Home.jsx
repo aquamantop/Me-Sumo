@@ -64,8 +64,8 @@ function Home() {
           }}
           value={tabValue} 
           onChange={handleChangeTab}>
-            <Tab sx={{color:"#62E8FF" }} label="Eventos"/>
-            <Tab sx={{color:"#62E8FF" }} label="Clubes"/>
+            <Tab sx={{color:"#3FEBBD" }} label="Eventos"/>
+            <Tab sx={{color:"#3FEBBD" }} label="Clubes"/>
           </Tabs>
           {tabValue === 0 && (
             <>

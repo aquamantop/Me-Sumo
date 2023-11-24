@@ -324,7 +324,12 @@ function EventSearch() {
                 />
                 <CssTimePicker
                   label="Elegir Hora"
-                  sx={{mt:2}}
+                  sx={{
+                    mt:2,
+                    '.MuiDateCalendar-root': {
+                        backgroundColor:'white'
+                    }
+                }}
                   slotProps={{
                     textField: { fullWidth: true },
                   }}

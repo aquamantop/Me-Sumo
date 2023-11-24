@@ -49,7 +49,7 @@ function EventCard({ booking }) {
       <Typography variant="h6" color="primary.main">
         Club: {info.clubName}
       </Typography>
-      <Typography variant="h6" color="primary.main">{info.bookingName}</Typography>
+      <Typography variant="h6" color="primary.main" sx={{ fontSize: '14px' }}>{info.bookingName}</Typography>
       <Typography variant="body2" color="secondary.main">Fecha: {info.bookingDate}</Typography>
       <Typography variant="body2" color="secondary.main">Inicio: {info.bookingStartTime}</Typography>
       <Typography variant="body2" color="secondary.main">

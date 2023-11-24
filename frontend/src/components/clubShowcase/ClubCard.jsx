@@ -52,18 +52,9 @@ const ClubCard = ({ club }) => {
           }}
         >
           <Link href={`/club/${club.id}`} >
-          <Button fullWidth height="100%"
-            variant="contained"
-            color="background"
-            sx={{ my: 0, height:'100%', borderColor: '#3FEBBD', fontWeight:700,
-            borderWidth: '2px', // Puedes ajustar el grosor del borde según tus necesidades
-            borderStyle: 'solid', color:'#3FEBBD', '&:hover': {
-            backgroundColor: '#3FEBBD', // Cambia el color de fondo al pasar el ratón sobre el botón
-            color:"#03081B"
-          },}}
-        >
-        Ver Más
-    </Button>
+            <Button variant="contained" color="secondary">
+              Ver Más
+            </Button>
           </Link>
         </Box>
       </Card>

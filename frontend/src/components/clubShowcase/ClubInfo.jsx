@@ -77,7 +77,7 @@ export const ClubInfo = ({ club }) => {
             </Link>
           </Box>
         </Grid>
-        <Grid item xs={12} md={3}  p={2}>
+        {/* <Grid item xs={12} md={3}  p={2}>
           <Typography variant="h5" color="primary.main">
             Eventos del Club
           </Typography>
@@ -86,7 +86,7 @@ export const ClubInfo = ({ club }) => {
               <EventCard />
             </Grid>
           ))}
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

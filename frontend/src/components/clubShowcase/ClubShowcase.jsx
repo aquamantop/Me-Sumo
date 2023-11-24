@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PaperSXX } from "../customMui/CustomMui";
 import ClubCard from "./ClubCard";
 import { BoxSX } from "../customMui/CustomMui";
-import axiosInstance from "../../hooks/api/axiosConfig";
+import axios from "axios"
 
 const ClubShowcase = () => {
 
@@ -12,7 +12,14 @@ const ClubShowcase = () => {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    axiosInstance.get("/club/")
+    axios({
+      method: "GET",
+      url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/club/",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
       .then((response) => {
         setClubs(response.data)
         setLoading(false)
