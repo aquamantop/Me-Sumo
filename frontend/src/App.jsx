@@ -28,6 +28,9 @@ function App() {
       background: {
         paper: '#03081B',
       },
+      text: {
+        primary: '#ffffff',
+      },
     },
   })
 
