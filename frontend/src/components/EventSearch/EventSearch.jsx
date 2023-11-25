@@ -7,7 +7,9 @@ import {
     InputAdornment,
     IconButton,
     Autocomplete,
-    Paper
+    Paper,
+    createTheme,
+    ThemeProvider
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
@@ -32,6 +34,17 @@ const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
     "Colegiales",
     "Núñez"
   ];
+
+  const theme = createTheme({
+    palette: {
+        background: {
+            paper: '#1d2132',
+          },
+          text: {
+            primary: '#FFFFFF'
+          },
+    },
+  });
   
   
 const CssIconButton = styled(IconButton)({
@@ -128,6 +141,7 @@ const CssTimePicker = styled(TimePicker)({
     },
 }
 })
+
 const CssTextField = styled(TextField)({
     "& input": {
         color: "white", // Color del texto
@@ -275,6 +289,7 @@ function EventSearch() {
                    />
                   }
                 />
+                
                 <CssDesktopDatePicker
                   label='Elegir Fecha'
                   inputFormat="dd.MM.yyyy"
@@ -290,18 +305,22 @@ function EventSearch() {
                       borderColor: '#e91e63',
                       border: '1px solid',
                       backgroundColor: 'rgb(255,255,255,0.1)',
-                    }
+                    },
+                    
                   }
                   }
                   }} 
                 />
-                <CssTimePicker
-                  label="Elegir Hora"
-                  sx={{mt:2}}
-                  slotProps={{
-                    textField: { fullWidth: true },
-                  }}
-                 />
+                <ThemeProvider theme={theme}>
+                    <CssTimePicker
+                    label="Elegir Hora"
+                    sx={{mt:2,}}
+                    slotProps={{
+                        textField: { fullWidth: true },
+                        
+                    }}
+                    />
+                </ThemeProvider>
                 <Button 
                 variant="contained" 
                 fullWidth 

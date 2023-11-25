@@ -24,6 +24,9 @@ function App() {
       info: {
         main: '#FCBA7D',
       },
+      text: {
+        primary: '#FFFFFF'
+      },
       background: {
         paper: '#03081B',
       },
