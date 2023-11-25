@@ -2,7 +2,6 @@ package com.mesumo.msclubs.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Set;
 
 @Entity
@@ -13,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Activity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +21,7 @@ public class Activity {
 
     private String type;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "activity")
     private Set<Court> courts;
 
 }
