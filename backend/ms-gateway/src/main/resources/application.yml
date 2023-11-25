@@ -1,0 +1,61 @@
+server:
+  port: ${PORT:8090}
+
+spring:
+  application:
+    name: ms-gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+#        MS CLUBS
+        - id: ms-clubs
+#          uri: http://localhost:8080
+          uri: http://ec2-34-229-118-35.compute-1.amazonaws.com:8080
+          predicates:
+            - Path=/club/**, /neighborhood/**, /activity/**, /court/**, /slot/**
+
+#        MS USERS
+        - id: ms-users
+#          uri: http://localhost:8081
+          uri: http://ec2-3-85-198-231.compute-1.amazonaws.com:8081
+          predicates:
+            - Path=/user/**, /auth/**
+
+#        MS BOOKINGS
+        - id: ms-bookings
+#          uri: http://localhost:8084
+          uri: http://ec2-54-198-112-83.compute-1.amazonaws.com:8084
+          predicates:
+            - Path=/booking/**
+
+info:
+  app:
+    name: ${spring.application.name}
+
+eureka:
+  instance:
+#    hostname: localhost
+    hostname: ec2-107-21-182-26.compute-1.amazonaws.com
+
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceURL:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.springframework.security: DEBUG
