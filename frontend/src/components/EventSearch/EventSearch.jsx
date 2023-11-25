@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import {
     Typography,
@@ -17,23 +17,8 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { ButtonSX } from "../customMui/CustomMui";
+import  axiosInstance  from "../../hooks/api/axiosConfig";
 
-
-const activities = ['Futbol'];
-const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
-  ];
-  const barrios = [
-    "Palermo",
-    "Recoleta",
-    "San Telmo",
-    "La Boca",
-    "Belgrano",
-    "Villa Crespo",
-    "Caballito",
-    "Boedo",
-    "Colegiales",
-    "Núñez"
-  ];
 
   const theme = createTheme({
     palette: {
@@ -45,7 +30,7 @@ const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
           },
     },
   });
-  
+
   
 const CssIconButton = styled(IconButton)({
     color: "white",
@@ -112,11 +97,16 @@ const CssDesktopDatePicker = styled (DesktopDatePicker)({
     },
 }
 })
+
+
 const CssTimePicker = styled(TimePicker)({
-  '& .MuiButtonBase-root':{
+    '& .MuiTimePickerToolbar-container': {
+        backgroundColor: 'white', // Reemplaza 'tu-color-aqui' con el color deseado
+      },
+'& .MuiButtonBase-root':{
     color:'white'
-  },
-  "& input": {
+},
+"& input": {
     color: "white", // Color del texto
 },
 "& label.Mui-focused": {
@@ -139,7 +129,10 @@ const CssTimePicker = styled(TimePicker)({
     "&.Mui-focused fieldset": {
         borderColor: "#6F7E8C",
     },
-}
+},
+'& .css-exqui8-MuiPaper-root-MuiDialog-paper' : {
+    backgroundColor:'white'
+},
 })
 
 const CssTextField = styled(TextField)({
@@ -185,6 +178,40 @@ const CustomPaper = styled(Paper)({
 })
 function EventSearch() {
     
+    const [neighborhoods, setNeighborhoods] = useState([]);
+    const [activities, setActivities] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true); 
+
+
+    useEffect(() => {
+        axiosInstance.get('/neighborhood/')
+        .then((response) => {
+          setNeighborhoods(response.data.map(item => item.name))
+          setLoading(false)
+      })
+      .catch((error) => setError(error))
+
+        axiosInstance.get('/activity/')
+        .then((response) => {
+           const uniqueNamesSet = new Set(response.data.map(item => item.name));
+           const uniqueNamesList = [...uniqueNamesSet];
+           setActivities(uniqueNamesList)
+           setLoading(false)
+      })
+      .catch((error) => setError(error))
+
+        axiosInstance.get('/activity/')
+        .then((response) => {
+          setCategories(response.data.map(item => item.name + " " + item.type))
+          setLoading(false)
+      })
+      .catch((error) => setError(error))
+    }, [])
+
+
     return (
         <>
             <Box
@@ -266,7 +293,7 @@ function EventSearch() {
                 fullWidth
                 PaperComponent={CustomPaper}
                 sx={{'&button':{color:"white"}}}
-                options={barrios}
+                options={neighborhoods}
                 renderInput={(params)=>
                    <CssTextField
                    {...params}
@@ -299,14 +326,17 @@ function EventSearch() {
                   layout: {
                   sx: {
                     '.MuiDateCalendar-root': {
-                      color: 'white',
+                      color: 'black',
                       borderRadius: 2,
                       borderWidth: 1,
                       borderColor: '#e91e63',
                       border: '1px solid',
-                      backgroundColor: 'rgb(255,255,255,0.1)',
-                    },
-                    
+                    //   backgroundColor: 'rgb(255,255,255,0.1)',
+                      backgroundColor: 'white',
+                      '& .MuiTypography-root': {
+                        color: 'black', // Color del texto en el calendario
+                      },
+                    }
                   }
                   }
                   }} 

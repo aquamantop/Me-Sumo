@@ -7,6 +7,7 @@ import Footer from "../components/footer/Footer";
 import ClubShowcase from "../components/clubShowcase/ClubShowcase";
 import { TabsSX } from "../components/customMui/CustomMui";
 
+
 function Home() {
   const [tabValue, setTabValue] = useState(0);
 
@@ -19,9 +20,9 @@ function Home() {
       <Grid
         container
         className="content"
-        sx={{ height:"auto", mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop:'30px'}}
+        sx={{ mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop:'30px'}}
       >
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={16} sm={5} sx={{ position: 'fixed', width: '20%', top: '150px', left: '20px', height: '100vh', overflowY: 'auto' }}>
           <EventSearch />
         </Grid>
         <Grid item xs={16} sm={9} sx={{ overflowY: 'auto', scrollbarWidth: 'thin',
@@ -63,3 +64,51 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+// function Home() {
+//   const [tabValue, setTabValue] = useState(0);
+
+//   const handleChangeTab = (event, newValue) => {
+//     setTabValue(newValue);
+//   };
+//   return (
+//     <>
+//       <Header />
+//       <Grid
+//         container
+//         className="content"
+//         sx={{ mx: "auto", maxWidth: "1200px" }}
+//       >
+//         <Grid item xs={12} sm={3}>
+//           <EventSearch />
+//         </Grid>
+//         <Grid item xs={12} sm={9}>
+//           <Tabs 
+//           textColor="secondary"
+//           indicatorColor="secondary"
+//           sx={{ml:4}} 
+//           value={tabValue} 
+//           onChange={handleChangeTab}>
+//             <Tab sx={{color:"#62E8FF" }} label="Eventos"/>
+//             <Tab sx={{color:"#62E8FF" }} label="Clubes"/>
+//           </Tabs>
+//           {tabValue === 0 && (
+//             <>
+//               <EventShowcase keyword="menos" />
+//               <EventShowcase keyword="más" />
+//             </>
+//           )}
+//           {tabValue === 1 && <ClubShowcase />}
+//         </Grid>
+//       </Grid>
+//       <Footer />
+//     </>
+//   );
+// }
+
+// export default Home;
+

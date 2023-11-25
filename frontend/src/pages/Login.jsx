@@ -12,6 +12,7 @@ import Footer from "../components/footer/Footer"
 import Header from "../components/header/Header"
 import axios from "axios"
 import Swal from "sweetalert2"
+import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
 import { useUserContext } from '../hooks/userContext'
 
@@ -32,23 +33,27 @@ export default function Login() {
 
   const [error, setError] = useState("")
 
+
   const onSubmit = handleSubmit(async (userData) => {
-    console.log(userData)
-      const response = await new Promise((resolve) => {
-        axios({
-          method: "POST",
-          url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login',
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          data: userData,
-        })
-          .then((response) => resolve(response))
-          .catch((error) => setError(error));
-      });
     
-    console.log(response)
+
+    const response = await new Promise((resolve) => {
+      // axios({
+      //   method: "POST",
+      //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json"
+      //   },
+      //   data: userData
+      // })
+      //console.log(userData);
+      //axiosInstance.defaults.headers.common['Accept'] = 'application/json';
+      //axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
+      axiosInstance.post("/auth/login", userData)
+        .then((response) => resolve(response))
+        .catch((error) => setError(error))
+    })
 
     if (!error) {
       loginUser(userData);
