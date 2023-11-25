@@ -34,8 +34,8 @@ public class ClubController {
         List<Club> list = service.findAll();
 
         if(list != null){
-            response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } else response = new ResponseEntity<>("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }
@@ -45,8 +45,8 @@ public class ClubController {
         ResponseEntity response = null;
 
         if(club != null){
-            response = new ResponseEntity(service.create(club), HttpStatus.CREATED);
-        } else response = new ResponseEntity("Complete the fields", HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(service.create(club), HttpStatus.CREATED);
+        } else response = new ResponseEntity<>("Complete the fields", HttpStatus.BAD_REQUEST);
 
         return response;
     }
@@ -56,8 +56,8 @@ public class ClubController {
         ResponseEntity response = null;
 
         if(club.getId() != null){
-            response = new ResponseEntity(service.update(club), HttpStatus.OK);
-        } else response = new ResponseEntity("Complete id field", HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(service.update(club), HttpStatus.OK);
+        } else response = new ResponseEntity<>("Complete id field", HttpStatus.BAD_REQUEST);
 
         return response;
     }
@@ -67,7 +67,7 @@ public class ClubController {
         ResponseEntity response = null;
 
         service.deleteById(id);
-        response = new ResponseEntity("Club deleted with id: " + id, HttpStatus.OK);
+        response = new ResponseEntity<>("Club deleted with id: " + id, HttpStatus.OK);
 
         return response;
     }
@@ -76,7 +76,7 @@ public class ClubController {
     public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
+        response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }
@@ -87,8 +87,8 @@ public class ClubController {
         List<ClubDTO> list = service.findAllDTO();
 
         if(list != null){
-            response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } else response = new ResponseEntity<>("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }

@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Court {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +36,7 @@ public class Court {
 
     private boolean inside;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "court")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "court")
     private Set<Slot> slots;
 
 }
