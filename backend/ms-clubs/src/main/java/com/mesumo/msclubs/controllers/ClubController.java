@@ -7,11 +7,10 @@ import com.mesumo.msclubs.models.service.impl.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/club")
-@CrossOrigin
 public class ClubController {
 
     private final ClubService service;
@@ -21,16 +20,10 @@ public class ClubController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
+    public ResponseEntity<Club> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findById(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findById(id), HttpStatus.OK);
 
         return response;
     }
@@ -38,11 +31,11 @@ public class ClubController {
     @GetMapping("/")
     public ResponseEntity getAll() {
         ResponseEntity response = null;
-        Set<Club> list = service.findAll();
+        List<Club> list = service.findAll();
 
         if(list != null){
-            response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } else response = new ResponseEntity<>("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }
@@ -52,54 +45,38 @@ public class ClubController {
         ResponseEntity response = null;
 
         if(club != null){
-            response = new ResponseEntity(service.create(club), HttpStatus.CREATED);
-        } else response = new ResponseEntity("Complete the fields", HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(service.create(club), HttpStatus.CREATED);
+        } else response = new ResponseEntity<>("Complete the fields", HttpStatus.BAD_REQUEST);
 
         return response;
     }
 
     @PutMapping("/update")
-    public ResponseEntity update (@RequestBody Club club){
+    public ResponseEntity update (@RequestBody Club club) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
         if(club.getId() != null){
-            try {
-                response = new ResponseEntity(service.update(club), HttpStatus.OK);
-
-            } catch (ResourceNotFoundException e){
-                e.printStackTrace();
-            }
-        } else response = new ResponseEntity("Complete id field", HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(service.update(club), HttpStatus.OK);
+        } else response = new ResponseEntity<>("Complete id field", HttpStatus.BAD_REQUEST);
 
         return response;
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete (@PathVariable Long id) {
+    public ResponseEntity delete (@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try {
-            service.deleteById(id);
-            response = new ResponseEntity("Club deleted with id: " + id, HttpStatus.OK);
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.BAD_REQUEST);
-        }
+        service.deleteById(id);
+        response = new ResponseEntity<>("Club deleted with id: " + id, HttpStatus.OK);
 
         return response;
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("Club not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }
@@ -107,11 +84,11 @@ public class ClubController {
     @GetMapping("/listDTO")
     public ResponseEntity getAllDTO() {
         ResponseEntity response = null;
-        Set<ClubDTO> list = service.findAllDTO();
+        List<ClubDTO> list = service.findAllDTO();
 
         if(list != null){
-            response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } else response = new ResponseEntity<>("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }

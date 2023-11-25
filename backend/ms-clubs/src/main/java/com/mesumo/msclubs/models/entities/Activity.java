@@ -1,20 +1,18 @@
 package com.mesumo.msclubs.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import java.util.Set;
 
 @Entity
+@Table
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Activity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +21,7 @@ public class Activity {
 
     private String type;
 
-    @ManyToMany(mappedBy = "activities")
-    @JsonIgnore
-    private Set<Club> clubs;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "activity")
     private Set<Court> courts;
+
 }

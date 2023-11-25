@@ -1,34 +1,39 @@
 package com.mesumo.msclubs;
 
-import com.mesumo.msclubs.models.entities.Activity;
-import com.mesumo.msclubs.models.entities.Amenity;
-import com.mesumo.msclubs.models.entities.Club;
-import com.mesumo.msclubs.models.entities.Neighborhood;
-import com.mesumo.msclubs.models.repository.IActivityRepository;
-import com.mesumo.msclubs.models.repository.IAmenityRepository;
-import com.mesumo.msclubs.models.repository.IClubRepository;
-import com.mesumo.msclubs.models.repository.INeighborhood;
-import org.springframework.boot.CommandLineRunner;
+//import com.mesumo.msclubs.models.entities.Activity;
+//import com.mesumo.msclubs.models.entities.Amenity;
+//import com.mesumo.msclubs.models.entities.Club;
+//import com.mesumo.msclubs.models.entities.Neighborhood;
+//import com.mesumo.msclubs.models.repository.IActivityRepository;
+//import com.mesumo.msclubs.models.repository.IAmenityRepository;
+//import com.mesumo.msclubs.models.repository.IClubRepository;
+//import com.mesumo.msclubs.models.repository.INeighborhood;
+//import org.springframework.boot.CommandLineRunner;
+//import org.springframework.context.annotation.Bean;
+//import java.util.HashSet;
+//import java.util.Set;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableDiscoveryClient
+@EnableFeignClients
 public class MsClubsApplication {
 
-	private final IClubRepository clubRepository;
-	private final INeighborhood neighborhoodRepository;
-	private final IAmenityRepository amenityRepository;
-	private final IActivityRepository activityRepository;
+	// TESTEANDO GITHUB ACTIONS
+//	private final IClubRepository clubRepository;
+//	private final INeighborhood neighborhoodRepository;
+//	private final IAmenityRepository amenityRepository;
+//	private final IActivityRepository activityRepository;
 
-	public MsClubsApplication(IClubRepository clubRepository, INeighborhood neighborhoodRepository, IAmenityRepository amenityRepository, IActivityRepository activityRepository) {
-		this.clubRepository = clubRepository;
-		this.neighborhoodRepository = neighborhoodRepository;
-		this.amenityRepository = amenityRepository;
-		this.activityRepository = activityRepository;
-	}
+//	public MsClubsApplication(IClubRepository clubRepository, INeighborhood neighborhoodRepository, IAmenityRepository amenityRepository, IActivityRepository activityRepository) {
+//		this.clubRepository = clubRepository;
+//		this.neighborhoodRepository = neighborhoodRepository;
+//		this.amenityRepository = amenityRepository;
+//		this.activityRepository = activityRepository;
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MsClubsApplication.class, args);

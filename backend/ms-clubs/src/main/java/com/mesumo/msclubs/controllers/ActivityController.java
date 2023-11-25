@@ -7,55 +7,45 @@ import com.mesumo.msclubs.models.service.impl.ActivityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/activity")
-@CrossOrigin
 public class ActivityController {
     private final ActivityService service;
-
 
     public ActivityController(ActivityService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getById(@PathVariable Long id) {
+    public ResponseEntity<Activity> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity<Activity> response = null;
-        try{
-            response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+
+        response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+
         return response;
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Activity>> getAll() {
-        ResponseEntity<Set<Activity>> response = null;
-        Set<Activity> set = service.findAll();
-        if(set != null){
-            response = new ResponseEntity<>(set, HttpStatus.OK);
+    public ResponseEntity<List<Activity>> getAll() {
+        ResponseEntity<List<Activity>> response = null;
+        List<Activity> list = service.findAll();
+
+        if(list != null){
+            response = new ResponseEntity<>(list, HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
+
         return response;
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) {
+    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        try{
-            response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e){
-            e.printStackTrace();
-            response = new ResponseEntity("ActivityDTO not found with id: " + id, HttpStatus.NOT_FOUND);
-        }
+        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }
@@ -63,7 +53,7 @@ public class ActivityController {
     @GetMapping("/listDTO")
     public ResponseEntity getAllDTO() {
         ResponseEntity response = null;
-        Set<ActivityDTO> list = service.findAllDTO();
+        List<ActivityDTO> list = service.findAllDTO();
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);

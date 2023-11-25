@@ -1,0 +1,35 @@
+name: Build MS Users
+
+on:
+  push:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-users/**'
+  pull_request:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-users/**'
+
+jobs:
+ build-user:
+    runs-on: [self-hosted, linux, X64, api-2]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Maven package User
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
+        mvn -B package --file pom.xml
+        
+    - name: Build User
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
+        sudo systemctl stop user.service
+        cp target/ms_users.jar /home/ubuntu/user
+        sudo systemctl start user.service
