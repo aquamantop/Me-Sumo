@@ -65,7 +65,6 @@ public class UserService implements IUserService {
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
         if (user.getEmail() != null) userExists.setEmail(user.getEmail());
-        if (user.getPhoneNumber() != null) userExists.setPhoneNumber(user.getPhoneNumber());
         if (user.getNeighborhood() != null) userExists.setNeighborhood(user.getNeighborhood());
 
         return userRepository.save(userExists);
