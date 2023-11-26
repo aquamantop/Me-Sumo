@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
 import  axiosInstance  from "../../hooks/api/axiosConfig";
+import Loader from "../loader";
 
 
 
@@ -25,38 +26,113 @@ import  axiosInstance  from "../../hooks/api/axiosConfig";
 
 function EventSearch() {
     
-    const [neighborhoods, setNeighborhoods] = useState([]);
+    // const [neighborhoods, setNeighborhoods] = useState([]);
+    // const [activities, setActivities] = useState([]);
+    // const [categories, setCategories] = useState([]);
+
+    // const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(true); 
+
+
+    // useEffect(() => {
+    //     axiosInstance.get('/neighborhood/')
+    //     .then((response) => {
+    //       setNeighborhoods(response.data.map(item => item.name))
+    //       setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+
+    //     axiosInstance.get('/activity/')
+    //     .then((response) => {
+    //        const uniqueNamesSet = new Set(response.data.map(item => item.name));
+    //        const uniqueNamesList = [...uniqueNamesSet];
+    //        setActivities(uniqueNamesList)
+    //        setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+
+    //     axiosInstance.get('/activity/')
+    //     .then((response) => {
+    //       setCategories(response.data.map(item => item.name + " " + item.type))
+    //       setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+    // }, [])
+
+
+    const today = new Date();
+    const [bookings, setBookings] = useState([]);
+
     const [activities, setActivities] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const [neighborhoods, setNeighborhoods] = useState([]);
+    const [dates, setDates] = useState([]);
+    const [times, setTimes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true); 
 
+    // const isDateDisabled = (date) => {
+    //   return isBefore(date, today);
+    // };
 
     useEffect(() => {
-        axiosInstance.get('/neighborhood/')
-        .then((response) => {
-          setNeighborhoods(response.data.map(item => item.name))
-          setLoading(false)
-      })
-      .catch((error) => setError(error))
+      const fetchBookings = async () => {
+        try {
+          const response = await axiosInstance.get('/booking/');
+          setBookings(response.data);
+        //   console.log(response.data)
+        } catch (error) {
+          console.error('Error fetching bookings:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchBookings();
+    }, []);
+  
 
-        axiosInstance.get('/activity/')
-        .then((response) => {
-           const uniqueNamesSet = new Set(response.data.map(item => item.name));
-           const uniqueNamesList = [...uniqueNamesSet];
-           setActivities(uniqueNamesList)
-           setLoading(false)
-      })
-      .catch((error) => setError(error))
+    useEffect(() => {
+      const fetchOptions = async () => {
+        setLoading(true);
+        try {
+          const uniqueActivities = new Set();
+          const uniqueNeighborhoods = new Set();
+          const uniqueDates = new Set();
+          const uniqueTimes = new Set();
+  
+          await Promise.all(
+            bookings.map(async (booking) => {
+              const slotResponse = await axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`);
 
-        axiosInstance.get('/activity/')
-        .then((response) => {
-          setCategories(response.data.map(item => item.name + " " + item.type))
-          setLoading(false)
-      })
-      .catch((error) => setError(error))
-    }, [])
+            //   console.log(slotResponse.data)
+              const slotData = slotResponse.data;
+
+              uniqueActivities.add(slotData.court.activity.name + " " + slotData.court.activity.type);
+              uniqueNeighborhoods.add(slotData.court.club.neighborhood.name);
+              uniqueDates.add(booking.date);
+              uniqueTimes.add(booking.startTime);
+            })
+          );
+  
+          setActivities(Array.from(uniqueActivities));
+          setNeighborhoods(Array.from(uniqueNeighborhoods));
+          setDates(Array.from(uniqueDates));
+          setTimes(Array.from(uniqueTimes));
+        } catch (error) {
+          console.error('Error fetching options:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchOptions();
+    }, [bookings]);
+  
+
+    if (loading) {
+        return <Loader />;
+    }
+
 
 
     return (
@@ -101,7 +177,7 @@ function EventSearch() {
                   }
                 />
 
-                <Autocomplete
+                {/* <Autocomplete
                 id="activity"
                 disablePortal
                 fullWidth
@@ -124,9 +200,9 @@ function EventSearch() {
                     }}
                    />
                   }
-                />
+                /> */}
 
-                <Autocomplete
+                {/* <Autocomplete
                 id="category"
                 disablePortal
                 fullWidth
@@ -150,7 +226,8 @@ function EventSearch() {
                    
                    />
                   }
-                />
+                /> */}
+
                 <Autocomplete
                 id="nhood"
                 disablePortal
@@ -198,14 +275,14 @@ function EventSearch() {
                         }
                     }}
                 />
-                    <TimePicker
+                    {/* <TimePicker
                     label="Elegir Hora"
                     sx={{mt:2,}}
                     slotProps={{
                         textField: { fullWidth: true },
                         
                     }}
-                    />
+                    /> */}
                 <Button 
                 variant="contained" 
                 fullWidth 
