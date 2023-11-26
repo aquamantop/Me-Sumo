@@ -10,3 +10,4 @@ Currently, two official plugins are available:
 Build app: 
 - npm install
 - npm run build
+
