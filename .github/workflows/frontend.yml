@@ -26,9 +26,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./frontend
 
       - name: Build app
         run: npm run build
+        working-directory: ./frontend
 
       - name: Set AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -38,4 +40,5 @@ jobs:
           aws-region: us-east-1
       
       - name: Copy to S3
-        run: aws s3 sync frontend/dist/ s3://me-sumo-frontend
+        run: aws s3 sync dist/ s3://me-sumo-frontend
+        working-directory: ./frontend
