@@ -22,7 +22,7 @@ const CustomInput = ({
       control={control}
       render={({ field }) => (
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "3px" }}
+          sx={{ backgroundColor: "white", borderRadius: "3px", color:'black', '.MuiInputBase-root':{color: "black"}}}
           label={label}
           error={error}
           type={type}
