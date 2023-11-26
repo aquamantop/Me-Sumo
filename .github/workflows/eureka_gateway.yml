@@ -1,4 +1,4 @@
-name: Build Eureka
+name: Build Eureka & Api Gateway
 
 on:
   push:
@@ -13,8 +13,8 @@ on:
       - 'backend/ms-gateway/**'
 
 jobs:
- build-eureka:
-    runs-on: [self-hosted, linux, X64, eureka]
+ build-gateway-eureka:
+    runs-on: [self-hosted, linux, X64, eu-gw]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -24,10 +24,24 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Maven package Api Gateway
+      run: |
+        mvn clean
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-gateway
+        mvn -X package --file pom.xml
+
+    - name: Build Api Gateway
+      run: |
+        cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-gateway
+        sudo systemctl stop gateway.service
+        cp target/ms_gateway.jar /home/ubuntu/app/gateway
+        sudo systemctl start gateway.service
+
     - name: Maven package Eureka
       run: |
+        mvn clean
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-discovery
-        mvn -B package --file pom.xml
+        mvn -X package --file pom.xml
 
     - name: Build Eureka
       run: |

@@ -24,11 +24,8 @@ jobs:
         
     - name: Maven package Club
       run: |
-        echo "Maven package Club"
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-clubs
-        ls -l
         mvn -X package --file pom.xml
-        ls -l target
         
     - name: Build Club
       run: |

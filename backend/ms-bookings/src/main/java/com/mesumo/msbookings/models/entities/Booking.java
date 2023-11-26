@@ -1,14 +1,10 @@
 package com.mesumo.msbookings.models.entities;
 
-import com.mesumo.msbookings.models.dto.SlotDTO;
-import com.mesumo.msbookings.models.dto.UserDTO;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-
 import java.sql.Time;
 import java.sql.Date;
-import java.util.Set;
 
 @Entity
 @Getter
