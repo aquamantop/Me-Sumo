@@ -1,15 +1,18 @@
-import { Box, Container, Grid, Typography, Paper } from "@mui/material";
+import { Box, Container, Grid, Typography, Paper, Pagination } from "@mui/material";
 import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
+import Loader from "../loader";
 
+const itemsPerPage = 3;
 
 function EventShowcase({keyword}) {
 
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1); 
 
        
   useEffect(() => {
@@ -23,6 +26,28 @@ function EventShowcase({keyword}) {
     .catch((error) => setError(error))
   }, [])
 
+
+  const sortedBookings = bookings.sort((a, b) => {
+    const dateA = new Date(`${a.date} ${a.startTime}`);
+    const dateB = new Date(`${b.date} ${b.startTime}`);
+    return dateA - dateB;
+  });
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBookings = sortedBookings.slice(startIndex, endIndex);
+  console.log(paginatedBookings)
+  console.log(startIndex,endIndex)
+
+  const numPages = Math.ceil(sortedBookings.length / itemsPerPage);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
   <>
@@ -40,11 +65,11 @@ function EventShowcase({keyword}) {
           }}
         >
           <Typography variant="h5" color="primary.main">
-            Eventos que cierran en <span style={{ color: 'orange' }}>{keyword}</span> de una hora
+            <span style={{ color: 'orange', marginLeft:'10px'}}>{keyword}</span> {keyword=='Todos' ? 'los eventos' : 'eventos'}
           </Typography>
         </Box>
         <Grid container > 
-          {bookings.map((booking, index) => {
+          {paginatedBookings.map((booking, index) => {
             return (
               <Grid
                 item
@@ -55,10 +80,20 @@ function EventShowcase({keyword}) {
                 sx={{ p: 2 }}
               >
                 <EventCard booking={booking}/>
-              </Grid>
+              </Grid>        
             )}
           )}
         </Grid>
+        {keyword === 'Todos' && (
+          <Pagination
+            count={numPages}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+            size="large"
+            sx={{ mt: 2, justifyContent: 'center' }}
+          /> 
+        )}
       </Paper>
     </Container>
   </>

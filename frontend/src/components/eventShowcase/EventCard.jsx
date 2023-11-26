@@ -32,7 +32,7 @@ function EventCard({ booking }) {
     })
     .catch((error) => setError(error)) 
 
-  }, [])
+  }, [booking])
 
   return (
   <>

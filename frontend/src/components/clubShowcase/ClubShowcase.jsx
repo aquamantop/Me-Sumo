@@ -1,17 +1,21 @@
-import { Container, Paper, Box, Typography, Grid } from "@mui/material";
+import { Container, Paper, Box, Typography, Grid, Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { PaperSXX } from "../customMui/CustomMui";
 import ClubCard from "./ClubCard";
 import { BoxSX } from "../customMui/CustomMui";
 //import axios from "axios"
 import axiosInstance from "../../hooks/api/axiosConfig";
+import Loader from "../loader";
+
+const itemsPerPage = 3;
 
 const ClubShowcase = () => {
 
   const [clubs, setClubs] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
     // axios({
     //   method: "GET",
@@ -29,6 +33,21 @@ const ClubShowcase = () => {
     .catch((error) => setError(error))
   }, [])
 
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBookings = clubs.slice(startIndex, endIndex);
+
+  const numPages = Math.ceil(clubs.length / itemsPerPage);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <>
     { loading && <p>Loading...</p>}
@@ -45,7 +64,7 @@ const ClubShowcase = () => {
                 <Typography variant="h6" color="primary.main">
                   {clubs.length == 0 || error ? "No hay clubes disponibles" : ""}
                 </Typography>
-                {clubs.map((club, index) => {
+                {paginatedBookings.map((club, index) => {
                   return (
                     <Grid
                       item
@@ -63,6 +82,14 @@ const ClubShowcase = () => {
                 }
                 )}
               </Grid>
+              <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              sx={{ mt: 2, justifyContent: 'center' }}
+            />
             </Paper>
           </Container>
         )}

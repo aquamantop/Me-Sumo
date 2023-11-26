@@ -51,8 +51,8 @@ function Home() {
           </Tabs>
           {tabValue === 0 && (
             <>
-              <EventShowcase keyword="menos" />
-              <EventShowcase keyword="más" />
+              <EventShowcase keyword="Próximos" />
+              <EventShowcase keyword="Todos" />
             </>
           )}
           {tabValue === 1 && <ClubShowcase />}
