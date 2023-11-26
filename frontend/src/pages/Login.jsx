@@ -71,7 +71,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      
       <Box
         backgroundColor="background.paper"
         align="center"
@@ -173,7 +173,6 @@ export default function Login() {
           </Link>
         </Typography>
       </Box>
-      <Footer />
     </>
   )
 }

@@ -50,10 +50,10 @@ function EventCard({ booking }) {
       <Typography variant="h6" color="primary.main">
         Club: {info.clubName}
       </Typography>
-      <Typography variant="h6" color="primary.main" sx={{ fontSize: '14px' }}>{info.bookingName}</Typography>
-      <Typography variant="body2" color="secondary.main">Fecha: {info.bookingDate}</Typography>
-      <Typography variant="body2" color="secondary.main">Inicio: {info.bookingStartTime}</Typography>
-      <Typography variant="body2" color="secondary.main">
+      <Typography variant="body2" color="primary.main" noWrap>{info.bookingName}</Typography>
+      <Typography variant="body2" color="secondary.main" noWrap>Fecha: {info.bookingDate}</Typography>
+      <Typography variant="body2" color="secondary.main" noWrap>Inicio: {info.bookingStartTime}</Typography>
+      <Typography variant="body2" color="secondary.main" noWrap>
         Lugares Disponibles: {info.bookingAvailability} 
       </Typography>
     </CardContent>
@@ -71,11 +71,12 @@ function EventCard({ booking }) {
         mb: 0,
       }}
     >
-    <Link href={`/event/${booking.id}`} >
-    <Button fullWidth height="100%"
+    <Link href={`/event/${booking.id}`} sx={{width:"100%"}}>
+    <Button 
         variant="contained"
         color="background"
-        sx={{ ...ButtonSX, }}
+        fullWidth
+        sx={{ ...ButtonSX }}
     >
         Ver Más
     </Button>

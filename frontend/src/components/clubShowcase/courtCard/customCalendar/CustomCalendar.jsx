@@ -39,7 +39,7 @@ const CustomCalendar = ({ courtId, activityName }) => {
     <>
       <StaticDatePicker
         sx={{
-          bgcolor: "white",
+          bgcolor: "rgb(255,255,255,0.1)",
           mt: 2
         }}
         shouldDisableDate={(day) => {

@@ -26,7 +26,18 @@ export const MenuListSX = {
         backgroundColor: "rgb(255,255,255, 0.1)",
       },
 }
-
+export const TextFieldSX = {
+    "& label": {
+        color: "white",
+    },
+    "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+            borderColor: "#E0E3E7",
+            backgroundColor: "rgb(255,255,255, 0.1)",
+            
+        },
+    },
+}
 export const ButtonSX = {
     p: 1.5,
     backgroundColor: "background.paper",
@@ -87,28 +98,13 @@ export const CustomButton = ({ buttonText }) => {
 
 
 export const CustomTextField = styled(TextField)({
-    "& input": {
-        color: "white", // Color del texto
-    },
-    "& label.Mui-focused": {
-        color: "#A0AAB4",
-    },
     "& label": {
-        color: "white", // Color del label
-    },
-    "& .MuiInput-underline:after": {
-        borderBottomColor: "#B2BAC2",
+        color: "white", 
     },
     "& .MuiOutlinedInput-root": {
         "& fieldset": {
-            borderColor: "#E0E3E7", // Color del Borde
+            borderColor: "#E0E3E7",
             backgroundColor: "rgb(255,255,255, 0.1)",
-        },
-        "&:hover fieldset": {
-            borderColor: "#B2BAC2",
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: "#6F7E8C",
         },
     },
 });

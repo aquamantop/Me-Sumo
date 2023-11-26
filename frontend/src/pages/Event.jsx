@@ -53,7 +53,6 @@ const Booking = () => {
     {loading && <p>Loading...</p>}
     {!loading && (
       <>
-        <Header />
         <Container className="content" sx={{my:0}}>
           <Paper sx={PaperSXX}>
             <Box
@@ -145,7 +144,6 @@ const Booking = () => {
             </Grid>
           </Paper>
         </Container>
-        <Footer />
       </>
       )
     }

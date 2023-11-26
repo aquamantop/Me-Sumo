@@ -70,7 +70,7 @@ export default function Register() {
 
   return (
     <>
-      <Header />
+      
       <Box
         backgroundColor='background.paper'
         align='center'
@@ -239,7 +239,7 @@ export default function Register() {
           </Link>
         </Typography>
       </Box>
-      <Footer />
+      
     </>
   )
 }

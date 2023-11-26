@@ -29,7 +29,7 @@ const Club = () => {
         {
             !loading && (
                     <>
-                    <Header />
+                    
                     <Container className="content" sx={{my:2}}>
               <Paper sx={PaperSXX}>
                   <Box
@@ -50,7 +50,7 @@ const Club = () => {
                   <ClubInfo club={ club }/>
               </Paper>
           </Container>
-          <Footer />
+          
             </>
             )}
         </>
@@ -58,17 +58,3 @@ const Club = () => {
 }
 
 export default Club
-
-{/* <> 
-    <Header/>
-    <Container className="content">
-      <Paper sx={PaperSXX}>
-        <CustomBox>
-          <Typography variant="h5" color="primary.main">
-
-          </Typography>
-        </CustomBox>
-      </Paper>
-    </Container>
-    <Footer/>
-    </> */}
