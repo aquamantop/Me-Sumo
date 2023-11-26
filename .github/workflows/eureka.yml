@@ -14,7 +14,7 @@ on:
 
 jobs:
  build-eureka:
-    runs-on: [self-hosted, linux, X64, eureka]
+    runs-on: [self-hosted, linux, X64, eu-gw]
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
