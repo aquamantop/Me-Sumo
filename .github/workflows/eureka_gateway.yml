@@ -26,6 +26,7 @@ jobs:
 
     - name: Maven package Api Gateway
       run: |
+        mvn clean
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-gateway
         mvn -B package --file pom.xml
 
@@ -38,6 +39,7 @@ jobs:
 
     - name: Maven package Eureka
       run: |
+        mvn clean
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-discovery
         mvn -B package --file pom.xml
 
