@@ -4,7 +4,7 @@ import Footer from '../components/footer/Footer'
 export default function LoginSuccess() {
   return (
     <>
-    <Header/>
+    
       <Box
         display='flex'
         flexDirection='column'
@@ -40,7 +40,7 @@ export default function LoginSuccess() {
           ¡Reservá ahora!
         </Link>
       </Box>
-      <Footer/>
+      
     </>
   )
 }

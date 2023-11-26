@@ -3,6 +3,8 @@ import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 import axios from "axios";
+import axiosInstance from "../../../../hooks/api/axiosConfig";
+
 
 const CustomCalendar = ({ courtId, activityName }) => {
   const { id: clubId } = useParams();
@@ -12,14 +14,15 @@ const CustomCalendar = ({ courtId, activityName }) => {
   const [error, setError] = useState(null); 
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityName=${activityName}`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
+    // axios({
+    //   method: "GET",
+    //   url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityName=${activityName}`,
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    axiosInstance.get(`/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityName=${activityName}`)
       .then((response) => {
         const fechasArray = Object.keys(response.data).flatMap((clave) =>
           Object.keys(response.data[clave])
@@ -36,7 +39,7 @@ const CustomCalendar = ({ courtId, activityName }) => {
     <>
       <StaticDatePicker
         sx={{
-          bgcolor: "white",
+          bgcolor: "rgb(255,255,255,0.1)",
           mt: 2
         }}
         shouldDisableDate={(day) => {

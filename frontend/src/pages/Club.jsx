@@ -4,10 +4,8 @@ import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
 import { Container, Paper, Typography, Box, Button, Link, Grid } from '@mui/material'
 import { PaperSXX } from '../components/customMui/CustomMui'
-import eventoImagen from "../assets/club-field.png"
-import EventCard from '../components/eventShowcase/EventCard'
 import { ClubInfo } from '../components/clubShowcase/ClubInfo'
-import axios from "axios"
+import axiosInstance from "../hooks/api/axiosConfig";
 
 const Club = () => {
     const { id } = useParams();
@@ -17,14 +15,7 @@ const Club = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios({
-            method: "GET",
-            url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/club/${id}`,
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }
-        })
+            axiosInstance.get(`/club/${id}`)
             .then((response) => {
                 setClub(response.data)
                 setLoading(false)
@@ -38,7 +29,7 @@ const Club = () => {
         {
             !loading && (
                     <>
-                    <Header />
+                    
                     <Container className="content" sx={{my:2}}>
               <Paper sx={PaperSXX}>
                   <Box
@@ -59,7 +50,7 @@ const Club = () => {
                   <ClubInfo club={ club }/>
               </Paper>
           </Container>
-          <Footer />
+          
             </>
             )}
         </>
@@ -67,17 +58,3 @@ const Club = () => {
 }
 
 export default Club
-
-{/* <> 
-    <Header/>
-    <Container className="content">
-      <Paper sx={PaperSXX}>
-        <CustomBox>
-          <Typography variant="h5" color="primary.main">
-
-          </Typography>
-        </CustomBox>
-      </Paper>
-    </Container>
-    <Footer/>
-    </> */}

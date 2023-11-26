@@ -1,12 +1,11 @@
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
-import { PaperSXX, CustomTextField } from "../components/customMui/CustomMui";
+import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
 
 const EventCreate = () => {
     return (
         <>
-            <Header />
             <Container className="content">
                 <Paper sx={{ ...PaperSXX, textAlign: "center" }} >
                     <Box
@@ -63,7 +62,6 @@ const EventCreate = () => {
                     </Button>
                 </Paper>
             </Container>
-            <Footer />
         </>
     );
 };

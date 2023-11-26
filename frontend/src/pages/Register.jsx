@@ -15,6 +15,8 @@ import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import axiosInstance from "../hooks/api/axiosConfig";
+import { ButtonSX } from '../components/customMui/CustomMui'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -40,17 +42,18 @@ export default function Register() {
   const onSubmit = handleSubmit(async (userData) => {
 
     const response = await new Promise((resolve) => {
-        axios({
-          method: "POST",
-          url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/register',
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          data: userData,
-        })
-          .then((response) => resolve(response))
-          .catch((error) => resolve(error));
+        // axios({
+        //   method: "POST",
+        //   url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/register',
+        //   headers: {
+        //     Accept: "application/json",
+        //     "Content-Type": "application/json",
+        //   },
+        //   data: userData,
+        // })
+        axiosInstance.post("/auth/register", userData)
+        .then((response) => resolve(response))
+        .catch((error) => resolve(error));
     });
 
     if (!error) {
@@ -67,7 +70,7 @@ export default function Register() {
 
   return (
     <>
-      <Header />
+      
       <Box
         backgroundColor='background.paper'
         align='center'
@@ -210,16 +213,7 @@ export default function Register() {
           <Button
             variant='contained'
             type='submit'
-            sx={{
-              backgroundColor: 'secondary.main',
-              borderRadius: '3px',
-              color: 'black',
-              '&.MuiButtonBase-root:hover': {
-                bgcolor: 'white',
-              },
-              height: '40px',
-              letterSpacing: '2.86px',
-            }}
+            sx={{...ButtonSX}}
           >
             Registrarme
           </Button>
@@ -245,7 +239,7 @@ export default function Register() {
           </Link>
         </Typography>
       </Box>
-      <Footer />
+      
     </>
   )
 }
