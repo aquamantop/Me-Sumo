@@ -4,6 +4,7 @@ import com.mesumo.msbookings.exceptions.ResourceNotFoundException;
 import com.mesumo.msbookings.models.dto.CourtDTO;
 import com.mesumo.msbookings.models.dto.SlotWithoutDaysDTO;
 import com.mesumo.msbookings.models.entities.Booking;
+import com.mesumo.msbookings.models.entities.Participant;
 import com.mesumo.msbookings.models.service.impl.AvailabilityService;
 import com.mesumo.msbookings.models.service.impl.BookingService;
 import org.springframework.http.HttpStatus;
@@ -78,9 +79,9 @@ public class BookingController {
     }
 
     @GetMapping("/club_activity")
-    public ResponseEntity filterByClubAndActivity(@RequestParam Long clubId, @RequestParam String activityName) {
+    public ResponseEntity filterByClubAndActivity(@RequestParam Long clubId, @RequestParam Long activityId) {
         ResponseEntity response = null;
-        Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> list = availabilityService.getAvailableBookings(clubId, activityName);
+        Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> list = availabilityService.getAvailableBookings(clubId, activityId);
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);
@@ -89,14 +90,94 @@ public class BookingController {
         return response;
     }
 
-    @GetMapping("/court_slots")
-    public ResponseEntity filterByCourtAndSlots(@RequestParam Long clubId, @RequestParam Long courtId, @RequestParam String activityName) {
+    @GetMapping("filter_endpoint")
+    public ResponseEntity filterByActivityNeighborhoodAndDates(@RequestParam(required = false) Long activityId, @RequestParam(required = false) String neighborhood, @RequestParam(required = false) String date) {
         ResponseEntity response = null;
-        Map<CourtDTO, Map<LocalDate,List<SlotWithoutDaysDTO>>> map = availabilityService.getAvailableBookingsByCourt(clubId, courtId, activityName);
+        if(activityId == null){
+            activityId = Long.valueOf("");
+        }
+        if(neighborhood == null){
+            neighborhood = "";
+        }
+        if(date == null){
+            date = "";
+        }
+
+        switch (String.valueOf(activityId)){
+            case "0":
+                switch (neighborhood){
+                    case "":
+                        switch (date){
+                            case "":
+                                response = new ResponseEntity(null, HttpStatus.OK);
+                                break;
+                            default:
+                                response = new ResponseEntity(service.filtersDate(LocalDate.parse(date)), HttpStatus.OK);
+                                break;
+                        }
+                        break;
+                    default:
+                        switch (date){
+                            case "":
+                                response = new ResponseEntity(service.filtersNeighborhood(neighborhood), HttpStatus.OK);
+                                break;
+                            default:
+                                response = new ResponseEntity(service.filtersNeighborhoodAndDate(neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                break;
+                        }
+                        break;
+                }
+                break;
+            default:
+                switch (neighborhood){
+                    case "":
+                        switch (date){
+                            case "":
+                                response = new ResponseEntity(service.filtersActivity(activityId), HttpStatus.OK);
+                                break;
+                            default:
+                                response = new ResponseEntity(service.filtersActivityAndDate(activityId, LocalDate.parse(date)), HttpStatus.OK);
+                                break;
+                        }
+                        break;
+                    default:
+                        switch (date){
+                            case "":
+                                response = new ResponseEntity(service.filtersActivityAndNeighborhood(activityId, neighborhood), HttpStatus.OK);
+                                break;
+                            default:
+                                response = new ResponseEntity(service.filtersActivityAndNeighborhoodAndDate(activityId, neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                break;
+                        }
+                        break;
+                }
+                break;
+
+        }
+
+        return response;
+    }
+
+    @GetMapping("/court_slots")
+    public ResponseEntity filterByCourtAndSlots(@RequestParam Long clubId, @RequestParam Long courtId, @RequestParam Long activityId) {
+        ResponseEntity response = null;
+        Map<CourtDTO, Map<LocalDate,List<SlotWithoutDaysDTO>>> map = availabilityService.getAvailableBookingsByCourt(clubId, courtId, activityId);
 
         if(map != null){
             response = new ResponseEntity(map, HttpStatus.OK);
         } else response = new ResponseEntity("Empty map", HttpStatus.NOT_FOUND);
+
+        return response;
+    }
+
+    @GetMapping("/participant_bookings")
+    public ResponseEntity getParticipantsByBookingId(@RequestParam Long userId) {
+        ResponseEntity response = null;
+        List<Booking> list = service.filterByUserParticipant(userId);
+
+        if(list != null){
+            response = new ResponseEntity(list, HttpStatus.OK);
+        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }
