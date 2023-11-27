@@ -12,6 +12,9 @@ spring:
     url: jdbc:mysql://db.ctd.academy/pi21023c02_GRUPO5?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: pi21023c02_GRUPO5
     password: eethoo7U
+#    url: ${{ secrets.BD_URL }}
+#    username: ${{ secrets.BD_USERNAME }}
+#    password: ${{ secrets.BD_PASSWORD }}
 
   #  Base de datos local
 #    url: jdbc:mysql://localhost:3306/me_sumo?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
@@ -34,10 +37,10 @@ spring:
     date_format: yyyy-MM-dd
 
   mail:
-    username: mesumo.contacto@gmail.com
-    password: dzzs ywni lmjo djnt
-#    username: ${{ secrets.SENDER_EMAIL_USERNAME }}
-#    password: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+#    username: mesumo.contacto@gmail.com
+#    password: dzzs ywni lmjo djnt
+    username: ${{ secrets.SENDER_EMAIL_USERNAME }}
+    password: ${{ secrets.SENDER_EMAIL_PASSWORD }}
 
 eureka:
   instance:
