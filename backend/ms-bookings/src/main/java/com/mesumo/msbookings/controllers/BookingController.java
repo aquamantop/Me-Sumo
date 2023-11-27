@@ -91,7 +91,7 @@ public class BookingController {
     }
 
     @GetMapping("filter_endpoint")
-    public ResponseEntity filterByActivityNeighborhoodAndDates(@RequestParam(required = false) Long activityId, @RequestParam(required = false) String neighborhood, @RequestParam(required = false) String date) {
+    public ResponseEntity filterByActivityNeighborhoodAndDates(@RequestParam(required = false) Long activityId, @RequestParam(required = false) String neighborhood, @RequestParam(required = false) String date, @RequestParam(required = false) Boolean full) {
         ResponseEntity response = null;
         if(activityId == null){
             activityId = Long.valueOf("");
@@ -101,6 +101,11 @@ public class BookingController {
         }
         if(date == null){
             date = "";
+        }
+        if(full == null){
+            full = false;
+        }else if (!full.equals(true)) {
+            full = false;
         }
 
         switch (String.valueOf(activityId)){
@@ -112,17 +117,29 @@ public class BookingController {
                                 response = new ResponseEntity(null, HttpStatus.OK);
                                 break;
                             default:
-                                response = new ResponseEntity(service.filtersDate(LocalDate.parse(date)), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersDate(LocalDate.parse(date)), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersDate(LocalDate.parse(date), true), HttpStatus.OK);
+
                                 break;
                         }
                         break;
                     default:
                         switch (date){
                             case "":
-                                response = new ResponseEntity(service.filtersNeighborhood(neighborhood), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersNeighborhood(neighborhood), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersNeighborhood(neighborhood, true), HttpStatus.OK);
+
                                 break;
                             default:
-                                response = new ResponseEntity(service.filtersNeighborhoodAndDate(neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersNeighborhoodAndDate(neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersNeighborhoodAndDate(neighborhood, LocalDate.parse(date), true), HttpStatus.OK);
+
                                 break;
                         }
                         break;
@@ -133,20 +150,35 @@ public class BookingController {
                     case "":
                         switch (date){
                             case "":
-                                response = new ResponseEntity(service.filtersActivity(activityId), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersActivity(activityId), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersActivity(activityId, true), HttpStatus.OK);
+
                                 break;
                             default:
-                                response = new ResponseEntity(service.filtersActivityAndDate(activityId, LocalDate.parse(date)), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersActivityAndDate(activityId, LocalDate.parse(date)), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersActivityAndDate(activityId, LocalDate.parse(date), true), HttpStatus.OK);
+
                                 break;
                         }
                         break;
                     default:
                         switch (date){
                             case "":
-                                response = new ResponseEntity(service.filtersActivityAndNeighborhood(activityId, neighborhood), HttpStatus.OK);
+                                if(!full)
+                                    response = new ResponseEntity(service.filtersActivityAndNeighborhood(activityId, neighborhood), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersActivityAndNeighborhood(activityId, neighborhood, true), HttpStatus.OK);
+
                                 break;
                             default:
-                                response = new ResponseEntity(service.filtersActivityAndNeighborhoodAndDate(activityId, neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                if (!full)
+                                    response = new ResponseEntity(service.filtersActivityAndNeighborhoodAndDate(activityId, neighborhood, LocalDate.parse(date)), HttpStatus.OK);
+                                else
+                                    response = new ResponseEntity(service.filtersActivityAndNeighborhoodAndDate(activityId, neighborhood, LocalDate.parse(date), true), HttpStatus.OK);
                                 break;
                         }
                         break;
