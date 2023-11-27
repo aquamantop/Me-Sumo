@@ -158,9 +158,11 @@ public class BookingService implements IBookingService {
         return filterBooking(spec);
     }
 
-    public List<Booking> filterByUserParticipant(Long userId) {
+    public List<Booking> filterByUserParticipant(Long userId, boolean approved) {
         Specification<Booking> spec = new BookingSpecification();
         spec = spec.and(BookingSpecification.bookingsByUserParticipant(userId));
+        spec = spec.and(BookingSpecification.bookingsApproved(approved));
+        spec = spec.and(BookingSpecification.bookingsWithinNext30Days());
         return filterBooking(spec);
     }
 
