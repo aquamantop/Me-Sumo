@@ -201,9 +201,9 @@ public class BookingController {
     }
 
     @GetMapping("/participant_bookings")
-    public ResponseEntity getParticipantsByBookingId(@RequestParam Long userId) {
+    public ResponseEntity getParticipantsByBookingId(@RequestParam Long userId, @RequestParam boolean approved) {
         ResponseEntity response = null;
-        List<Booking> list = service.filterByUserParticipant(userId);
+        List<Booking> list = service.filterByUserParticipant(userId, approved);
 
         if(list != null){
             response = new ResponseEntity(list, HttpStatus.OK);
