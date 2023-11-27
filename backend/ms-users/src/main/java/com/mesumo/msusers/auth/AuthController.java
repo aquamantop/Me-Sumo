@@ -1,13 +1,11 @@
 package com.mesumo.msusers.auth;
+
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.service.impl.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -16,8 +14,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     @PostMapping(value = "/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) throws ResourceNotFoundException {
@@ -38,4 +35,5 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
 }
