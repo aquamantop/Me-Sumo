@@ -22,21 +22,31 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Set Environment Variables
+    # - name: Set Environment Variables
+    #   run: |
+    #     echo "export BD_URL=${{ secrets.BD_URL }}" 
+    #     echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" 
+    #     echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}"
+    #     echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" 
+    #     echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" 
+        
+    - name: Maven package User
       run: |
         echo "export BD_URL=${{ secrets.BD_URL }}" 
         echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" 
         echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}"
         echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" 
         echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" 
-        
-    - name: Maven package User
-      run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         mvn -B package --file pom.xml
         
     - name: Build User
       run: |
+        echo "export BD_URL=${{ secrets.BD_URL }}" 
+        echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" 
+        echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}"
+        echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" 
+        echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" 
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         sudo systemctl stop user.service
         cp target/ms_users.jar /home/ubuntu/user
