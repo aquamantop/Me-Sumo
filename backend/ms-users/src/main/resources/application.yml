@@ -33,6 +33,10 @@ spring:
       write_dates_as_timestamps: false
     date_format: yyyy-MM-dd
 
+  mail:
+    username: ${{ secrets.SENDER_EMAIL_USERNAME }}
+    password: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+
 eureka:
   instance:
 #    hostname: localhost

@@ -1,10 +1,13 @@
 package com.mesumo.msusers.auth;
-
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
+import com.mesumo.msusers.models.service.impl.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -13,14 +16,26 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping(value = "/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
-    {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) throws ResourceNotFoundException {
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ResourceAlreadyExistsException {
-        return ResponseEntity.ok(authService.register(request));
+        AuthResponse response = authService.register(request);
+
+        if (!response.getToken().isEmpty()) {
+            try {
+                emailService.sendWelcomeEmail(request.getEmail());
+            } catch (Exception e) {
+                throw new RuntimeException("Error sending welcome email: " + e.getMessage(), e);
+            }
+        }
+
+        return ResponseEntity.ok(response);
     }
 }
