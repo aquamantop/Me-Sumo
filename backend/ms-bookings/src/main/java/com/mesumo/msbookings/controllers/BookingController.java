@@ -94,7 +94,7 @@ public class BookingController {
     public ResponseEntity filterByActivityNeighborhoodAndDates(@RequestParam(required = false) Long activityId, @RequestParam(required = false) String neighborhood, @RequestParam(required = false) String date, @RequestParam(required = false) Boolean full) {
         ResponseEntity response = null;
         if(activityId == null){
-            activityId = Long.valueOf("");
+            activityId = 0L;
         }
         if(neighborhood == null){
             neighborhood = "";
