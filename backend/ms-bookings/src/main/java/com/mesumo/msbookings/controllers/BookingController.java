@@ -104,8 +104,6 @@ public class BookingController {
         }
         if(full == null){
             full = false;
-        }else if (!full.equals(true)) {
-            full = false;
         }
 
         switch (String.valueOf(activityId)){
