@@ -6,7 +6,7 @@ import axios from "axios";
 import axiosInstance from "../../../../hooks/api/axiosConfig";
 
 
-const CustomCalendar = ({ courtId, activityName }) => {
+const CustomCalendar = ({ courtId, activityId }) => {
   const { id: clubId } = useParams();
 
   const [booking, setBooking] = useState([]);
@@ -16,13 +16,13 @@ const CustomCalendar = ({ courtId, activityName }) => {
   useEffect(() => {
     // axios({
     //   method: "GET",
-    //   url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityName=${activityName}`,
+    //   url: `http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`,
     //   headers: {
     //     Accept: "application/json",
     //     "Content-Type": "application/json"
     //   }
     // })
-    axiosInstance.get(`/booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityName=${activityName}`)
+    axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
       .then((response) => {
         const fechasArray = Object.keys(response.data).flatMap((clave) =>
           Object.keys(response.data[clave])

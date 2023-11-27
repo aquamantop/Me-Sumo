@@ -59,7 +59,7 @@ export const ClubInfo = ({ club }) => {
               {activities.map((activity, index) => (
                 activity.courts.map((court) => {
                   return <Grid item xs={12} sm={6} key={index+court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court} activityName={activity.name}/>
+                      <CourtCard court={court} activityId={activity.id}/>
                   </Grid>
                 })
               ))} 
