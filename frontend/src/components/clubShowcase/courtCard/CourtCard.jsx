@@ -50,7 +50,7 @@ const CourtCard = ({ court, activityId }) => {
         >
           <Link href="" >
             <Button variant="contained" color="secondary">
-              Ver Más
+              Reservar cancha
             </Button>
           </Link>
         </Box>
