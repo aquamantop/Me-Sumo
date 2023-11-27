@@ -271,6 +271,67 @@ public class BookingService implements IBookingService {
         return filters;
     }
 
+    public List<Booking> filtersActivity(Long activityId, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByActivities(activityId));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersActivityAndNeighborhood(Long activityId, String neighborhood, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByActivities(activityId));
+        spec = spec.and(BookingSpecification.bookingsByNeighborhood(neighborhood));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersActivityAndDate(Long activityId, LocalDate date, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByActivities(activityId));
+        spec = spec.and(BookingSpecification.bookingsByDate(date));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersNeighborhood(String neighborhood, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByNeighborhood(neighborhood));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersNeighborhoodAndDate(String neighborhood, LocalDate date, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByNeighborhood(neighborhood));
+        spec = spec.and(BookingSpecification.bookingsByDate(date));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersDate(LocalDate date, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByDate(date));
+        return filterBooking(spec);
+
+    }
+    public List<Booking> filtersActivityAndNeighborhoodAndDate(Long activityId, String neighborhood, LocalDate date, boolean full) {
+
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        spec = spec.and(BookingSpecification.bookingsByActivities(activityId));
+        spec = spec.and(BookingSpecification.bookingsByNeighborhood(neighborhood));
+        spec = spec.and(BookingSpecification.bookingsByDate(date));
+        return filterBooking(spec);
+
+    }
 
 
 
