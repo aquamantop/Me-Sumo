@@ -2,6 +2,7 @@ package com.mesumo.msusers.models.service.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,13 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender emailSender;
-
-    public EmailService(JavaMailSender emailSender) {
-        this.emailSender = emailSender;
-    }
 
     public void sendWelcomeEmail(String email) {
 
