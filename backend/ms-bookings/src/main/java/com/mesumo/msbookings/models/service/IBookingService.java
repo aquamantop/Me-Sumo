@@ -11,14 +11,15 @@ public interface IBookingService {
 
     Booking findById(Long id) throws ResourceNotFoundException;
     Booking create(Booking booking);
+    
     void deleteById(Long id) throws ResourceNotFoundException;
     Booking update(Booking booking) throws ResourceNotFoundException;
 
     Set<Booking> findAll();
 
     List<Booking> filterBooking(Specification spec);
-    List<Booking> filterByDate(LocalDate startDate, LocalDate endDate);
+    List<Booking> filterByDate(LocalDate startDate);
 
-    List<Booking> filterBySlotAndDate(Long slotId, LocalDate date, boolean approved);
+    List<Booking> filterBySlotAndDate(Long slotId, LocalDate date);
 
 }

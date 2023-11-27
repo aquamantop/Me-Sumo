@@ -9,5 +9,5 @@ import java.util.Map;
 
 public interface IAvailabilityService {
 
-    Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, String activityName);
+    Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, Long activityId);
 }

@@ -18,12 +18,11 @@ public class BookingSpecification implements Specification<Booking> {
 
     }
 
-    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, LocalDate date, boolean approved) {
+    public static Specification<Booking> bookingsBySlotAndDate(Long slotId, LocalDate date) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("slotId"), slotId),
-                    criteriaBuilder.equal(root.get("date"), date),
-                    criteriaBuilder.equal(root.get("approved"), approved));
+                    criteriaBuilder.equal(root.get("date"), date));
         };
     }
 
@@ -31,6 +30,47 @@ public class BookingSpecification implements Specification<Booking> {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("approved"), approved));
+        };
+    }
+
+    public static Specification<Booking> bookingsByClub(Long clubId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("clubId"), clubId));
+        };
+    }
+    public static Specification<Booking> bookingsByCreatorUser(Long userId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("creatorId"), userId));
+        };
+    }
+
+    public static Specification<Booking> bookingsByUserParticipant(Long userId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("participants"), userId));
+        };
+    }
+
+    public static Specification<Booking> bookingsByActivities(Long activityId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("activityId"), activityId));
+        };
+    }
+
+    public static Specification<Booking> bookingsByNeighborhood(String neighborhood) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("neighborhoodName"), neighborhood));
+        };
+    }
+
+    public static Specification<Booking> bookingsByDate(LocalDate date) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("date"), date));
         };
     }
 

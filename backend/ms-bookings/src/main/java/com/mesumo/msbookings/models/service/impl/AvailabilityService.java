@@ -23,13 +23,13 @@ public class AvailabilityService implements IAvailabilityService {
     IBookingService bookingService;
 
     @Override
-    public Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, String activityName) {
+    public Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> getAvailableBookings(Long clubId, Long activityId) {
 
         ClubDTO club = clubFeignClient.getById(clubId);
 
         ActivityDTO selectedActivity = null;
         for (ActivityDTO activity : club.getActivities()) {
-            if (activity.getName().equals(activityName)) {
+            if (activity.getId().equals(activityId)) {
                 selectedActivity = activity;
                 break;
             }
@@ -54,7 +54,7 @@ public class AvailabilityService implements IAvailabilityService {
 
                 for (DayEntity day : slot.getDays()) {
                     LocalDate dateSlot = monthStart;
-                    List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
+                    List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
 
                     while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
                         dateSlot = dateSlot.plusDays(1);
@@ -71,7 +71,7 @@ public class AvailabilityService implements IAvailabilityService {
                         }
 
                         dateSlot = dateSlot.plusWeeks(1);
-                        bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
+                        bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
                     }
                     bookings = null;
                 }
@@ -81,13 +81,13 @@ public class AvailabilityService implements IAvailabilityService {
         return availabilityCalendar;
     }
 
-    public Map<CourtDTO, Map<LocalDate, List<SlotWithoutDaysDTO>>> getAvailableBookingsByCourt(Long clubId, Long courtId, String activityName) {
+    public Map<CourtDTO, Map<LocalDate, List<SlotWithoutDaysDTO>>> getAvailableBookingsByCourt(Long clubId, Long courtId, Long activityId) {
 
         ClubDTO club = clubFeignClient.getById(clubId);
 
         ActivityDTO selectedActivity = null;
         for (ActivityDTO activity : club.getActivities()) {
-            if (activity.getName().equals(activityName)) {
+            if (activity.getId().equals(activityId)) {
                 selectedActivity = activity;
                 break;
             }
@@ -124,7 +124,7 @@ public class AvailabilityService implements IAvailabilityService {
 
             for (DayEntity day : slot.getDays()) {
                 LocalDate dateSlot = monthStart;
-                List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
+                List<Booking> bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
 
                 while (dateSlot.getDayOfWeek() != day.toJavaDayOfWeek()) {
                     dateSlot = dateSlot.plusDays(1);
@@ -144,7 +144,7 @@ public class AvailabilityService implements IAvailabilityService {
                     }
 
                     dateSlot = dateSlot.plusWeeks(1);
-                    bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot, true);
+                    bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
                 }
                 bookings = null;
             }

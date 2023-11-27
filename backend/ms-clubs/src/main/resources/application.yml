@@ -27,6 +27,7 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
   jackson:
      serialization:
        write_dates_as_timestamps: false
@@ -46,3 +47,4 @@ eureka:
 logging:
   level:
     org.springframework.security: DEBUG
+    
