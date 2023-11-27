@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import {
     Typography,
@@ -7,168 +7,134 @@ import {
     InputAdornment,
     IconButton,
     Autocomplete,
-    Paper
+    Paper,
+    createTheme,
+    ThemeProvider
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
 import CategoryIcon from '@mui/icons-material/Category';
 import { styled } from "@mui/material/styles";
-import { DesktopDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
+import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
+import  axiosInstance  from "../../hooks/api/axiosConfig";
+import Loader from "../loader";
 
-const activities = ['Futbol'];
-const categories = ['Futbol 5', 'Futbol 7', 'Futbol 11'
-  ];
-  const barrios = [
-    "Palermo",
-    "Recoleta",
-    "San Telmo",
-    "La Boca",
-    "Belgrano",
-    "Villa Crespo",
-    "Caballito",
-    "Boedo",
-    "Colegiales",
-    "Núñez"
-  ];
-  
-  
-const CssIconButton = styled(IconButton)({
-    color: "white",
-    // '&.Mui-focused': {
-    //   color: '#6F7E8C', // Cambia el color al estar enfocado
-    // },
-    // '&:hover': {
-    //   color: 'blue', // Color al hacer hover
-    // },
-    // '&.Mui-focused': {
-    //   color: 'red', // Color al estar en focus
-    // },
-});
 
-const CssAutocomplete = styled(Autocomplete)({
-  "& .MuiAutocomplete-clearIndicator":{
-    color:'white',
-    '&:hover': {
-      backgroundColor: 'rgb(255,255,255,0.1)', // Cambia 'your-hover-color' al color que desees al hacer hover
-    },
-  },
-  "& .MuiAutocomplete-popupIndicator": {
-    color: 'white',
-    '&:hover': {
-      backgroundColor: 'rgb(255,255,255,0.1)', // Cambia 'your-hover-color' al color que desees al hacer hover
-    },
-  },
-  '& .MuiPaper-root':{
-      '& .MuiAutocomplete-listbox': {
-        '& .MuiAutocomplete-option': {
-          backgroundColor: 'red !important',
-          color: 'white !important'
-        }
-      }
-  }
-})
 
-const CssDesktopDatePicker = styled (DesktopDatePicker)({
-  '& .MuiButtonBase-root':{
-    color:'white'
-  },
-  "& input": {
-    color: "white", // Color del texto
-},
-"& label.Mui-focused": {
-    color: "#A0AAB4",
-},
-"& label": {
-    color: "white", // Color del label
-},
-"& .MuiInput-underline:after": {
-    borderBottomColor: "#B2BAC2",
-},
-"& .MuiOutlinedInput-root": {
-    "& fieldset": {
-        borderColor: "#E0E3E7", // Color del Borde
-        backgroundColor: "rgb(255,255,255, 0.1)",
-    },
-    "&:hover fieldset": {
-        borderColor: "#B2BAC2",
-    },
-    "&.Mui-focused fieldset": {
-        borderColor: "#6F7E8C",
-    },
-}
-})
-const CssTimePicker = styled(TimePicker)({
-  '& .MuiButtonBase-root':{
-    color:'white'
-  },
-  "& input": {
-    color: "white", // Color del texto
-},
-"& label.Mui-focused": {
-    color: "#A0AAB4",
-},
-"& label": {
-    color: "white", // Color del label
-},
-"& .MuiInput-underline:after": {
-    borderBottomColor: "#B2BAC2",
-},
-"& .MuiOutlinedInput-root": {
-    "& fieldset": {
-        borderColor: "#E0E3E7", // Color del Borde
-        backgroundColor: "rgb(255,255,255, 0.1)",
-    },
-    "&:hover fieldset": {
-        borderColor: "#B2BAC2",
-    },
-    "&.Mui-focused fieldset": {
-        borderColor: "#6F7E8C",
-    },
-}
-})
-const CssTextField = styled(TextField)({
-    "& input": {
-        color: "white", // Color del texto
-    },
-    "& label.Mui-focused": {
-        color: "#A0AAB4",
-    },
-    "& label": {
-        color: "white", // Color del label
-    },
-    "& .MuiInput-underline:after": {
-        borderBottomColor: "#B2BAC2",
-    },
-    "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-            borderColor: "#E0E3E7", // Color del Borde
-            backgroundColor: "rgb(255,255,255, 0.1)",
-        },
-        "&:hover fieldset": {
-            borderColor: "#B2BAC2",
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: "#6F7E8C",
-        },
-    },
-});
 
-const CustomPaper = styled(Paper)({
-    '& .MuiAutocomplete-option': {
-        color: 'white',//Color de la fuente
-        '&:hover': {
-            backgroundColor: "rgb(255,255,255, 0.1)",
-        },
-        '&&[aria-selected="true"].Mui-focused':{
-            backgroundColor: "green"
-        }
-      },
-    '& .MuiAutocomplete-listbox':{
-        backgroundColor: 'rgb(255,255,255, 0.1)',//Color del fondo 
-    }
-})
+
 function EventSearch() {
     
+    // const [neighborhoods, setNeighborhoods] = useState([]);
+    // const [activities, setActivities] = useState([]);
+    // const [categories, setCategories] = useState([]);
+
+    // const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(true); 
+
+
+    // useEffect(() => {
+    //     axiosInstance.get('/neighborhood/')
+    //     .then((response) => {
+    //       setNeighborhoods(response.data.map(item => item.name))
+    //       setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+
+    //     axiosInstance.get('/activity/')
+    //     .then((response) => {
+    //        const uniqueNamesSet = new Set(response.data.map(item => item.name));
+    //        const uniqueNamesList = [...uniqueNamesSet];
+    //        setActivities(uniqueNamesList)
+    //        setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+
+    //     axiosInstance.get('/activity/')
+    //     .then((response) => {
+    //       setCategories(response.data.map(item => item.name + " " + item.type))
+    //       setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+    // }, [])
+
+
+    const today = new Date();
+    const [bookings, setBookings] = useState([]);
+
+    const [activities, setActivities] = useState([]);
+    const [neighborhoods, setNeighborhoods] = useState([]);
+    const [dates, setDates] = useState([]);
+    const [times, setTimes] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
+    // const isDateDisabled = (date) => {
+    //   return isBefore(date, today);
+    // };
+
+    useEffect(() => {
+      const fetchBookings = async () => {
+        try {
+          const response = await axiosInstance.get('/booking/');
+          setBookings(response.data);
+        //   console.log(response.data)
+        } catch (error) {
+          console.error('Error fetching bookings:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchBookings();
+    }, []);
+  
+
+    useEffect(() => {
+      const fetchOptions = async () => {
+        setLoading(true);
+        try {
+          const uniqueActivities = new Set();
+          const uniqueNeighborhoods = new Set();
+          const uniqueDates = new Set();
+          const uniqueTimes = new Set();
+  
+          await Promise.all(
+            bookings.map(async (booking) => {
+              const slotResponse = await axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`);
+
+            //   console.log(slotResponse.data)
+              const slotData = slotResponse.data;
+
+              uniqueActivities.add(slotData.court.activity.name + " " + slotData.court.activity.type);
+              uniqueNeighborhoods.add(slotData.court.club.neighborhood.name);
+              uniqueDates.add(booking.date);
+              uniqueTimes.add(booking.startTime);
+            })
+          );
+  
+          setActivities(Array.from(uniqueActivities));
+          setNeighborhoods(Array.from(uniqueNeighborhoods));
+          setDates(Array.from(uniqueDates));
+          setTimes(Array.from(uniqueTimes));
+        } catch (error) {
+          console.error('Error fetching options:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchOptions();
+    }, [bookings]);
+  
+
+    if (loading) {
+        return <Loader />;
+    }
+
+
+
     return (
         <>
             <Box
@@ -176,93 +142,110 @@ function EventSearch() {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    mx:2
+                    mx:2,
+                    position: "sticky",
+                    top: "140px"
+
                 }}
             >
                 <Typography variant="h5" component="h5" color="primary.main">
                     Buscar Eventos
                 </Typography>
                 
-                <CssAutocomplete
+                <Autocomplete
                 id="activity"
                 disablePortal
                 fullWidth
-                PaperComponent={CustomPaper}
-                sx={{'&button':{color:"white"}}}
                 options={activities}
                 renderInput={(params)=>
-                   <CssTextField
+                   <TextField
                    {...params}
-                   label="Elegir Actividad"
+                    label="Elegir Actividad"
                     id="custom-css-outlined-input"
-                    fullWidth
-                    sx={{mt: 2}}
-                    
+                    sx={{ mt: 2}}
                     InputProps={{
                       ...params.InputProps,
                         startAdornment: (
                             <InputAdornment position="start">
-                                <CssIconButton>
+                                <IconButton>
                                     <AccessibilityNewOutlinedIcon />
-                                </CssIconButton>
+                                </IconButton>
                             </InputAdornment>
                         ),
                     }}
-                   
                    />
                   }
                 />
-                <CssAutocomplete
+
+                {/* <Autocomplete
+                id="activity"
+                disablePortal
+                fullWidth
+                options={activities}
+                renderInput={(params)=>
+                   <TextField
+                   {...params}
+                    label="TEST"
+                    id="custom-css-outlined-input"
+                    sx={{ mt: 2}}
+                    InputProps={{
+                      ...params.InputProps,
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <IconButton>
+                                    <AccessibilityNewOutlinedIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                   />
+                  }
+                /> */}
+
+                {/* <Autocomplete
                 id="category"
                 disablePortal
                 fullWidth
-                PaperComponent={CustomPaper}
-                sx={{'&button':{color:"white"}}}
                 options={categories}
                 renderInput={(params)=>
-                   <CssTextField
+                   <TextField
                    {...params}
-                   label="Elejir Categoria"
+                   label="Elegir Categoria"
                     id="custom-css-outlined-input"
-                    fullWidth
-                    sx={{mt: 2}}
-                    
+                    sx={{ mt: 2}}
                     InputProps={{
                       ...params.InputProps,
                         startAdornment: (
                             <InputAdornment position="start">
-                                <CssIconButton>
+                                <IconButton>
                                     <CategoryIcon />
-                                </CssIconButton>
+                                </IconButton>
                             </InputAdornment>
                         ),
                     }}
                    
                    />
                   }
-                />
-                <CssAutocomplete
+                /> */}
+
+                <Autocomplete
                 id="nhood"
                 disablePortal
                 fullWidth
-                PaperComponent={CustomPaper}
-                sx={{'&button':{color:"white"}}}
-                options={barrios}
+                options={neighborhoods}
                 renderInput={(params)=>
-                   <CssTextField
+                   <TextField
                    {...params}
                    label="Elegir Barrio"
                     id="custom-css-outlined-input"
-                    fullWidth
-                    sx={{mt: 2}}
-                    
+                    sx={{ mt: 2}}
                     InputProps={{
                       ...params.InputProps,
                         startAdornment: (
                             <InputAdornment position="start">
-                                <CssIconButton>
+                                <IconButton>
                                     <LocationOnOutlinedIcon />
-                                </CssIconButton>
+                                </IconButton>
                             </InputAdornment>
                         ),
                     }}
@@ -271,40 +254,40 @@ function EventSearch() {
                   }
                 />
                 
-                <CssDesktopDatePicker
-                  label='Elegir Fecha'
-                  inputFormat="dd.MM.yyyy"
-                  sx={{mt:1.5}}
-                  slotProps={{
-                  textField: { fullWidth: true },
-                  layout: {
-                  sx: {
-                    '.MuiDateCalendar-root': {
-                      color: 'white',
-                      borderRadius: 2,
-                      borderWidth: 1,
-                      borderColor: '#e91e63',
-                      border: '1px solid',
-                      backgroundColor: 'rgb(255,255,255,0.1)',
-                    }
-                  }
-                  }
-                  }} 
+                <DesktopDatePicker
+                    label='Elegir Fecha'
+                    inputFormat="dd.MM.yyyy"
+                    sx={{ mt: 1.5 }}
+                    
+                    slotProps={{
+                        textField: { 
+                            fullWidth: true,
+                            
+                            },
+                        layout: {
+                            sx: {
+                                '.MuiDateCalendar-root': {
+                                    borderRadius: 2,
+                                    borderWidth: 1,
+                                    border: '1px solid',
+                                },
+                            }
+                        }
+                    }}
                 />
-                <CssTimePicker
-                  label="Elegir Hora"
-                  sx={{mt:2}}
-                  slotProps={{
-                    textField: { fullWidth: true },
-                  }}
-                 />
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ my: 2 }}
-                    fullWidth
-                >
-                    Botón
+                    {/* <TimePicker
+                    label="Elegir Hora"
+                    sx={{mt:2,}}
+                    slotProps={{
+                        textField: { fullWidth: true },
+                        
+                    }}
+                    /> */}
+                <Button 
+                variant="contained" 
+                fullWidth 
+                sx={{...ButtonSX,m:2}}>
+                    Buscar
                 </Button>
             </Box>
         </>

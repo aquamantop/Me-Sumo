@@ -12,9 +12,13 @@ import Footer from "../components/footer/Footer"
 import Header from "../components/header/Header"
 import axios from "axios"
 import Swal from "sweetalert2"
+import axiosInstance from "../hooks/api/axiosConfig";
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { useUserContext } from '../hooks/userContext'
 
 export default function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { loginUser } = useUserContext();
 
   const {
     handleSubmit,
@@ -29,23 +33,30 @@ export default function Login() {
 
   const [error, setError] = useState("")
 
+
   const onSubmit = handleSubmit(async (userData) => {
-    console.log(userData)
+    
+
     const response = await new Promise((resolve) => {
-      axios({
-        method: "POST",
-        url: "http://ec2-3-85-198-231.compute-1.amazonaws.com:8081/auth/login",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        data: userData
-      })
+      // axios({
+      //   method: "POST",
+      //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json"
+      //   },
+      //   data: userData
+      // })
+      //console.log(userData);
+      //axiosInstance.defaults.headers.common['Accept'] = 'application/json';
+      //axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
+      axiosInstance.post("/auth/login", userData)
         .then((response) => resolve(response))
         .catch((error) => setError(error))
     })
 
     if (!error) {
+      loginUser(userData);
       setError("")
       Swal.fire({
         title: "Ingreso exitoso!",
@@ -60,7 +71,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      
       <Box
         backgroundColor="background.paper"
         align="center"
@@ -135,18 +146,9 @@ export default function Login() {
           />
 
           <Button
-            variant="contained"
-            type="submit"
-            sx={{
-              backgroundColor: "secondary.main",
-              borderRadius: "3px",
-              color: "black",
-              "&.MuiButtonBase-root:hover": {
-                bgcolor: "white"
-              },
-              height: "40px",
-              letterSpacing: "2.86px"
-            }}
+            variant='contained'
+            type='submit'
+            sx={{...ButtonSX}}
           >
             Iniciar Sesión
           </Button>
@@ -165,13 +167,12 @@ export default function Login() {
             letterSpacing: " 4.68px"
           }}
         >
-          Todavía no tenés usuario?{" "}
-          <Link href="/register" underline="none" color="secondary.main">
-            Registrate ;)
+          Todavía no tenés usuario?{' '}
+          <Link href='/register' underline='none' color='secondary.main'>
+            Registrate ;
           </Link>
         </Typography>
       </Box>
-      <Footer />
     </>
   )
 }

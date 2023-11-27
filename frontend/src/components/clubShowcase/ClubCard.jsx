@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
-import eventoImagen from "../../assets/club-field.png"
+import eventoImagen from "../../assets/club-field.png";
+import { ButtonSX } from "../customMui/CustomMui";
 
-const ClubCard = () => {
+const ClubCard = ({ club }) => {
   return (
     <>
       <Card
@@ -16,37 +17,45 @@ const ClubCard = () => {
         }}
       >
         <CardContent>
-          <Typography variant="h6" color="primary.main">
-            Club: Deportivo Test FC
+          <Typography variant="h6" color="primary.main" noWrap>
+            Club: {club.name}
           </Typography>
-          <Typography variant="h6" color="primary.main">
-            Evento: Futbol 5
+          <Typography variant="body2" color="primary.main" noWrap>
+            Dirección: {club.address}
           </Typography>
-          <Typography variant="body2" color="secondary.main">
-            Fecha: DD/MM/AAAA
+          <Typography variant="body2" color="secondary.main" noWrap>
+            Barrio: {club.neighborhood.name}
           </Typography>
-          <Typography variant="body2" color="secondary.main">
-            Lugares Disponibles: X
+          <Typography variant="body2" color="secondary.main" noWrap>
+            Actvividades: {
+              club.activities.map((activity, index, array) => {
+                return activity.name + " " + activity.type + (index === array.length - 1 ? '' : ', ');              })
+            }
           </Typography>
         </CardContent>
         <CardMedia
           component="img"
           alt="Imagen del Evento"
           height="200"
-          image={eventoImagen}
+          image={club.url ? club.url : eventoImagen}
+          /* sx={{
+            objectFit: "cover"
+          }} */
         />
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            mt: 2,
-            mb: 2,
+            mt: 0,
+            mb: 0,
           }}
         >
-          <Link href='/club' >
-            <Button variant="contained" color="secondary">
+          <Link href={`/club/${club.id}`} sx={{width:"100%"}} >
+          <Button 
+          variant="contained" 
+          fullWidth sx={{...ButtonSX}}>
               Ver Más
-            </Button>
+            </Button> 
           </Link>
         </Box>
       </Card>
