@@ -8,7 +8,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
 
-const NotLoggedInMessage = ({ open, message, onClose }) => {
+const BoxMessage = ({ open, message, onClose }) => {
 
 return (
     <Dialog open={open} onClose={onClose} maxWidth='lg' >
@@ -43,4 +43,4 @@ return (
 };
 
 
-export default NotLoggedInMessage;
+export default BoxMessage;

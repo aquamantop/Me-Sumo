@@ -9,7 +9,7 @@ import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
 import { CenterFocusStrong } from '@mui/icons-material';
 import { useUserContext } from '../hooks/userContext'
-import NotLoggedInMessage from '../components/message'
+import BoxMessage from '../components/message'
 
 const Booking = () => {
   const { id } = useParams();
@@ -190,7 +190,7 @@ const Booking = () => {
             >
               ¡Me Sumo!
             </Button>
-            <NotLoggedInMessage
+            <BoxMessage
                 open={snackbarOpen}
                 message={snackbarMessage}
                 onClose={handleSnackbarClose}
