@@ -26,6 +26,8 @@ const Booking = () => {
 
   const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
 
+  const okMessage = '¡Sumado!\nYa estás participando ;D';
+  const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
 
   // const handleButtonClick = () => {
   //   if (user) {
@@ -183,7 +185,7 @@ const Booking = () => {
               variant="contained"
               color="background"
               fullWidth
-              onClick={() => user ? showMessage('¡Sumado! Ya estás participando') : showMessage('¡Hola, tenés que loguearte para sumarte al evento!')}
+              onClick={() => user ? showMessage(okMessage) : showMessage(noOkMessage)}
               sx={{ ...ButtonSX }}
             >
               ¡Me Sumo!
