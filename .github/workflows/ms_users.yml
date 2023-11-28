@@ -32,11 +32,15 @@ jobs:
 
     - name: Maven package User
       run: |
+        echo $SENDER_EMAIL_USERNAME
+        echo $SENDER_EMAIL_PASSWORD
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         mvn -B package --file pom.xml
         
     - name: Build User
       run: |
+        echo $SENDER_EMAIL_USERNAME
+        echo $SENDER_EMAIL_PASSWORD
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-users
         sudo systemctl stop user.service
         cp target/ms_users.jar /home/ubuntu/user
