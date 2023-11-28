@@ -54,7 +54,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
 
   const handleBookAppointment = () => {
     console.log('Fecha seleccionada:', selectedDate);
-    console.log('Hora seleccionada:', selectedHour);
+    console.log('ID Hora seleccionada:', selectedHour);
     // Agrega tu lógica de reserva aquí
   };
 
@@ -87,18 +87,18 @@ const CustomCalendar = ({ courtId, activityId }) => {
             onChange={(_, newHour) => handleHourChange(newHour)}
           >
             {selectedDate && (
-                availableHoursForSelectedDate.map((timeSlot) => {
-                  const startHour =  parseInt(timeSlot.startTime.split(':')[0], 10);
-                  const endHour =  parseInt(timeSlot.endTime.split(':')[0], 10);
-                  const hoursRange = Array.from({ length: endHour - startHour + 1 }, (_, index) => `${startHour + index}:00`);
-
-                  return hoursRange.map((hour) => (
-                    <ToggleButton key={hour} variant="outlined" value={hour}>
-                      {hour}
-                    </ToggleButton>
-                  ));
+              availableHoursForSelectedDate
+                .flatMap((timeSlot) => {
+                  const startHour = parseInt(timeSlot.startTime.split(':')[0], 10);
+                  return [{ id: timeSlot.id, startHour }];
                 })
-              )}
+                .sort((a, b) => a.startHour - b.startHour)
+                .map((timeSlot) => (
+                  <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.id}>
+                    {`${timeSlot.startHour}:00`}
+                  </ToggleButton>
+              ))
+            )}
           </ToggleButtonGroup>
         </Box>
         <Box
