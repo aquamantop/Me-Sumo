@@ -8,17 +8,46 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
 import { CenterFocusStrong } from '@mui/icons-material';
-
+import { useUserContext } from '../hooks/userContext'
+import NotLoggedInMessage from '../components/message'
 
 const Booking = () => {
   const { id } = useParams();
   const theme = useTheme();
 
+  const { user } = useUserContext();
+
   const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
+
+
+  // const handleButtonClick = () => {
+  //   if (user) {
+  //     console.log('Usuario logueado:', user);
+  //   } else {
+  //     console.log('Usuario no logueado');
+  //   }
+  // };
+
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const showMessage = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };  
 
   useEffect(() => {
     axiosInstance.get(`/booking/${id}`)
@@ -122,7 +151,7 @@ const Booking = () => {
                 </Box>
               </Grid>
               {/* //<Grid item xs={12} sm={12} justifyContent="center" alignItems="center" sx={{ width: '100%', height:'30%'}}> */}
-              <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '180px', overflowY: 'auto' }}>
+              {/* <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '180px', overflowY: 'auto' }}>
                   <Table>
                     <TableHead>
                     <TableRow>
@@ -147,33 +176,30 @@ const Booking = () => {
                       ))}
                     </TableBody>
                   </Table>
-                </TableContainer>
-              {/* </Grid> */}
-              {/* <Grid container justifyContent="center">
-                <Grid item xs={12} sm={10} sx={{alignItems: "center"}}>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    m={0} 
-                    sx={{backgroundColor:"white",
-                      height:"25vh",
-                      borderRadius:"10px",
-                      marginTop:"-10px"
-                    }}
-                  >
-                  </Box>
-                </Grid>
-              </Grid> */}
+                </TableContainer> */}
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
             <Button 
               variant="contained"
               color="background"
               fullWidth
+              onClick={() => user ? showMessage('¡Sumado! Ya estás participando') : showMessage('¡Hola, este es un mensaje emergente!')}
               sx={{ ...ButtonSX }}
             >
               ¡Me Sumo!
             </Button>
+            {!user && 
+              <NotLoggedInMessage
+                open={snackbarOpen}
+                message={snackbarMessage}
+                onClose={handleSnackbarClose}
+            />}
+            {user && 
+              <NotLoggedInMessage
+                open={snackbarOpen}
+                message={snackbarMessage}
+                onClose={handleSnackbarClose}
+            />}
             </Grid>
           </Paper>
         </Container>
