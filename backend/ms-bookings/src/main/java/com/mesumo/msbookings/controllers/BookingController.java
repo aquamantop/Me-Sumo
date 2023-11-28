@@ -112,7 +112,7 @@ public class BookingController {
                     case "":
                         switch (date){
                             case "":
-                                response = new ResponseEntity(null, HttpStatus.OK);
+                                response = new ResponseEntity(service.initialFiltersValues(), HttpStatus.OK);
                                 break;
                             default:
                                 if(!full)

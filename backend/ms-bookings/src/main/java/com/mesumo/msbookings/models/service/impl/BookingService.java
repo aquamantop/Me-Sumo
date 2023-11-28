@@ -259,12 +259,8 @@ public class BookingService implements IBookingService {
                 .map(Booking::getNeighborhoodName)
                 .collect(Collectors.toSet()));
         filters.setActivities(bookings.stream()
-                .map(booking -> {
-                    ActivityDTO activity = new ActivityDTO();
-                    activity.setId(booking.getActivityId());
-                    activity.setName(booking.getActivityName());
-                    return activity;
-                })
+                .map(booking -> new ActivityDTO(booking.getActivityId(), booking.getActivityName()))
+                .distinct()
                 .collect(Collectors.toSet()));
         filters.setBookingDates(bookings.stream()
                 .map(Booking ::getDate)
@@ -336,6 +332,11 @@ public class BookingService implements IBookingService {
     }
 
 
-
-
+    public FiltersDTO initialFiltersValues() {
+        FiltersDTO filters = new FiltersDTO();
+        Specification<Booking> spec = new BookingSpecification();
+        spec = spec.and(BookingSpecification.bookingsApproved(false));
+        List<Booking> bookings = filterBooking(spec);
+        return returnFilters(bookings, filters);
+    }
 }
