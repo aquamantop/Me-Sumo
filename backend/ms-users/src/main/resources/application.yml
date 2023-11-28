@@ -39,8 +39,8 @@ spring:
   mail:
     # username: mesumo.contacto@gmail.com
     # password: dzzs ywni lmjo djnt
-    username: ${env.SENDER_EMAIL_USERNAME}
-    password: ${env.SENDER_EMAIL_PASSWORD}
+    username: ${SENDER_EMAIL_USERNAME}
+    password: ${SENDER_EMAIL_PASSWORD}
 
 eureka:
   instance:
