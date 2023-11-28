@@ -183,23 +183,16 @@ const Booking = () => {
               variant="contained"
               color="background"
               fullWidth
-              onClick={() => user ? showMessage('¡Sumado! Ya estás participando') : showMessage('¡Hola, este es un mensaje emergente!')}
+              onClick={() => user ? showMessage('¡Sumado! Ya estás participando') : showMessage('¡Hola, tenés que loguearte para sumarte al evento!')}
               sx={{ ...ButtonSX }}
             >
               ¡Me Sumo!
             </Button>
-            {!user && 
-              <NotLoggedInMessage
+            <NotLoggedInMessage
                 open={snackbarOpen}
                 message={snackbarMessage}
                 onClose={handleSnackbarClose}
-            />}
-            {user && 
-              <NotLoggedInMessage
-                open={snackbarOpen}
-                message={snackbarMessage}
-                onClose={handleSnackbarClose}
-            />}
+            />
             </Grid>
           </Paper>
         </Container>
