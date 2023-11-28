@@ -81,6 +81,15 @@ function EventSearch() {
         setSelectedNeighborhood(selectedNeighborhood);
     };
 
+    const handleDateChange = (date) => {
+        if (!date || !dayjs(date).isValid()) {
+            return true;
+        }
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');  
+        console.log(formattedDate)
+        setSelectedDate(formattedDate)
+    };
+
 
     if (loading) {
         return <Loader />;
@@ -163,6 +172,8 @@ function EventSearch() {
                     inputFormat="dd.MM.yyyy"
                     sx={{ mt: 1.5 }}
                     shouldDisableDate={shouldDisableDate}
+                    value={selectedDate}
+                    onChange={handleDateChange}
                     slotProps={{
                         textField: { 
                             fullWidth: true,
