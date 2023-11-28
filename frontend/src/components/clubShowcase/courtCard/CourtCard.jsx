@@ -40,20 +40,6 @@ const CourtCard = ({ court, activityId }) => {
           </Typography>
           <CustomCalendar courtId={ court.id } activityId={ activityId }/>
         </CardContent>
-        {<Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 2,
-            mb: 2,
-          }}
-        >
-          <Link href="" >
-            <Button variant="contained" color="secondary">
-              Reservar cancha
-            </Button>
-          </Link>
-        </Box>}
       </Card>
     </>
   );
