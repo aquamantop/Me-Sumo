@@ -10,7 +10,7 @@ import { TabsSX } from "../components/customMui/CustomMui";
 
 function Home() {
   const [tabValue, setTabValue] = useState(0);
-  const [selectedFilters, setSelectedFilters] = useState({activityId: null, neighborhood: "", date: ""});
+  const [selectedFilters, setSelectedFilters] = useState({activityId: null, neighborhood: null, date: null});
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
@@ -45,8 +45,8 @@ function Home() {
           </Tabs>
           {tabValue === 0 && (
             <>
-              <EventShowcase keyword="Próximos" />
-              <EventShowcase keyword="Todos" />
+              <EventShowcase keyword="Próximos" filters={selectedFilters} />
+              <EventShowcase keyword="Todos" filters={selectedFilters}/>
             </>
           )}
           {tabValue === 1 && <ClubShowcase />}

@@ -22,7 +22,7 @@ import Loader from "../loader";
 import dayjs from 'dayjs';
 
 
-function EventSearch() {
+function EventSearch({ onUpdateFilters }) {
 
     const today = new Date();
     const [bookings, setBookings] = useState([]);
@@ -192,7 +192,7 @@ function EventSearch() {
                 />
 
                 <Button 
-                    onClick={() => onUpdateFilters({ activityId: selectedActivity, neighborhood: selectedNeighborhood, date: selectedDate })}
+                    onClick={() => onUpdateFilters({ activityId: selectedActivityId, neighborhood: selectedNeighborhood, date: selectedDate })}
                     variant="contained" 
                     fullWidth 
                     sx={{...ButtonSX,m:2}}
