@@ -32,8 +32,9 @@ function EventSearch() {
     const [dates, setDates] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedActivity, setSelectedActivity] = useState(null);
-    const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedActivityId, setSelectedActivityId] = useState(null);
+    const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const shouldDisableDate = (date) => {
         if (!date || !dayjs(date).isValid()) {
@@ -48,10 +49,9 @@ function EventSearch() {
         const fetchBookings = async () => {
             try {
 
-                let selectedActivityID = null;
-                if (selectedActivity!=null) selectedActivityID = activitiesMap[selectedActivity];
+                //if (selectedActivity!=null) setSelectedActivityId(activitiesMap[selectedActivity]);
 
-                const response = await axiosInstance.get(`/booking/filter_endpoint?neighborhood=${selectedNeighborhood}&${selectedActivityID ? `activityId=${selectedActivityID}` : ''}&date=${selectedDate}`);
+                const response = await axiosInstance.get(`/booking/filter_endpoint?${selectedNeighborhood ? `neighborhood=${selectedNeighborhood}` : ''}&${selectedActivityId ? `activityId=${selectedActivityId}` : ''}&${selectedDate ? `date=${selectedDate}` : ''}`);
 
                 setNeighborhoods(response.data.neighborhood);
                 setActivities(response.data.activities.map(activity => activity.name));
@@ -63,7 +63,7 @@ function EventSearch() {
                 );
                 setDates(response.data.bookingDates);
                 setLoading(false);
-
+                console.log(response.data.bookingDates)
             } catch (error) {
                 console.error('Error fetching bookings:', error);
             }
@@ -73,16 +73,15 @@ function EventSearch() {
 
 
     const handleActivityChange = (selectedValue) => {
-        console.log("Hola")
-        console.log(selectedValue)
         setSelectedActivity(selectedValue);
+        setSelectedActivityId(activitiesMap[selectedValue]);
     };
     
-    const handleNeighborhoodChange = (event) => {
-        setSelectedNeighborhood(event.target.value);
+    const handleNeighborhoodChange = (selectedNeighborhood) => {
+        setSelectedNeighborhood(selectedNeighborhood);
     };
 
-    
+
     if (loading) {
         return <Loader />;
     }
@@ -109,8 +108,8 @@ function EventSearch() {
                     disablePortal
                     fullWidth
                     options={activities}
-                    value={selectedActivity} // Asigna el valor seleccionado
-                    onChange={(event, value) => handleActivityChange(value)} // Maneja el cambio
+                    value={selectedActivity}
+                    onChange={(event, value) => handleActivityChange(value)}
                     renderInput={(params)=>
                     <TextField
                     {...params}
@@ -136,6 +135,8 @@ function EventSearch() {
                 disablePortal
                 fullWidth
                 options={neighborhoods}
+                value={selectedNeighborhood}
+                onChange={(event, value) => handleNeighborhoodChange(value)}
                 renderInput={(params)=>
                    <TextField
                    {...params}
@@ -180,6 +181,7 @@ function EventSearch() {
                 />
 
                 <Button 
+                    onClick={() => onUpdateFilters({ activityId: selectedActivity, neighborhood: selectedNeighborhood, date: selectedDate })}
                     variant="contained" 
                     fullWidth 
                     sx={{...ButtonSX,m:2}}
