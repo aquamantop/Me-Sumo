@@ -22,13 +22,15 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    # - name: Set Environment Variables
-    #   run: |
-    #     echo "export BD_URL=${{ secrets.BD_URL }}" 
-    #     echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" 
-    #     echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}"
-    #     echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" 
-    #     echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" 
+    - name: Set Environment Variables
+      run: |
+        echo "export BD_URL=${{ secrets.BD_URL }}" 
+        echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" 
+        echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}"
+        echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" 
+        echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" 
+        source $GITHUB_ENV
+
         
     - name: Maven package User
       run: |
