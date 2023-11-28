@@ -21,14 +21,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
-    - name: Set Environment Variables
-      run: |
-        echo "export BD_URL=${{ secrets.BD_URL }}" >> $GITHUB_ENV
-        echo "export BD_USERNAME=${{ secrets.BD_USERNAME }}" >> $GITHUB_ENV
-        echo "export BD_PASSWORD=${{ secrets.BD_PASSWORD }}" >> $GITHUB_ENV
-        echo "export SENDER_EMAIL_USERNAME=${{ secrets.SENDER_EMAIL_USERNAME }}" >> $GITHUB_ENV
-        echo "export SENDER_EMAIL_PASSWORD=${{ secrets.SENDER_EMAIL_PASSWORD }}" >> $GITHUB_ENV
 
     - name: Maven package Booking
       run: |
