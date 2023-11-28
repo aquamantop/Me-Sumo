@@ -27,39 +27,75 @@ function EventSearch() {
     const today = new Date();
     const [bookings, setBookings] = useState([]);
     const [activities, setActivities] = useState([]);
+    const [activitiesMap, setActivitiesMap] = useState({});
     const [neighborhoods, setNeighborhoods] = useState([]);
     const [dates, setDates] = useState([]);
-    const [times, setTimes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [selectedNeighborhood, setSelectedNeighborhood] = useState("");
+    const [selectedDate, setSelectedDate] = useState("");
 
     const shouldDisableDate = (date) => {
         if (!date || !dayjs(date).isValid()) {
-            // Manejar el caso en el que date no sea una instancia válida de dayjs
             return true;
         }
-    
-        const formattedDate = dayjs(date).format('YYYY-MM-DD'); // Convertir date a formato "yyyy-mm-dd"
-        
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');        
         return !dates.includes(formattedDate);
     };
+
 
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-                const response = await axiosInstance.get('/booking/filter_endpoint');
+
+                let selectedActivityID = null;
+                if (selectedActivity!=null) selectedActivityID = activitiesMap[selectedActivity];
+
+                const response = await axiosInstance.get(`/booking/filter_endpoint?neighborhood=${selectedNeighborhood}&${selectedActivityID ? `activityId=${selectedActivityID}` : ''}&date=${selectedDate}`);
+
                 setNeighborhoods(response.data.neighborhood);
-                setActivities(response.data.uniqueActivities);
+                setActivities(response.data.activities.map(activity => activity.name));
+                setActivitiesMap(
+                    response.data.activities.reduce((acc, activity) => {
+                        acc[activity.name] = activity.id;
+                        return acc;
+                    }, {})
+                );
                 setDates(response.data.bookingDates);
                 setLoading(false);
-                console.log(response.data.bookingDates);
-                console.log(response.data);
+
             } catch (error) {
                 console.error('Error fetching bookings:', error);
             }
         };
         fetchBookings();
-    }, []);
-  
+    }, [selectedActivity, selectedNeighborhood, selectedDate]);
+
+
+    const handleActivityChange = (selectedValue) => {
+        console.log("Hola")
+        console.log(selectedValue)
+        setSelectedActivity(selectedValue);
+    };
+    
+    const handleNeighborhoodChange = (event) => {
+        setSelectedNeighborhood(event.target.value);
+    };
+
+
+    // useEffect(() => {
+    //     // Filtrar las actividades únicas
+    //     const uniqueActivities = Array.from(new Set(allBookings.map(booking => booking.activity)));
+    //     setActivities(uniqueActivities);
+    //   }, [allBookings]);
+    
+    //   useEffect(() => {
+    //     // Filtrar los barrios únicos
+    //     const uniqueNeighborhoods = Array.from(new Set(allBookings.map(booking => booking.neighborhood)));
+    //     setNeighborhoods(uniqueNeighborhoods);
+    //   }, [allBookings]);
+    
+
 
     if (loading) {
         return <Loader />;
@@ -87,6 +123,8 @@ function EventSearch() {
                     disablePortal
                     fullWidth
                     options={activities}
+                    value={selectedActivity} // Asigna el valor seleccionado
+                    onChange={(event, value) => handleActivityChange(value)} // Maneja el cambio
                     renderInput={(params)=>
                     <TextField
                     {...params}
