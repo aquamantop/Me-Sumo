@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router';
 import Header from '../components/header/Header'
 import Footer from '../components/footer/Footer'
-import { Container, Paper, Typography, Box, Button, Link, Grid } from '@mui/material'
+import { Container, Paper, Typography, Box, Button, Link, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { PaperSXX } from '../components/customMui/CustomMui'
 import axiosInstance from "../hooks/api/axiosConfig";
 import { useTheme } from '@mui/system';
+import { ButtonSX } from "../components/customMui/CustomMui";
+import { CenterFocusStrong } from '@mui/icons-material';
 
 
 const Booking = () => {
@@ -15,7 +17,9 @@ const Booking = () => {
   const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-    
+
+  const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
+
   useEffect(() => {
     axiosInstance.get(`/booking/${id}`)
     .then((response) =>{
@@ -117,7 +121,35 @@ const Booking = () => {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid container justifyContent="center">
+              {/* //<Grid item xs={12} sm={12} justifyContent="center" alignItems="center" sx={{ width: '100%', height:'30%'}}> */}
+              <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '180px', overflowY: 'auto' }}>
+                  <Table>
+                    <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        <Typography variant="h6" color="secondary.main">
+                          Orden
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="h6" color="secondary.main">
+                          Nombre
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {participants.map((user, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{user}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              {/* </Grid> */}
+              {/* <Grid container justifyContent="center">
                 <Grid item xs={12} sm={10} sx={{alignItems: "center"}}>
                   <Box
                     display="flex"
@@ -131,16 +163,17 @@ const Booking = () => {
                   >
                   </Box>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ my:2 }}
-              >
-                ¡Me Sumo!
-              </Button>
+            <Button 
+              variant="contained"
+              color="background"
+              fullWidth
+              sx={{ ...ButtonSX }}
+            >
+              ¡Me Sumo!
+            </Button>
             </Grid>
           </Paper>
         </Container>
