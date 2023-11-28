@@ -37,10 +37,10 @@ spring:
     date_format: yyyy-MM-dd
 
   mail:
-  #  username: mesumo.contacto@gmail.com
-  #  password: dzzs ywni lmjo djnt
-    username: $SENDER_EMAIL_USERNAME
-    password: $SENDER_EMAIL_PASSWORD
+   username: mesumo.contacto@gmail.com
+   password: dzzs ywni lmjo djnt
+    # username: $SENDER_EMAIL_USERNAME
+    # password: $SENDER_EMAIL_PASSWORD
 
 eureka:
   instance:
