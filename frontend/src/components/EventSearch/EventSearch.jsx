@@ -82,21 +82,7 @@ function EventSearch() {
         setSelectedNeighborhood(event.target.value);
     };
 
-
-    // useEffect(() => {
-    //     // Filtrar las actividades únicas
-    //     const uniqueActivities = Array.from(new Set(allBookings.map(booking => booking.activity)));
-    //     setActivities(uniqueActivities);
-    //   }, [allBookings]);
     
-    //   useEffect(() => {
-    //     // Filtrar los barrios únicos
-    //     const uniqueNeighborhoods = Array.from(new Set(allBookings.map(booking => booking.neighborhood)));
-    //     setNeighborhoods(uniqueNeighborhoods);
-    //   }, [allBookings]);
-    
-
-
     if (loading) {
         return <Loader />;
     }
