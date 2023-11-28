@@ -40,7 +40,7 @@ const CourtCard = ({ court, activityId }) => {
           </Typography>
           <CustomCalendar courtId={ court.id } activityId={ activityId }/>
         </CardContent>
-        <Box
+        {<Box
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -53,7 +53,7 @@ const CourtCard = ({ court, activityId }) => {
               Reservar cancha
             </Button>
           </Link>
-        </Box>
+        </Box>}
       </Card>
     </>
   );

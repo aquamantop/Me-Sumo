@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers';
-import { Button } from "@mui/material";
+import { TextField, Button, Typography, Grid } from '@mui/material';
 import axiosInstance from "../../../../hooks/api/axiosConfig";
 
 
@@ -11,6 +11,9 @@ const CustomCalendar = ({ courtId, activityId }) => {
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedHour, setSelectedHour] = useState(null);
 
   useEffect(() => {
     axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
@@ -40,23 +43,55 @@ const CustomCalendar = ({ courtId, activityId }) => {
       return datosSalida;
   }
 
-  const availableHoursForSelectedDate = selectedDate ? booking[selectedDate] : [];
+  const handleDateChange = (date) => {
+    const formatDate = new Date(date).toISOString().split('T')[0];
+    setSelectedDate(formatDate)
+    setSelectedHour(null)
+  };
+
+  const availableHoursForSelectedDate = selectedDate ? booking[selectedDate] : []
+
+  const handleHourChange = (hour) => {
+    setSelectedHour(hour)
+  };
+
+  const handleBookAppointment = () => {
+    console.log('Fecha seleccionada:', selectedDate);
+    console.log('Hora seleccionada:', selectedHour);
+    // Agrega tu lógica de reserva aquí
+  };
 
 
   return (
     <>
-      <StaticDatePicker
-        sx={{
-          bgcolor: "rgb(255,255,255,0.1)",
-          mt: 2
-        }}
-        shouldDisableDate={(day) => {
-          return !booking[day.toISOString().split('T')[0]];
-        }}
-      />
-      <Button variant="outlined">9:00</Button>
+        <StaticDatePicker
+          displayStaticWrapperAs="desktop"
+          value={selectedDate}
+          onChange={handleDateChange}
+          renderInput={(params) => <TextField {...params} label="Selecciona una fecha" />}
+          shouldDisableDate={(day) => !booking[day.toISOString().split('T')[0]]}
+        />
+        {selectedDate && availableHoursForSelectedDate.length === 0 && (
+          <Typography variant="body2" color="error">
+          No hay horas disponibles para la fecha seleccionada.
+          </Typography>
+        )}
+        {selectedDate && (
+          availableHoursForSelectedDate.map((timeSlot) => {
+            const startHour =  parseInt(timeSlot.startTime.split(':')[0], 10);
+            const endHour =  parseInt(timeSlot.endTime.split(':')[0], 10);
+            const hoursRange = Array.from({ length: endHour - startHour + 1 }, (_, index) => startHour + index);
+            console.log(startHour)
+
+            return hoursRange.map((hour) => (
+              <Button key={hour} variant="outlined" onClick={() => handleHourChange(hour)}>
+                {`${hour}:00 - ${hour + 1}:00`}
+              </Button>
+            ));
+          })
+        )}
     </>
-  );  
+  ); 
 };
 
 export default CustomCalendar;
