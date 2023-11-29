@@ -10,10 +10,18 @@ import { TabsSX } from "../components/customMui/CustomMui";
 
 function Home() {
   const [tabValue, setTabValue] = useState(0);
+  const [selectedFilters, setSelectedFilters] = useState({activityId: null, neighborhood: null, date: null});
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  const handleFilterChange = (filters) => {
+    console.log(filters)
+    setSelectedFilters(filters);
+  };
+
+
   return (
     <>
       
@@ -23,23 +31,9 @@ function Home() {
         sx={{ height:"auto", mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop:'30px'}}
       >
         <Grid item xs={12} sm={3}>
-          <EventSearch />
+          <EventSearch onUpdateFilters={handleFilterChange} />
         </Grid>
-        <Grid item xs={12} sm={9} sx={{ overflowY: 'auto', scrollbarWidth: 'thin',
-        '&::-webkit-scrollbar': {
-          width: '8px', // Ancho de la barra de desplazamiento
-          height: '60px'
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: "#D6FF4E", // Color del pulgar (barra deslizante)
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-        background: '#555', // Color del pulgar al pasar el ratón
-        },
-        '&::-webkit-scrollbar-track': {
-          background: '#eee', // Color de la pista (fondo de la barra)
-        },
-      }}> 
+        <Grid item xs={12} sm={9} sx={{ overflowY: 'auto', scrollbarWidth: 'thin'}}> 
           <Tabs 
           textColor="secondary"
           indicatorColor="secondary"
@@ -51,8 +45,8 @@ function Home() {
           </Tabs>
           {tabValue === 0 && (
             <>
-              <EventShowcase keyword="Próximos" />
-              <EventShowcase keyword="Todos" />
+              <EventShowcase keyword="Próximos" filters={selectedFilters} />
+              <EventShowcase keyword="Todos" filters={selectedFilters}/>
             </>
           )}
           {tabValue === 1 && <ClubShowcase />}

@@ -18,114 +18,82 @@ import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
 import  axiosInstance  from "../../hooks/api/axiosConfig";
-import Loader from "../loader";
+import CustomLoader from "../CustomLoader";
+import dayjs from 'dayjs';
 
 
-
-
-
-function EventSearch() {
-    
-    // const [neighborhoods, setNeighborhoods] = useState([]);
-    // const [activities, setActivities] = useState([]);
-    // const [categories, setCategories] = useState([]);
-
-    // const [error, setError] = useState(null);
-    // const [loading, setLoading] = useState(true); 
-
-
-    // useEffect(() => {
-    //     axiosInstance.get('/neighborhood/')
-    //     .then((response) => {
-    //       setNeighborhoods(response.data.map(item => item.name))
-    //       setLoading(false)
-    //   })
-    //   .catch((error) => setError(error))
-
-    //     axiosInstance.get('/activity/')
-    //     .then((response) => {
-    //        const uniqueNamesSet = new Set(response.data.map(item => item.name));
-    //        const uniqueNamesList = [...uniqueNamesSet];
-    //        setActivities(uniqueNamesList)
-    //        setLoading(false)
-    //   })
-    //   .catch((error) => setError(error))
-
-    //     axiosInstance.get('/activity/')
-    //     .then((response) => {
-    //       setCategories(response.data.map(item => item.name + " " + item.type))
-    //       setLoading(false)
-    //   })
-    //   .catch((error) => setError(error))
-    // }, [])
-
+function EventSearch({ onUpdateFilters }) {
 
     const today = new Date();
     const [bookings, setBookings] = useState([]);
-
     const [activities, setActivities] = useState([]);
+    const [activitiesMap, setActivitiesMap] = useState({});
     const [neighborhoods, setNeighborhoods] = useState([]);
     const [dates, setDates] = useState([]);
-    const [times, setTimes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [selectedActivityId, setSelectedActivityId] = useState(null);
+    const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const shouldDisableDate = (date) => {
+        if (!date || !dayjs(date).isValid()) {
+            return true;
+        }
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');        
+        return !dates.includes(formattedDate);
+    };
 
 
     useEffect(() => {
-      const fetchBookings = async () => {
-        try {
-          const response = await axiosInstance.get('/booking/');
-          setBookings(response.data);
-        } catch (error) {
-          console.error('Error fetching bookings:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      fetchBookings();
-    }, []);
-  
+        const fetchBookings = async () => {
+            try {
 
-    useEffect(() => {
-      const fetchOptions = async () => {
-        setLoading(true);
-        try {
-          const uniqueActivities = new Set();
-          const uniqueNeighborhoods = new Set();
-          const uniqueDates = new Set();
-          const uniqueTimes = new Set();
-  
-          await Promise.all(
-            bookings.map(async (booking) => {
-              const slotResponse = await axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`);
-              const slotData = slotResponse.data;
-              uniqueActivities.add(slotData.court.activity.name + " " + slotData.court.activity.type);
-              uniqueNeighborhoods.add(slotData.court.club.neighborhood.name);
-              uniqueDates.add(booking.date);
-              uniqueTimes.add(booking.startTime);
-            })
-          );
-  
-          setActivities(Array.from(uniqueActivities));
-          setNeighborhoods(Array.from(uniqueNeighborhoods));
-          setDates(Array.from(uniqueDates));
-          setTimes(Array.from(uniqueTimes));
-        } catch (error) {
-          console.error('Error fetching options:', error);
-        } finally {
-          setLoading(false);
+                //if (selectedActivity!=null) setSelectedActivityId(activitiesMap[selectedActivity]);
+
+                const response = await axiosInstance.get(`/booking/filter_endpoint?${selectedNeighborhood ? `neighborhood=${selectedNeighborhood}` : ''}&${selectedActivityId ? `activityId=${selectedActivityId}` : ''}&${selectedDate ? `date=${selectedDate}` : ''}`);
+
+                setNeighborhoods(response.data.neighborhood);
+                setActivities(response.data.activities.map(activity => activity.name));
+                setActivitiesMap(
+                    response.data.activities.reduce((acc, activity) => {
+                        acc[activity.name] = activity.id;
+                        return acc;
+                    }, {})
+                );
+                setDates(response.data.bookingDates);
+                setLoading(false);
+                console.log(response.data.bookingDates)
+            } catch (error) {
+                console.error('Error fetching bookings:', error);
+            }
+        };
+        fetchBookings();
+    }, [selectedActivity, selectedNeighborhood, selectedDate]);
+
+
+    const handleActivityChange = (selectedValue) => {
+        setSelectedActivity(selectedValue);
+        setSelectedActivityId(activitiesMap[selectedValue]);
+    };
+    
+    const handleNeighborhoodChange = (selectedNeighborhood) => {
+        setSelectedNeighborhood(selectedNeighborhood);
+    };
+
+    const handleDateChange = (date) => {
+        if (!date || !dayjs(date).isValid()) {
+            return true;
         }
-      };
-  
-      fetchOptions();
-    }, [bookings]);
-  
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');  
+        console.log(formattedDate)
+        setSelectedDate(formattedDate)
+    };
+
 
     if (loading) {
-        return <Loader />;
+        return <CustomLoader />;
     }
-
-
 
     return (
         <>
@@ -143,88 +111,41 @@ function EventSearch() {
                 <Typography variant="h5" component="h5" color="primary.main">
                     Buscar Eventos
                 </Typography>
-                
+                    
                 <Autocomplete
-                id="activity"
-                disablePortal
-                fullWidth
-                options={activities}
-                renderInput={(params)=>
-                   <TextField
-                   {...params}
-                    label="Elegir Actividad"
-                    id="custom-css-outlined-input"
-                    sx={{ mt: 2}}
-                    InputProps={{
-                      ...params.InputProps,
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton>
-                                    <AccessibilityNewOutlinedIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                   />
-                  }
+                    id="activity"
+                    disablePortal
+                    fullWidth
+                    options={activities}
+                    value={selectedActivity}
+                    onChange={(event, value) => handleActivityChange(value)}
+                    renderInput={(params)=>
+                    <TextField
+                    {...params}
+                        label="Elegir Actividad"
+                        id="custom-css-outlined-input"
+                        sx={{ mt: 2}}
+                        InputProps={{
+                            ...params.InputProps,
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton>
+                                        <AccessibilityNewOutlinedIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    }
                 />
-
-                {/* <Autocomplete
-                id="activity"
-                disablePortal
-                fullWidth
-                options={activities}
-                renderInput={(params)=>
-                   <TextField
-                   {...params}
-                    label="TEST"
-                    id="custom-css-outlined-input"
-                    sx={{ mt: 2}}
-                    InputProps={{
-                      ...params.InputProps,
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton>
-                                    <AccessibilityNewOutlinedIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                   />
-                  }
-                /> */}
-
-                {/* <Autocomplete
-                id="category"
-                disablePortal
-                fullWidth
-                options={categories}
-                renderInput={(params)=>
-                   <TextField
-                   {...params}
-                   label="Elegir Categoria"
-                    id="custom-css-outlined-input"
-                    sx={{ mt: 2}}
-                    InputProps={{
-                      ...params.InputProps,
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <IconButton>
-                                    <CategoryIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                   
-                   />
-                  }
-                /> */}
 
                 <Autocomplete
                 id="nhood"
                 disablePortal
                 fullWidth
                 options={neighborhoods}
+                value={selectedNeighborhood}
+                onChange={(event, value) => handleNeighborhoodChange(value)}
                 renderInput={(params)=>
                    <TextField
                    {...params}
@@ -250,12 +171,14 @@ function EventSearch() {
                     label='Elegir Fecha'
                     inputFormat="dd.MM.yyyy"
                     sx={{ mt: 1.5 }}
-                    
+                    shouldDisableDate={shouldDisableDate}
+                    value={selectedDate}
+                    onChange={handleDateChange}
                     slotProps={{
                         textField: { 
                             fullWidth: true,
                             
-                            },
+                        },
                         layout: {
                             sx: {
                                 '.MuiDateCalendar-root': {
@@ -267,18 +190,13 @@ function EventSearch() {
                         }
                     }}
                 />
-                    {/* <TimePicker
-                    label="Elegir Hora"
-                    sx={{mt:2,}}
-                    slotProps={{
-                        textField: { fullWidth: true },
-                        
-                    }}
-                    /> */}
+
                 <Button 
-                variant="contained" 
-                fullWidth 
-                sx={{...ButtonSX,m:2}}>
+                    onClick={() => onUpdateFilters({ activityId: selectedActivityId, neighborhood: selectedNeighborhood, date: selectedDate })}
+                    variant="contained" 
+                    fullWidth 
+                    sx={{...ButtonSX,m:2}}
+                >
                     Buscar
                 </Button>
             </Box>
