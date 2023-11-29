@@ -17,39 +17,49 @@ const Booking = () => {
 
   const { user } = useUserContext();
 
-  const [info, setInfo] = useState([]);
+  const [cardInfo, setCardInfo] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
+  //const [userId, setUserId] = useState("");
+  const [userInfo, setUserInfo] = useState({});
+
   const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
 
   const okMessage = '¡Sumado!\nYa estás participando ;D';
   const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
 
-  // const handleButtonClick = () => {
-  //   if (user) {
-  //     console.log('Usuario logueado:', user);
-  //   } else {
-  //     console.log('Usuario no logueado');
-  //   }
-  // };
-
-
   const handleSnackbarClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setSnackbarOpen(false);
   };
 
   const showMessage = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
-  };  
+  };
+  
+  const handleButtonClick = () => {
+    console.log("booking id "+ id)
+    if (user) {
+      axiosInstance.post(`/booking/participant//${id}`, userInfo)
+      .then(response => {
+        console.log(response.data);
+        showMessage(okMessage);
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud POST:', error);
+        showMessage('Error al procesar la solicitud.');
+      });
+    } else {
+      showMessage(noOkMessage);
+    }
+  };
 
   useEffect(() => {
     axiosInstance.get(`/booking/${id}`)
@@ -58,9 +68,6 @@ const Booking = () => {
       axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
       .then((response) => {
         const { name, url } = response.data.court.club;
-        // console.log("Capacity "+ response.data.capacity)
-        // console.log("Slot "+ booking.participants)
-        // console.log(response.data.capacity - booking.participants)
         const availability = response.data.capacity - booking.participants;
         const category = response.data.court.activity.name +" " + response.data.court.activity.type;
         const cardData = {
@@ -73,8 +80,7 @@ const Booking = () => {
           "bookingMessage": booking.message,
           "clubUrl":url
         }
-        setInfo(cardData);
-        // console.log(cardData);
+        setCardInfo(cardData);
         setLoading(false);
         return cardData;
       })
@@ -83,9 +89,22 @@ const Booking = () => {
   
   }, [])
 
+
+  useEffect(() => {
+    console.log(user)
+    user && 
+    axiosInstance.get(`/user/search-email?email=${user.email}`)
+    .then((response) => {
+      const { userId, firstName, lastName, email } = response.data;
+      setUserInfo({ userId, firstName, lastName, email });
+      console.log({ userId, firstName, lastName, email })
+      console.log(userInfo)
+    })
+    .catch((error) => setError(error)) 
+  }, [])
+
   return (
   <>
-    {loading && <p>Loading...</p>}
     {!loading && (
       <>
         <Container className="content" sx={{my:0}}>
@@ -103,7 +122,7 @@ const Booking = () => {
             >
               <Typography variant="h5" color="primary.main">
                 <span style={{color: theme.palette.primary.main }}>Club: </span> 
-                <span style={{color: theme.palette.primary.main }}>{info.clubName}</span>
+                <span style={{color: theme.palette.primary.main }}>{cardInfo.clubName}</span>
               </Typography>
             </Box>
             <Grid container spacing={2} >
@@ -115,14 +134,14 @@ const Booking = () => {
                 >
                   <Typography variant="h6" color="primary.main">
                     <span style={{color: theme.palette.primary.main }}>Evento: </span> 
-                    <span style={{color: theme.palette.secondary.main }}>{info.bookingCategory}</span>
+                    <span style={{color: theme.palette.secondary.main }}>{cardInfo.bookingCategory}</span>
                   </Typography>
                   <Typography variant="h6" color="primary.main">
                     <span style={{color: theme.palette.primary.main }}>Fecha: </span>
-                    <span style={{color: theme.palette.secondary.main }}>{info.bookingDate + " " + info.bookingStartTime}</span>
+                    <span style={{color: theme.palette.secondary.main }}>{cardInfo.bookingDate + " " + cardInfo.bookingStartTime}</span>
                   </Typography>
                   <Typography variant="h6" color="#FCBA7D">
-                    Quedan {info.bookingAvailability} lugares
+                    Quedan {cardInfo.bookingAvailability} lugares
                   </Typography>
                 </Box>
               </Grid>
@@ -135,25 +154,10 @@ const Booking = () => {
                   <Typography variant="h6">
                     <span style={{color: theme.palette.primary.main }}>Mensaje del organizador:</span>
                     <br />
-                    <span style={{color: "white" , fontStyle: 'italic', fontWeight:200 }}>{info.bookingMessage}</span>
+                    <span style={{color: "white" , fontStyle: 'italic', fontWeight:200 }}>{cardInfo.bookingMessage}</span>
                   </Typography>
                 </Box>
               </Grid>
-              {/* <Grid item xs={12} sm={12} >
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  m={2}
-                  marginTop={-5}                 
-                >
-                  <Typography variant="h6" color="primary.main">
-                    Participantes
-                  </Typography>
-                </Box>
-              </Grid>
-              <Typography variant="h6" color="primary.main">
-                    Participantes
-                  </Typography> */}
               <Grid item xs={12} sm={12} sx={{ textAlign: 'center', display:'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center' }}>
                 <Typography variant="h6" color="primary.main">
                     Participantes
@@ -162,13 +166,11 @@ const Booking = () => {
                     <Table>
                       <TableHead>
                       <TableRow>
-                        {/* <TableCell> */}
                         <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
                           <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}} >
                             Orden
                           </Typography>
                         </TableCell>
-                        {/* <TableCell> */}
                         <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
                           <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}}>
                             Nombre
@@ -193,7 +195,7 @@ const Booking = () => {
               variant="contained"
               color="background"
               fullWidth
-              onClick={() => user ? showMessage(okMessage) : showMessage(noOkMessage)}
+              onClick={handleButtonClick}
               sx={{ ...ButtonSX }}
             >
               ¡Me Sumo!
