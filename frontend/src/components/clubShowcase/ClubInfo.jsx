@@ -77,16 +77,6 @@ export const ClubInfo = ({ club }) => {
             </Link>
           </Box>
         </Grid>
-        {/* <Grid item xs={12} md={3}  p={2}>
-          <Typography variant="h5" color="primary.main">
-            Eventos del Club
-          </Typography>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Grid item key={index} sx={{ my: 1 }}>
-              <EventCard />
-            </Grid>
-          ))}
-        </Grid> */}
       </Grid>
     </>
   );

@@ -54,7 +54,7 @@ function EventCard({ booking }) {
       }}
     >
     <CardContent>
-      <Typography variant="h6" color="primary.main">
+      <Typography variant="h6" color="primary.main" noWrap>
         Club: {info.clubName}
       </Typography>
       <Typography variant="body2" color="primary.main" noWrap>{info.bookingName}</Typography>
