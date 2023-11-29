@@ -9,7 +9,7 @@ import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
 import { CenterFocusStrong } from '@mui/icons-material';
 import { useUserContext } from '../hooks/userContext'
-import BoxMessage from '../components/Message'
+import BoxMessage from '../components/BoxMessage'
 
 const Booking = () => {
   const { id } = useParams();
