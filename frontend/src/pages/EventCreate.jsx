@@ -1,5 +1,3 @@
-import Header from "../components/header/Header";
-import Footer from "../components/footer/Footer";
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
 import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
 import { useBookingContext } from '../hooks/bookingContext'
@@ -7,9 +5,26 @@ import { useBookingContext } from '../hooks/bookingContext'
 const EventCreate = () => {
 
     const { bookingInfo } = useBookingContext();
-    console.log(bookingInfo)
     
-    const { selectedDate, selectedHour, clubId, courtId, activityId } = bookingInfo;
+    const { selectedDate, selectedHour, clubId, courtId, activityId, capacity } = bookingInfo;
+
+    const bookingData = {
+        name: "Otra Reserva de Franco",
+        slotId: 6,
+        activityId: 3,
+        activityName: "Fútbol 5",
+        creatorId: 17,
+        clubId: 2,
+        clubName: "Belgrano",
+        neighborhoodName: "Belgrano",
+        courtId: 1,
+        date: "2023-11-30",
+        startTime: "10:30:00",
+        endTime: "11:30:00",
+        participants: [],
+        message: "Mensaje de la reserva",
+        approved: false
+    }
 
     return (
         <>
@@ -38,10 +53,11 @@ const EventCreate = () => {
                             flexDirection="column"
                             m={2}
                             >
-                            <CustomTextField label="Club" margin="normal" value={clubId?clubId:""}/>
-                            <CustomTextField label="Actividad" margin="normal"value={activityId?activityId:""}/>
-                            <CustomTextField label="Fecha" margin="normal" value={selectedDate?selectedDate:""}/>
-                            <CustomTextField label="Barrio" margin="normal"/>
+                            <CustomTextField name="clubName" label="Club" margin="normal" disabled={clubId} value={clubId?clubId:""}/>
+                            <CustomTextField name="activityName" label="Actividad" margin="normal"disabled={activityId} value={activityId?activityId:""}/>
+                            <CustomTextField name="date" label="Fecha" margin="normal" disabled={selectedDate} value={selectedDate?selectedDate:""}/>
+                            <CustomTextField name="startTime" label="Hora" margin="normal" disabled={selectedHour} value={selectedHour?selectedHour:""}/>
+                            <CustomTextField name="neighborhoodName" label="Barrio" margin="normal"/>
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={6}>

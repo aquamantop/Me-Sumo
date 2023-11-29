@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router';
-import Header from '../components/header/Header'
-import Footer from '../components/footer/Footer'
-import { Container, Paper, Typography, Box, Button, Link, Grid } from '@mui/material'
+import { Container, Paper, Typography, Box } from '@mui/material'
 import { PaperSXX } from '../components/customMui/CustomMui'
 import { ClubInfo } from '../components/clubShowcase/ClubInfo'
 import axiosInstance from "../hooks/api/axiosConfig";
-/* import { BookingProvider } from '../hooks/bookingContext'; */
-
 import { BoxSX } from '../components/customMui/CustomMui';
+
 const Club = () => {
     const { id } = useParams();
 
@@ -30,8 +27,7 @@ const Club = () => {
         {loading && <p>Loading...</p>}
         {
             !loading && (
-                    <>
-            {/* <BookingProvider> */}              
+                    <>        
             <Container className="content" sx={{my:2}}>
               <Paper sx={PaperSXX}>
                   <Box sx={{...BoxSX}}>
@@ -42,7 +38,6 @@ const Club = () => {
                   <ClubInfo club={ club }/>
               </Paper>
             </Container>
-            {/* </BookingProvider> */}
             </>
             )}
         </>

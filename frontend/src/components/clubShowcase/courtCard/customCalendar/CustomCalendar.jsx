@@ -7,7 +7,8 @@ import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
 const CustomCalendar = ({ courtId, activityId }) => {
-  const { id: clubId } = useParams();
+  const { id } = useParams();
+  const clubId = parseInt(id)
 
   const { saveBookingInfo } = useBookingContext();
 
@@ -17,6 +18,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedCapacity, setSelectedCapacity] = useState(null);
 
   useEffect(() => {
     axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
@@ -102,11 +104,13 @@ const CustomCalendar = ({ courtId, activityId }) => {
                   return [{ id: timeSlot.id, startHour }];
                 })
                 .sort((a, b) => a.startHour - b.startHour)
-                .map((timeSlot) => (
-                  <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.startHour}>
+              .map((timeSlot) => {
+                return (
+                  <ToggleButton key={timeSlot.id} variant="outlined" value={`${timeSlot.startHour}:00:00`}>
                     {`${timeSlot.startHour}:00`}
                   </ToggleButton>
-              ))
+                )
+              })
             )}
           </ToggleButtonGroup>
         </Box>
