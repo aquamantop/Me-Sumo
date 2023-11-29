@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/slot")
 public class SlotController {
 
-    ISlotService slotService;
+    private final ISlotService slotService;
 
     public SlotController(ISlotService slotService) {
         this.slotService = slotService;

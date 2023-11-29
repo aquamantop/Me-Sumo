@@ -9,21 +9,19 @@ import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.mappers.ClubMapper;
 import com.mesumo.msclubs.models.repository.IClubRepository;
 import com.mesumo.msclubs.models.service.IClubService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClubService implements IClubService {
 
     private final IClubRepository repository;
 
     private static final ClubMapper clubMapper = new ClubMapper();
-
-    public ClubService(IClubRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Club findById(Long id) throws ResourceNotFoundException {

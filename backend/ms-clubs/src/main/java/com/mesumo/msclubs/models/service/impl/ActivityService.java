@@ -6,15 +6,15 @@ import com.mesumo.msclubs.models.entities.Activity;
 import com.mesumo.msclubs.models.mappers.ActivityMapper;
 import com.mesumo.msclubs.models.repository.IActivityRepository;
 import com.mesumo.msclubs.models.service.IActivityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService implements IActivityService {
 
-    @Autowired
-    IActivityRepository activityRepository;
+    private final IActivityRepository activityRepository;
 
     private static final ActivityMapper activityMapper = new ActivityMapper();
 
@@ -33,7 +33,7 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public void deleteById(Long id) throws ResourceNotFoundException {
+    public void deleteById(Long id) {
 
     }
 
