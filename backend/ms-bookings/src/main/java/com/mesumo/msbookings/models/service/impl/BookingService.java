@@ -7,6 +7,7 @@ import com.mesumo.msbookings.models.dto.UserDTO;
 import com.mesumo.msbookings.models.entities.Booking;
 import com.mesumo.msbookings.models.entities.Participant;
 import com.mesumo.msbookings.models.repository.IBookingRepository;
+import com.mesumo.msbookings.models.repository.feign.IClubFeignClient;
 import com.mesumo.msbookings.models.repository.feign.IUserFeignClient;
 import com.mesumo.msbookings.models.service.IBookingService;
 import com.mesumo.msbookings.models.service.IParticipantService;
@@ -29,6 +30,9 @@ public class BookingService implements IBookingService {
 
     @Autowired
     IUserFeignClient userFeignClient;
+
+    @Autowired
+    IClubFeignClient clubFeignClient;
 
     @Override
     public Booking findById(Long id) throws ResourceNotFoundException {
@@ -98,20 +102,49 @@ public class BookingService implements IBookingService {
             if (booking.getEndTime() != null){
                 newBooking.get().setEndTime(booking.getEndTime());
             }
-            if (!booking.getParticipants().equals(newBooking.get().getParticipants())){
+            if (booking.getParticipants() != newBooking.get().getParticipants()){
                 newBooking.get().setParticipants(booking.getParticipants());
             }
             if (booking.getMessage() != null){
                 newBooking.get().setMessage(booking.getMessage());
             }
-            if (!booking.isApproved()){
-                newBooking.get().setApproved(true);
+            if (booking.getApproved() != newBooking.get().getApproved()){
+                newBooking.get().setApproved(booking.getApproved());
             }
 
             bookingRepository.save(newBooking.get());
         }else System.err.println("Booking not found with id: " + booking.getId());
 
         return newBooking.get();
+    }
+
+    public Booking addParticipant(Long bookingId, Participant participant) throws ResourceNotFoundException {
+        Booking booking = findById(bookingId);
+        if(!booking.getParticipants().contains(participant) && !booking.getApproved()){
+            participantService.create(participant);
+            booking.getParticipants().add(participant);
+            if (clubFeignClient.getSlotById(booking.getSlotId()).getCapacity() <= booking.getParticipants().size()){
+                booking.setApproved(true);
+            }
+            return update(booking);
+        }
+        return booking;
+
+    }
+
+    public Booking deleteParticipant(Long participantId, Long bookingId) throws ResourceNotFoundException {
+        Participant participant = participantService.findById(participantId);
+        Booking booking = findById(bookingId);
+        if (booking.getParticipants().contains(participant)){
+            booking.getParticipants().remove(participant);
+            participantService.deleteById(participantId);
+            if (clubFeignClient.getSlotById(booking.getSlotId()).getCapacity() > booking.getParticipants().size()){
+                booking.setApproved(false);
+            }
+            return update(booking);
+        }
+
+        return booking;
     }
 
     @Override
