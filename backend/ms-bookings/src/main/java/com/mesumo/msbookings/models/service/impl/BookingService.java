@@ -12,7 +12,8 @@ import com.mesumo.msbookings.models.repository.feign.IUserFeignClient;
 import com.mesumo.msbookings.models.service.IBookingService;
 import com.mesumo.msbookings.models.service.IParticipantService;
 import com.mesumo.msbookings.searchs.BookingSpecification;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -20,19 +21,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookingService implements IBookingService {
 
-    @Autowired
-    IBookingRepository bookingRepository;
+    private final IBookingRepository bookingRepository;
 
-    @Autowired
-    IParticipantService participantService;
+    private final IParticipantService participantService;
 
-    @Autowired
-    IUserFeignClient userFeignClient;
+    @Qualifier("com.mesumo.msbookings.models.repository.feign.IUserFeignClient")
+    private final IUserFeignClient userFeignClient;
 
-    @Autowired
-    IClubFeignClient clubFeignClient;
+    @Qualifier("com.mesumo.msbookings.models.repository.feign.IClubFeignClient")
+    private final IClubFeignClient clubFeignClient;
 
     @Override
     public Booking findById(Long id) throws ResourceNotFoundException {
