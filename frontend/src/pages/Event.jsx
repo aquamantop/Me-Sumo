@@ -24,10 +24,7 @@ const Booking = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  //const [userId, setUserId] = useState("");
   const [userInfo, setUserInfo] = useState({});
-
-  const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
 
   const okMessage = '¡Sumado!\nYa estás participando ;D';
   const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
@@ -68,7 +65,8 @@ const Booking = () => {
       axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
       .then((response) => {
         const { name, url } = response.data.court.club;
-        const availability = response.data.capacity - booking.participants;
+        console.log(booking.participants)
+        const availability = response.data.capacity - booking.participants.length - 1;
         const category = response.data.court.activity.name +" " + response.data.court.activity.type;
         const cardData = {
           "clubName": name,
@@ -78,7 +76,8 @@ const Booking = () => {
           "bookingAvailability": availability,
           "bookingCategory": category,
           "bookingMessage": booking.message,
-          "clubUrl":url
+          "clubUrl":url,
+          "bookingParticipants": booking.participants
         }
         setCardInfo(cardData);
         setLoading(false);
@@ -160,7 +159,7 @@ const Booking = () => {
               </Grid>
               <Grid item xs={12} sm={12} sx={{ textAlign: 'center', display:'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center' }}>
                 <Typography variant="h6" color="primary.main">
-                    Participantes
+                    Participantes Sumados
                 </Typography>
                 <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '250px', overflowY: 'auto', borderRadius:'20px', background:'none' }}>
                     <Table>
@@ -179,10 +178,10 @@ const Booking = () => {
                       </TableRow>
                       </TableHead>
                       <TableBody>
-                        {participants.map((user, index) => (
+                        {cardInfo.bookingParticipants.map((participant, index) => (
                           <TableRow key={index}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{user}</TableCell>
+                            <TableCell>{participant.firstName + " " + participant.lastName}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
