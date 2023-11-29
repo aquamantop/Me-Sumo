@@ -112,7 +112,7 @@ public class BookingController {
                     case "":
                         switch (date){
                             case "":
-                                response = new ResponseEntity(null, HttpStatus.OK);
+                                response = new ResponseEntity(service.initialFiltersValues(), HttpStatus.OK);
                                 break;
                             default:
                                 if(!full)
@@ -223,6 +223,39 @@ public class BookingController {
 
         return response;
     }
+
+    @PostMapping("/participant/{id}")
+    public ResponseEntity addParticipant(@PathVariable Long id, @RequestBody Participant participant){
+        ResponseEntity response = null;
+
+        if(participant != null){
+            try {
+                response = new ResponseEntity(service.addParticipant(id, participant), HttpStatus.CREATED);
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+                response = new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+        } else response = new ResponseEntity("Participant missing", HttpStatus.BAD_REQUEST);
+
+        return response;
+    }
+
+    @DeleteMapping("/participant/{id}")
+    public ResponseEntity deleteParticipant(@PathVariable Long id, @RequestBody Participant participant){
+        ResponseEntity response = null;
+
+        if(participant != null){
+            try {
+                response = new ResponseEntity(service.deleteParticipant(participant.getId(), id), HttpStatus.OK);
+            } catch (ResourceNotFoundException e) {
+                e.printStackTrace();
+                response = new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+        } else response = new ResponseEntity("Participant missing", HttpStatus.BAD_REQUEST);
+
+        return response;
+    }
+
 
     @PutMapping("/update")
     public ResponseEntity update (@RequestBody Booking booking){

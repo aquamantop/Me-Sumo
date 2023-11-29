@@ -1,6 +1,7 @@
 package com.mesumo.msbookings.models.repository.feign;
 
 import com.mesumo.msbookings.models.dto.ClubDTO;
+import com.mesumo.msbookings.models.dto.SlotDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,8 +17,12 @@ public class ClubFeignRepository implements IClubFeignClient {
 
     @Override
     public ClubDTO getById(Long id) {
-        ClubDTO response = feignClient.getById(id);
-        return response;
+        return feignClient.getById(id);
+    }
+
+    @Override
+    public SlotDTO getSlotById(Long id) {
+        return feignClient.getSlotById(id);
     }
 
 }

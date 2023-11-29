@@ -52,6 +52,6 @@ public class Booking {
 
     private String message;
 
-    private boolean approved;
+    private Boolean approved;
 
 }
