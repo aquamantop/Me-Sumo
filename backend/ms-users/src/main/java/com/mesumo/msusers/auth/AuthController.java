@@ -36,4 +36,27 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<AuthResponse> forgotPassword(@RequestBody PasswordRequest request) throws ResourceNotFoundException {
+        AuthResponse response = authService.generateResetPasswordToken(request);
+
+        if (!response.getToken().isEmpty()) {
+            try {
+                emailService.sendPasswordResetEmail(request.getEmail(), response.getToken());
+            } catch (Exception e) {
+                throw new RuntimeException("Error sending reset email: " + e.getMessage(), e);
+            }
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String tokenHeader, @RequestBody NewPasswordRequest password) throws Exception {
+        String token = tokenHeader.replace("Bearer ", "");
+        authService.resetPassword(token, password.getPassword());
+        return ResponseEntity.ok("Contraseña actualizada correctamente.");
+    }
+
+
 }
