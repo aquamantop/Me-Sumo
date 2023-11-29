@@ -56,10 +56,10 @@ export const ClubInfo = ({ club }) => {
             </Grid>
             <Typography variant="h5" color="primary.main"p={1} >Canchas y disponibilidad</Typography>
             <Grid container >
-              {activities.map((activity, index) => (
-                activity.courts.map((court) => {
-                  return <Grid item xs={12} sm={6} key={index+court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court} activityName={activity.name}/>
+              {activities.map((activity) => (
+                activity.courts.sort((a, b) => a.id - b.id).map((court) => {
+                  return <Grid item xs={12} sm={6} key={court.id} sx={{ p: 1 }}>
+                      <CourtCard court={court} activityId={activity.id}/>
                   </Grid>
                 })
               ))} 
@@ -77,16 +77,6 @@ export const ClubInfo = ({ club }) => {
             </Link>
           </Box>
         </Grid>
-        {/* <Grid item xs={12} md={3}  p={2}>
-          <Typography variant="h5" color="primary.main">
-            Eventos del Club
-          </Typography>
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Grid item key={index} sx={{ my: 1 }}>
-              <EventCard />
-            </Grid>
-          ))}
-        </Grid> */}
       </Grid>
     </>
   );

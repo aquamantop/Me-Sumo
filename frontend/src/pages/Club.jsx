@@ -6,7 +6,7 @@ import { Container, Paper, Typography, Box, Button, Link, Grid } from '@mui/mate
 import { PaperSXX } from '../components/customMui/CustomMui'
 import { ClubInfo } from '../components/clubShowcase/ClubInfo'
 import axiosInstance from "../hooks/api/axiosConfig";
-
+import { BoxSX } from '../components/customMui/CustomMui';
 const Club = () => {
     const { id } = useParams();
 
@@ -32,17 +32,7 @@ const Club = () => {
                     
                     <Container className="content" sx={{my:2}}>
               <Paper sx={PaperSXX}>
-                  <Box
-                      sx={{
-                          border: "2px solid",
-                          borderColor: "secondary.main",
-                          borderRadius: "10px",
-                          margin: "-2px",
-                          position: "relative",
-                          zIndex: 1,
-                          p: 2,
-                        }}
-                        >
+                  <Box sx={{...BoxSX}}>
                       <Typography variant="h5" color="primary.main">
                           { club.name } | { club.address }
                       </Typography>

@@ -95,14 +95,16 @@ function EventShowcase({keyword, filters}) {
           )}
         </Grid>
         {keyword === 'Todos' && (
-          <Pagination
-            count={numPages}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
-            sx={{ mt: 2, justifyContent: 'center' }}
-          /> 
+          <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              sx={{ my: 2, mx: 'auto'}}
+            /> 
+          </Box>
         )}
       </Paper>
     </Container>
