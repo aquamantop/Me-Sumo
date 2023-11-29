@@ -70,16 +70,11 @@ function EventSearch() {
     const [loading, setLoading] = useState(true);
 
 
-    // const isDateDisabled = (date) => {
-    //   return isBefore(date, today);
-    // };
-
     useEffect(() => {
       const fetchBookings = async () => {
         try {
           const response = await axiosInstance.get('/booking/');
           setBookings(response.data);
-        //   console.log(response.data)
         } catch (error) {
           console.error('Error fetching bookings:', error);
         } finally {
@@ -103,10 +98,7 @@ function EventSearch() {
           await Promise.all(
             bookings.map(async (booking) => {
               const slotResponse = await axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`);
-
-            //   console.log(slotResponse.data)
               const slotData = slotResponse.data;
-
               uniqueActivities.add(slotData.court.activity.name + " " + slotData.court.activity.type);
               uniqueNeighborhoods.add(slotData.court.club.neighborhood.name);
               uniqueDates.add(booking.date);
