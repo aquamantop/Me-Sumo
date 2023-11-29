@@ -162,12 +162,14 @@ const Booking = () => {
                     <Table>
                       <TableHead>
                       <TableRow>
-                        <TableCell>
+                        {/* <TableCell> */}
+                        <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
                           <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}} >
                             Orden
                           </Typography>
                         </TableCell>
-                        <TableCell>
+                        {/* <TableCell> */}
+                        <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
                           <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}}>
                             Nombre
                           </Typography>
