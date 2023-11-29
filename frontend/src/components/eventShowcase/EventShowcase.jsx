@@ -3,7 +3,7 @@ import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
-import Loader from "../Loader";
+import CustomLoader from "../CustomLoader";
 
 const itemsPerPage = 3;
 
@@ -56,7 +56,7 @@ function EventShowcase({keyword, filters}) {
   };
 
   if (loading) {
-    return <Loader />;
+    return <CustomLoader />;
   }
 
   return (

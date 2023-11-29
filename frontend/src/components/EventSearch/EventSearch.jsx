@@ -18,7 +18,7 @@ import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
 import  axiosInstance  from "../../hooks/api/axiosConfig";
-import Loader from "../Loader";
+import CustomLoader from "../CustomLoader";
 import dayjs from 'dayjs';
 
 
@@ -92,7 +92,7 @@ function EventSearch({ onUpdateFilters }) {
 
 
     if (loading) {
-        return <Loader />;
+        return <CustomLoader />;
     }
 
     return (
