@@ -78,27 +78,11 @@ const Header = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
-                sx={{
-                  '& .MuiPaper-root': {
-                    // backgroundColor: 'black',
-                    color: 'white',
-                    // border: '1px solid white',
-                    fontSize: '14px',
-                  },
-                }}
-                
-              >
-                <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Editar Perfil</MenuItem>
+              > <Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Editar Perfil</MenuItem>
+                </Link>
                 <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
               </Menu>
-              {/* <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={handleMenuClose}>Editar Perfil</MenuItem>
-                <MenuItem onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
-              </Menu> */}
             </>
 
           ):(

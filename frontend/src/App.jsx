@@ -14,6 +14,7 @@ import { UserProvider } from './hooks/userContext'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import { BookingProvider } from './hooks/bookingContext'
+import Profile from './pages/Profile'
 
 function App() {
   const theme = createTheme({
@@ -50,7 +51,6 @@ function App() {
           }
         }
       },
-      
     }
   })
 
@@ -61,15 +61,18 @@ function App() {
           <UserProvider>
             <BookingProvider>  
             <Header/>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/club/:id' element={<Club />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/login-success' element={<LoginSuccess />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/event/:id' element={<Booking />} />
-              <Route path='/new-event' element={<EventCreate/>}/>
-            </Routes>
+            <div class='content'>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/club/:id' element={<Club />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/login-success' element={<LoginSuccess />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/event/:id' element={<Booking />} />
+                <Route path='/new-event' element={<EventCreate/>}/>
+                <Route path='/profile' element={<Profile/>}/>
+              </Routes>
+            </div>
             <Footer/>
           </BookingProvider>
           </UserProvider>
