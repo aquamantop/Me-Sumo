@@ -13,7 +13,6 @@ export const BookingProvider = ({children}) => {
   const saveBookingInfo = (data) => {
     setBookingInfo(data);
     localStorage.setItem("bookingInfo", JSON.stringify(data));
-    console.log(bookingInfo)
   };
 
   useEffect(() => {

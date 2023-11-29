@@ -8,6 +8,8 @@ const EventCreate = () => {
     
     const { selectedDate, selectedHour, clubId, courtId, activityId, clubName, neighborhoodName, activityName } = bookingInfo;
 
+    const slotCapacity = activityName.slice(-1) * 2;
+
     /* bookingData = {
         name: "Otra Reserva de Franco",
         slotId: 6,
@@ -72,7 +74,7 @@ const EventCreate = () => {
                             flexDirection="column"
                             m={2}
                             >
-                            <CustomTextField name="participants" label="Cupo" margin="normal"/>
+                            <CustomTextField name="participants" label="Cupo" margin="normal" disabled={slotCapacity} value={slotCapacity?slotCapacity:""}/>
                             <CustomTextField label="Nombre del evento" margin="normal"/>
                             <CustomTextField
                             label="Mensaje del organizador"
