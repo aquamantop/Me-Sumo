@@ -1,6 +1,7 @@
 package com.mesumo.msusers.auth;
 
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
+import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.jwt.JwtService;
 import com.mesumo.msusers.models.entities.Role;
 import com.mesumo.msusers.models.entities.User;
@@ -42,7 +43,7 @@ public class AuthService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode( request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
                 .build();
 
@@ -56,6 +57,29 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
+    }
+
+    public AuthResponse generateResetPasswordToken(PasswordRequest request) throws ResourceNotFoundException {
+        UserDetails user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        String token = jwtService.getToken(user);
+        return AuthResponse.builder()
+                .token(token)
+                .build();
+    }
+
+    public void resetPassword(String token, String password) throws Exception {
+        if (!jwtService.isResetTokenValid(token)) {
+            throw new IllegalArgumentException("Token inválido o expirado");
+        }
+        String username = jwtService.getUsernameFromToken(token);
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+
     }
 
 }
