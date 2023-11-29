@@ -46,7 +46,7 @@ public class BookingDTO {
 
     private String message;
 
-    private boolean approved;
+    private Boolean approved;
 
     Set<UserDTO> group;
 }
