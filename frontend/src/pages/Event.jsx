@@ -8,17 +8,48 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
 import { CenterFocusStrong } from '@mui/icons-material';
-
+import { useUserContext } from '../hooks/userContext'
+import BoxMessage from '../components/BoxMessage'
 
 const Booking = () => {
   const { id } = useParams();
   const theme = useTheme();
 
+  const { user } = useUserContext();
+
   const [info, setInfo] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const participants = ["Juampi","Fran","Nahue","Noe","Fede","Lean","Maru"]
+
+  const okMessage = '¡Sumado!\nYa estás participando ;D';
+  const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
+
+  // const handleButtonClick = () => {
+  //   if (user) {
+  //     console.log('Usuario logueado:', user);
+  //   } else {
+  //     console.log('Usuario no logueado');
+  //   }
+  // };
+
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const showMessage = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };  
 
   useEffect(() => {
     axiosInstance.get(`/booking/${id}`)
@@ -75,7 +106,7 @@ const Booking = () => {
                 <span style={{color: theme.palette.primary.main }}>{info.clubName}</span>
               </Typography>
             </Box>
-            <Grid container spacing={2} sx={{height:"50vh"}}>
+            <Grid container spacing={2} >
               <Grid Grid item xs={12} sm={6}>
                 <Box
                   display="flex"
@@ -108,8 +139,7 @@ const Booking = () => {
                   </Typography>
                 </Box>
               </Grid>
-              {/* <Grid item xs={12} sm={12} sx={{textAlign: "center"}}> */}
-              <Grid item xs={12} sm={12} >
+              {/* <Grid item xs={12} sm={12} >
                 <Box
                   display="flex"
                   flexDirection="column"
@@ -121,59 +151,58 @@ const Booking = () => {
                   </Typography>
                 </Box>
               </Grid>
-              {/* //<Grid item xs={12} sm={12} justifyContent="center" alignItems="center" sx={{ width: '100%', height:'30%'}}> */}
-              <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '180px', overflowY: 'auto' }}>
-                  <Table>
-                    <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="h6" color="secondary.main">
-                          Orden
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="h6" color="secondary.main">
-                          Nombre
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {participants.map((user, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{user}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              {/* </Grid> */}
-              {/* <Grid container justifyContent="center">
-                <Grid item xs={12} sm={10} sx={{alignItems: "center"}}>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    m={0} 
-                    sx={{backgroundColor:"white",
-                      height:"25vh",
-                      borderRadius:"10px",
-                      marginTop:"-10px"
-                    }}
-                  >
-                  </Box>
-                </Grid>
-              </Grid> */}
+              <Typography variant="h6" color="primary.main">
+                    Participantes
+                  </Typography> */}
+              <Grid item xs={12} sm={12} sx={{ textAlign: 'center', display:'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center' }}>
+                <Typography variant="h6" color="primary.main">
+                    Participantes
+                </Typography>
+                <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '250px', overflowY: 'auto', borderRadius:'20px', background:'none' }}>
+                    <Table>
+                      <TableHead>
+                      <TableRow>
+                        {/* <TableCell> */}
+                        <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
+                          <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}} >
+                            Orden
+                          </Typography>
+                        </TableCell>
+                        {/* <TableCell> */}
+                        <TableCell sx={{ fontSize: '14px', position: 'sticky', top: 0, background: theme.palette.background.default }}>
+                          <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}}>
+                            Nombre
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {participants.map((user, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{user}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+              </Grid>
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
             <Button 
               variant="contained"
               color="background"
               fullWidth
+              onClick={() => user ? showMessage(okMessage) : showMessage(noOkMessage)}
               sx={{ ...ButtonSX }}
             >
               ¡Me Sumo!
             </Button>
+            <BoxMessage
+                open={snackbarOpen}
+                message={snackbarMessage}
+                onClose={handleSnackbarClose}
+            />
             </Grid>
           </Paper>
         </Container>

@@ -2,7 +2,7 @@ import { Box, Typography, Card, CardContent, CardMedia, Button, Link } from "@mu
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
 import { ButtonSX } from "../customMui/CustomMui";
-import Loader from "../loader";
+import CustomLoader from "../CustomLoader";
 
 function EventCard({ booking }) {
 
@@ -38,7 +38,7 @@ function EventCard({ booking }) {
 
 
   if (loading) {
-    return <Loader />;
+    return <CustomLoader />;
   }
 
   return (
