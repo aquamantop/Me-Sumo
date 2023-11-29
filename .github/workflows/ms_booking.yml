@@ -21,7 +21,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
+
     - name: Maven package Booking
       run: |
         cd /home/ubuntu/actions-runner/_work/Grupo-5/Grupo-5/backend/ms-bookings

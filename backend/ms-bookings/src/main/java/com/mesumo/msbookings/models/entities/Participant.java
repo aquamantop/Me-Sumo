@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -31,5 +33,17 @@ public class Participant {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email=email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Participant )) return false;
+        return userId != null && userId.equals(((Participant) o).getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 }
