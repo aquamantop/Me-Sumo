@@ -66,7 +66,7 @@ const Booking = () => {
       .then((response) => {
         const { name, url } = response.data.court.club;
         console.log(booking.participants)
-        const availability = response.data.capacity - booking.participants.length - 1;
+        const availability = response.data.capacity - booking.participants.length;
         const category = response.data.court.activity.name +" " + response.data.court.activity.type;
         const cardData = {
           "clubName": name,
