@@ -47,4 +47,3 @@ eureka:
 logging:
   level:
     org.springframework.security: DEBUG
-    
