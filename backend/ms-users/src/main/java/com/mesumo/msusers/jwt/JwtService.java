@@ -3,6 +3,8 @@ package com.mesumo.msusers.jwt;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
+
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -65,6 +67,30 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
+    }
+
+    //public String generatePasswordResetToken(String username) {
+        //Map<String, Object> claims = new HashMap<>();
+       // claims.put("type", "password_reset");
+        //return Jwts.builder()
+                //.setClaims(claims)
+               // .setSubject(username)
+               // .setIssuedAt(new Date(System.currentTimeMillis()))
+               // .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutos
+                //.signWith(getKey(), SignatureAlgorithm.HS256)
+                //.compact();
+    //}
+
+    public boolean isResetTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
 }
