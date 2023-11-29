@@ -139,8 +139,7 @@ const Booking = () => {
                   </Typography>
                 </Box>
               </Grid>
-              {/* <Grid item xs={12} sm={12} sx={{textAlign: "center"}}> */}
-              <Grid item xs={12} sm={12} >
+              {/* <Grid item xs={12} sm={12} >
                 <Box
                   display="flex"
                   flexDirection="column"
@@ -152,33 +151,40 @@ const Booking = () => {
                   </Typography>
                 </Box>
               </Grid>
-              {/* //<Grid item xs={12} sm={12} justifyContent="center" alignItems="center" sx={{ width: '100%', height:'30%'}}> */}
-              {/* <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '180px', overflowY: 'auto' }}>
-                  <Table>
-                    <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <Typography variant="h6" color="secondary.main">
-                          Orden
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="h6" color="secondary.main">
-                          Nombre
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {participants.map((user, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{user}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer> */}
+              <Typography variant="h6" color="primary.main">
+                    Participantes
+                  </Typography> */}
+              <Grid item xs={12} sm={12} sx={{ textAlign: 'center', display:'flex', flexDirection: 'column', justifyContent:'center', alignItems:'center' }}>
+                <Typography variant="h6" color="primary.main">
+                    Participantes
+                </Typography>
+                <TableContainer component={Paper} sx={{ width: '50%', maxHeight: '250px', overflowY: 'auto', borderRadius:'20px', background:'none' }}>
+                    <Table>
+                      <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}} >
+                            Orden
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="h6" color="secondary.main" sx={{fontSize:'16px'}}>
+                            Nombre
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {participants.map((user, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{user}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+              </Grid>
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
             <Button 
