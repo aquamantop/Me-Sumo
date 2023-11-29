@@ -3,7 +3,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
 import { useTheme } from '@mui/system';
-import { ButtonSX } from "../components/customMui/CustomMui";
+import { ButtonSX } from "./customMui/CustomMui";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 const BoxMessage = ({ open, message, onClose }) => {
 
 return (
-    <Dialog open={open} onClose={onClose} maxWidth='lg' >
+    <Dialog open={open} onClose={onClose} width='300px' >
       <DialogContent
         fullWidth
         sx={{

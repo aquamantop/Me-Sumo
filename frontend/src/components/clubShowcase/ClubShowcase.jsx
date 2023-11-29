@@ -5,7 +5,7 @@ import ClubCard from "./ClubCard";
 import { BoxSX } from "../customMui/CustomMui";
 //import axios from "axios"
 import axiosInstance from "../../hooks/api/axiosConfig";
-import Loader from "../loader";
+import Loader from "../Loader";
 
 const itemsPerPage = 3;
 

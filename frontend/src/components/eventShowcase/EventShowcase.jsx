@@ -3,7 +3,7 @@ import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
-import Loader from "../loader";
+import Loader from "../Loader";
 
 const itemsPerPage = 3;
 

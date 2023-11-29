@@ -18,7 +18,7 @@ import { styled } from "@mui/material/styles";
 import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
 import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
 import  axiosInstance  from "../../hooks/api/axiosConfig";
-import Loader from "../loader";
+import Loader from "../Loader";
 import dayjs from 'dayjs';
 
 
