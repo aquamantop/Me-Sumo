@@ -10,7 +10,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
   const { id } = useParams();
   const clubId = parseInt(id)
 
-  const { saveBookingInfo } = useBookingContext();
+  const { bookingInfo, saveBookingInfo } = useBookingContext();
 
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true); 
@@ -18,7 +18,6 @@ const CustomCalendar = ({ courtId, activityId }) => {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedHour, setSelectedHour] = useState(null);
-  const [selectedCapacity, setSelectedCapacity] = useState(null);
 
   useEffect(() => {
     axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
@@ -58,14 +57,13 @@ const CustomCalendar = ({ courtId, activityId }) => {
   };
 
   const handleBooking = () => {
-    console.log('Fecha seleccionada:', selectedDate);
-    console.log('ID Hora seleccionada:', selectedHour);
     saveBookingInfo({
+      ...bookingInfo,
       selectedDate,
       selectedHour,
       clubId,
       courtId,
-      activityId
+      activityId,
     });
   };
 

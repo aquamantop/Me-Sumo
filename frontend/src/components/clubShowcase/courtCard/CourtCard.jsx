@@ -1,8 +1,10 @@
-import React from "react";
-import { Card, CardContent, Typography, Box, Button, Link } from "@mui/material";
+import React, { useEffect } from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 import CustomCalendar from "./customCalendar/CustomCalendar";
+import { useBookingContext } from '../../../hooks/bookingContext';
 
-const CourtCard = ({ court, activityId }) => {
+const CourtCard = ({ court, activityId, activityName }) => {
+  const { bookingInfo, saveBookingInfo } = useBookingContext();
 
   const { name, court_type, inside } = court
 
@@ -18,6 +20,13 @@ const CourtCard = ({ court, activityId }) => {
         return "N/A";
     }
   })();
+
+  useEffect(() => {
+    saveBookingInfo({
+      ...bookingInfo,
+        activityName
+      })
+}, [])
 
   return (
     <>
