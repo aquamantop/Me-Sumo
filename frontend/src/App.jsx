@@ -13,6 +13,7 @@ import Booking from './pages/Event'
 import { UserProvider } from './hooks/userContext'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
+import { BookingProvider } from './hooks/bookingContext'
 
 function App() {
   const theme = createTheme({
@@ -58,6 +59,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <UserProvider>
+            <BookingProvider>  
             <Header/>
             <Routes>
               <Route path='/' element={<Home />} />
@@ -69,6 +71,7 @@ function App() {
               <Route path='/new-event' element={<EventCreate/>}/>
             </Routes>
             <Footer/>
+          </BookingProvider>
           </UserProvider>
         </LocalizationProvider>
       </ThemeProvider>

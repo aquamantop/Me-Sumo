@@ -2,8 +2,15 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
 import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
+import { useBookingContext } from '../hooks/bookingContext'
 
 const EventCreate = () => {
+
+    const { bookingInfo } = useBookingContext();
+    console.log(bookingInfo)
+    
+    const { selectedDate, selectedHour, clubId, courtId, activityId } = bookingInfo;
+
     return (
         <>
             <Container className="content">
@@ -31,9 +38,9 @@ const EventCreate = () => {
                             flexDirection="column"
                             m={2}
                             >
-                            <CustomTextField label="Club" margin="normal"/>
-                            <CustomTextField label="Actividad" margin="normal"/>
-                            <CustomTextField label="Fecha" margin="normal" />
+                            <CustomTextField label="Club" margin="normal" value={clubId?clubId:""}/>
+                            <CustomTextField label="Actividad" margin="normal"value={activityId?activityId:""}/>
+                            <CustomTextField label="Fecha" margin="normal" value={selectedDate?selectedDate:""}/>
                             <CustomTextField label="Barrio" margin="normal"/>
                             </Box>
                         </Grid>

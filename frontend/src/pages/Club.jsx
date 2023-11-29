@@ -6,6 +6,7 @@ import { Container, Paper, Typography, Box, Button, Link, Grid } from '@mui/mate
 import { PaperSXX } from '../components/customMui/CustomMui'
 import { ClubInfo } from '../components/clubShowcase/ClubInfo'
 import axiosInstance from "../hooks/api/axiosConfig";
+/* import { BookingProvider } from '../hooks/bookingContext'; */
 
 const Club = () => {
     const { id } = useParams();
@@ -29,8 +30,8 @@ const Club = () => {
         {
             !loading && (
                     <>
-                    
-                    <Container className="content" sx={{my:2}}>
+            {/* <BookingProvider> */}              
+            <Container className="content" sx={{my:2}}>
               <Paper sx={PaperSXX}>
                   <Box
                       sx={{
@@ -49,8 +50,8 @@ const Club = () => {
                   </Box>
                   <ClubInfo club={ club }/>
               </Paper>
-          </Container>
-          
+            </Container>
+            {/* </BookingProvider> */}
             </>
             )}
         </>

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers';
-import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box } from '@mui/material';
+import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box, Link } from '@mui/material';
 import axiosInstance from "../../../../hooks/api/axiosConfig";
+import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
 const CustomCalendar = ({ courtId, activityId }) => {
   const { id: clubId } = useParams();
+
+  const { saveBookingInfo } = useBookingContext();
 
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true); 
@@ -52,10 +55,16 @@ const CustomCalendar = ({ courtId, activityId }) => {
     setSelectedHour(hour)
   };
 
-  const handleBookAppointment = () => {
+  const handleBooking = () => {
     console.log('Fecha seleccionada:', selectedDate);
     console.log('ID Hora seleccionada:', selectedHour);
-    // Agrega tu lógica de reserva aquí
+    saveBookingInfo({
+      selectedDate,
+      selectedHour,
+      clubId,
+      courtId,
+      activityId
+    });
   };
 
 
@@ -94,7 +103,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
                 })
                 .sort((a, b) => a.startHour - b.startHour)
                 .map((timeSlot) => (
-                  <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.id}>
+                  <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.startHour}>
                     {`${timeSlot.startHour}:00`}
                   </ToggleButton>
               ))
@@ -109,9 +118,11 @@ const CustomCalendar = ({ courtId, activityId }) => {
             mb: 2,
           }}
           >
-          <Button variant="contained" color="secondary" onClick={handleBookAppointment}>
-            Reservar cancha
+        <Link href="/new-event">
+          <Button variant="contained" color="secondary" onClick={handleBooking}>
+            Confirmar evento
           </Button>
+        </Link>
         </Box> 
     </>
   ); 
