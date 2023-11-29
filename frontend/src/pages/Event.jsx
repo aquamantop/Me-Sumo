@@ -106,7 +106,7 @@ const Booking = () => {
                 <span style={{color: theme.palette.primary.main }}>{info.clubName}</span>
               </Typography>
             </Box>
-            <Grid container spacing={2} sx={{height:"50vh"}}>
+            <Grid container spacing={2} >
               <Grid Grid item xs={12} sm={6}>
                 <Box
                   display="flex"
