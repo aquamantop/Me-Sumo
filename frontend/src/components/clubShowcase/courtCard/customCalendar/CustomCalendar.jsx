@@ -6,7 +6,7 @@ import axiosInstance from "../../../../hooks/api/axiosConfig";
 import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
-const CustomCalendar = ({ courtId, activityId }) => {
+const CustomCalendar = ({ courtId, activityId, activityName }) => {
   const { id } = useParams();
   const clubId = parseInt(id)
 
@@ -64,6 +64,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
       clubId,
       courtId,
       activityId,
+      activityName
     });
   };
 

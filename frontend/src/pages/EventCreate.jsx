@@ -54,7 +54,7 @@ const EventCreate = () => {
                             m={2}
                             >
                             <CustomTextField name="clubName" label="Club" margin="normal" disabled={clubName} value={clubName?clubName:""}/>
-                            <CustomTextField name="activityName" label="Actividad" margin="normal" disabled={activityName} value={activityName ? activityName : ""} />
+                            <CustomTextField name="activityName" label="Actividad" margin="normal" disabled={activityName} value={activityName?activityName:""} />
                             <Grid container>
                                 <Grid item xs={12} sm={6}>
                                     <CustomTextField name="date" label="Fecha" margin="normal" disabled={selectedDate} value={selectedDate?selectedDate:""}/>
