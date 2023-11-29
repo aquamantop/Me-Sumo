@@ -1,13 +1,11 @@
 package com.mesumo.msusers.auth;
 
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
+import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.jwt.JwtService;
 import com.mesumo.msusers.models.entities.Role;
 import com.mesumo.msusers.models.entities.User;
 import com.mesumo.msusers.models.repository.IUserRepository;
-import com.mesumo.msusers.models.service.impl.EmailService;
-import feign.Response;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
