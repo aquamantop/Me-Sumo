@@ -80,8 +80,8 @@ jobs:
         echo "Current directory contents:"
         pwd
         ls -la
-        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service"
-        scp backend/ms-clubs/target/ms_clubs.jar ubuntu@${HOST}:~/club
-        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl start club.service"
-        echo "Finished deploying the app."
-        
+        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service && \
+        cp ~/club/ms_clubs.jar ubuntu@${HOST}:~/club && \
+        sudo systemctl start club.service"
+      env:
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
