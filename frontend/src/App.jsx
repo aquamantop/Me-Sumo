@@ -15,8 +15,8 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import { BookingProvider } from './hooks/bookingContext'
 import Profile from './pages/Profile'
-import NewPassword from './pages/NewPassword'
 import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   const theme = createTheme({
@@ -74,7 +74,7 @@ function App() {
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
-                <Route path='/reset-password' element={<NewPassword/>}/>
+                <Route path='/reset-password' element={<ResetPassword/>}/>
               </Routes>
             </div>
             <Footer/>

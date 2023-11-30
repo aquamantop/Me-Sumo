@@ -11,7 +11,7 @@ import Swal from "sweetalert2"
 import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
 
-export default function NewPassword() {
+export default function ResetPassword() {
   const navigate = useNavigate();
 
   const {
@@ -59,16 +59,16 @@ export default function NewPassword() {
         className="content"
       >
         <Typography
-          variant="h3"
+          variant="h4"
           color="primary.main"
           sx={{
             letterSpacing: 13
           }}
         >
-          ¡Hola!
+          Nueva Contraseña
         </Typography>
         <Typography
-          variant="h4"
+          variant="h6"
           color="primary.main"
           sx={{
             fontWeight: "regular",
@@ -76,7 +76,7 @@ export default function NewPassword() {
             marginBottom: "36px"
           }}
         >
-          ¡Ingresa una nueva contraseña!
+          Ingresa tu nueva contraseña para completar el restablecimiento.
         </Typography>
         <Stack
           sx={{ margin: "auto", px: 5 }}
