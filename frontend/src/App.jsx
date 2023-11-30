@@ -13,6 +13,7 @@ import Booking from './pages/Event'
 import { UserProvider } from './hooks/userContext'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
+import { BookingProvider } from './hooks/bookingContext'
 import Profile from './pages/Profile'
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <UserProvider>
+            <BookingProvider>  
             <Header/>
             <div class='content'>
               <Routes>
@@ -72,6 +74,7 @@ function App() {
               </Routes>
             </div>
             <Footer/>
+          </BookingProvider>
           </UserProvider>
         </LocalizationProvider>
       </ThemeProvider>
