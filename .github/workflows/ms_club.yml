@@ -38,7 +38,8 @@ jobs:
       run: |
         echo "Building app..."
         cd backend/ms-clubs
-        mvn clean install
+        ls
+        mvn install --file pom.xml -X
         echo "Finished building the app."
 
     - name: Archive Backend Build
