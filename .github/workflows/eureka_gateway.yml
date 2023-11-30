@@ -63,10 +63,11 @@ jobs:
     - name: Deploy Eureka
       run: |
           echo "Deploying started..."
-          ssh ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY "sudo systemctl stop eureka.service"
-          scp backend/ms-discovery/target/ms_discovery.jar ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY:~/app/eureka
-          ssh ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY "sudo systemctl start eureka.service"
+          ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}} "sudo systemctl stop eureka.service"
+          scp ms-discovery/target/ms_discovery.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}:~/app/eureka
+          ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}} "sudo systemctl start eureka.service"
           echo "Finished deploying the app."
+      working-directory: ./backend
 
   build-gateway:
     name: Build Gateway with Maven
@@ -103,7 +104,8 @@ jobs:
     - name: Build Api Gateway
       run: |
         echo "Deploying started..."
-        ssh ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY "sudo systemctl stop gateway.service"
-        scp backend/ms-gateway/target/ms_gateway.jar ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY:~/app/gateway
-        ssh ubuntu@$DEPLOY_SERVER_IP_EUREKA_GATEWAY "sudo systemctl start gateway.service"
+        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}} "sudo systemctl stop gateway.service"
+        scp ms-gateway/target/ms_gateway.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}:~/app/gateway
+        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}} "sudo systemctl start gateway.service"
         echo "Finished deploying the app."
+      working-directory: ./backend

@@ -28,7 +28,7 @@ jobs:
 
   build-club:
     name: Build Club with Maven
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-20.04
     steps:
     
     - name: Checkout Repository
@@ -61,7 +61,8 @@ jobs:
     - name: Deploy Backend
       run: |
         echo "Deploying started..."
-        ssh ubuntu@$DEPLOY_SERVER_IP_CLUB "sudo systemctl stop club.service"
-        scp backend/ms-clubs/target/ms_clubs.jar ubuntu@$DEPLOY_SERVER_IP_CLUB:~/club
-        ssh ubuntu@$DEPLOY_SERVER_IP_CLUB "sudo systemctl start club.service"
+        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl stop club.service"
+        scp ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
+        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl start club.service"
         echo "Finished deploying the app."
+      working-directory: ./backend
