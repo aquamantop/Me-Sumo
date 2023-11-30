@@ -17,7 +17,7 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
   const [error, setError] = useState(null);
 
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
@@ -47,25 +47,30 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
   const handleDateChange = (date) => {
     const formatDate = new Date(date).toISOString().split('T')[0];
     setSelectedDate(formatDate)
-    setSelectedHour(null)
+    setSelectedSlot(null)
   };
 
   const availableHoursForSelectedDate = selectedDate ? booking[selectedDate] : []
 
-  const handleHourChange = (hour) => {
-    setSelectedHour(hour)
+  const handleHourChange = (id) => {
+    setSelectedSlot(id)
   };
 
   const handleBooking = () => {
-    saveBookingInfo({
-      ...bookingInfo,
-      selectedDate,
-      selectedHour,
-      clubId,
-      courtId,
-      activityId,
-      activityName
-    });
+    const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot);
+
+    if (data) {
+      saveBookingInfo({
+        ...bookingInfo,
+        selectedDate,
+        selectedHour: data.startTime,
+        slotId: data.id,
+        clubId,
+        courtId,
+        activityId,
+        activityName
+      });
+    }
   };
 
 
@@ -90,7 +95,7 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
             }}
         >
           <ToggleButtonGroup
-            value={selectedHour}
+            value={selectedSlot}
             exclusive
             size="small"
             color="secondary"
@@ -100,13 +105,13 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
               availableHoursForSelectedDate
                 .flatMap((timeSlot) => {
                   const startHour = parseInt(timeSlot.startTime.split(':')[0], 10);
-                  return [{ id: timeSlot.id, startHour }];
+                  return [{ id: timeSlot.id, startHour: `${startHour}:00` }];
                 })
                 .sort((a, b) => a.startHour - b.startHour)
               .map((timeSlot) => {
                 return (
-                  <ToggleButton key={timeSlot.id} variant="outlined" value={`${timeSlot.startHour}:00:00`}>
-                    {`${timeSlot.startHour}:00`}
+                  <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.id}>
+                    {timeSlot.startHour}
                   </ToggleButton>
                 )
               })
