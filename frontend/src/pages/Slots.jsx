@@ -220,7 +220,7 @@ const Slot = () => {
                 <TableRow>
                   <TableCell>Cancha</TableCell>
                   <TableCell>Conjunto de Días</TableCell>
-                  <TableCell>Horarios</TableCell>
+                  <TableCell>Eliminar</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
