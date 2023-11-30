@@ -22,7 +22,8 @@ const Booking = () => {
     const [cardInfo, setCardInfo] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [initialLoading, setInitialLoading] = useState(false);
+    
     const [boxOpen, setBoxOpen] = useState(false);
     const [boxMessage, setBoxMessage] = useState('');
     
@@ -36,6 +37,7 @@ const Booking = () => {
             return;
         }
         setBoxOpen(false);
+        setIsParticipant(true);
     };
 
     
@@ -43,14 +45,14 @@ const Booking = () => {
         setBoxMessage(message);
         setBoxOpen(true);
     };
+
   
     const handleButtonClick = () => {
-        if (user) {
+        if (user && isParticipant==false) {
             axiosInstance.post(`/booking/participant/${id}`, userInfo)
             .then(response => {
                 console.log(response.data);
                 showMessage(okMessage);
-            
                 axiosInstance.get(`/booking/${id}`)
                 .then(response => {
                     setCardInfo(prevCardInfo => ({
@@ -70,6 +72,7 @@ const Booking = () => {
                 console.error('Error al realizar la solicitud POST:', error);
                 showMessage('Error al procesar la solicitud.');
             });
+        
         } else {
           showMessage(noOkMessage);
         }
@@ -112,9 +115,7 @@ const Booking = () => {
 
                 const isUserParticipant = cardData.bookingParticipants.some(participant => participant.userId === userInfo.userId);
                 setIsParticipant(isUserParticipant);
-
                 console.log(isUserParticipant)
-
                 setLoading(false);
                 return cardData;
             })
@@ -219,7 +220,7 @@ const Booking = () => {
                 fullWidth
                 onClick={handleButtonClick}
                 sx={{ ...ButtonSX }}
-                disabled={isParticipant}
+                disabled={initialLoading || isParticipant}
                 >
                 ¡Me Sumo!
                 </Button>
