@@ -64,13 +64,22 @@ jobs:
       with:
         name: clubs
 
+    - name: Configure SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${DEPLOY_KEY_CLUB}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{secrets.DEPLOY_SERVER_IP_CLUB}} >> ~/.ssh/known_hosts
+      env:
+        HOST: ${{secrets.DEPLOY_SERVER_IP_CLUB}}
+
     - name: Deploy Backend
       run: |
         echo "Deploying started..."
         echo "Current directory contents:"
         pwd
         ls -la
-        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl stop club.service"
-        scp backend/ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
-        ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl start club.service"
+        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service"
+        scp backend/ms-clubs/target/ms_clubs.jar ubuntu@${HOST}:~/club
+        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl start club.service"
         echo "Finished deploying the app."
