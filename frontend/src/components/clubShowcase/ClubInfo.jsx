@@ -22,7 +22,7 @@ export const ClubInfo = ({ club }) => {
   return (
     <>
       <Grid container >
-        <Grid item xs={12} md={9}  p={2} sx={{borderBottom: {xs:'2px solid #62E8FF', md:'none'}, borderRight: {xs:'none', md:'2px solid #62E8FF'}}}>
+        <Grid item xs={12} md={9}  p={2} sx={{borderBottom: {xs:'2px solid #3FEBBD', md:'none'}, borderRight: {xs:'none', md:'2px solid #3FEBBD'}}}>
           <Typography variant="h6" color="primary.main">
             { description }
           </Typography>
