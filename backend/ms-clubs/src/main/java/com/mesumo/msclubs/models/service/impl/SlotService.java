@@ -6,16 +6,16 @@ import com.mesumo.msclubs.models.entities.Slot;
 import com.mesumo.msclubs.models.mappers.SlotMapper;
 import com.mesumo.msclubs.models.repository.ISlotRepository;
 import com.mesumo.msclubs.models.service.ISlotService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SlotService implements ISlotService {
 
-    @Autowired
-    ISlotRepository repository;
+    private final ISlotRepository repository;
 
     private static final SlotMapper slotMapper = new SlotMapper();
 

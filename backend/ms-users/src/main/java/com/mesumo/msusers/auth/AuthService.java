@@ -27,13 +27,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest request) {
-
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
-        System.out.println(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())));
-        UserDetails user=userRepository.findByEmail(request.getEmail()).orElseThrow();
-        System.out.println(user);
-        String token=jwtService.getToken(user);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        UserDetails user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.getToken(user);
+        
         return AuthResponse.builder()
                 .token(token)
                 .build();
@@ -51,7 +48,7 @@ public class AuthService {
                 .build();
 
         Optional<User> userExists =  userRepository.findByEmail(user.getEmail());
-        if(!userExists.isEmpty()) {
+        if(userExists.isPresent()) {
             throw new ResourceAlreadyExistsException(": Cannot finish your registration. User with email: "+ user.getEmail() +" already exists");
         }
 

@@ -6,20 +6,17 @@ import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.mappers.CourtMapper;
 import com.mesumo.msclubs.models.repository.ICourtRepository;
 import com.mesumo.msclubs.models.service.ICourtService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CourtService implements ICourtService {
 
-    @Autowired
-    ICourtRepository repository;
-
+    private final ICourtRepository repository;
     private static final CourtMapper courtMapper = new CourtMapper();
 
     @Override

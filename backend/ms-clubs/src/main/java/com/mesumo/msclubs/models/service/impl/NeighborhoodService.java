@@ -6,15 +6,15 @@ import com.mesumo.msclubs.models.entities.Neighborhood;
 import com.mesumo.msclubs.models.mappers.NeighborhoodMapper;
 import com.mesumo.msclubs.models.repository.INeighborhood;
 import com.mesumo.msclubs.models.service.INeighborhoodService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class NeighborhoodService implements INeighborhoodService {
 
-    @Autowired
-    INeighborhood neighborhoodRepository;
+    private final INeighborhood neighborhoodRepository;
 
     private static final NeighborhoodMapper neighborhoodMapper = new NeighborhoodMapper();
 
@@ -34,7 +34,7 @@ public class NeighborhoodService implements INeighborhoodService {
     }
 
     @Override
-    public void deleteById(Long id) throws ResourceNotFoundException {}
+    public void deleteById(Long id) {}
 
     @Override
     public Neighborhood update(Neighborhood neighborhood) throws ResourceNotFoundException {
