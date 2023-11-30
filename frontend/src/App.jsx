@@ -14,6 +14,7 @@ import { UserProvider } from './hooks/userContext'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import Profile from './pages/Profile'
+import Slots from './pages/Slots'
 
 function App() {
   const theme = createTheme({
@@ -69,6 +70,7 @@ function App() {
                 <Route path='/event/:id' element={<Booking />} />
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
+                <Route path='/new-slot/:id' element={<Slots />}/>
               </Routes>
             </div>
             <Footer/>
