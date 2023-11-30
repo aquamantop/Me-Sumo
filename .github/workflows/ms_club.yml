@@ -77,12 +77,8 @@ jobs:
     - name: Deploy Backend
       run: |
         echo "Deploying started..."
-        echo "RUTA"
-        pwd
-        echo "PROBANDO LS"
-        ls
-        scp /home/runner/work/Grupo-5/Grupo-5/club/target/ms_clubs.jar ubuntu@${HOST}:~/club
         ssh ubuntu@${HOST} sudo systemctl stop club.service
+        scp ms_clubs.jar ubuntu@${HOST}:~/club
         ssh ubuntu@${HOST} sudo systemctl start club.service
         echo "Finished deploying the app."
       env:
