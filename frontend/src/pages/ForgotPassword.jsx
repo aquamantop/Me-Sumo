@@ -24,16 +24,17 @@ export default function ForgotPassword() {
   })
 
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
 
 
-  const onSubmit = handleSubmit(async (userData) => {
-    
-    // TODO - AGREGAR EL ENDPOINT PARA CAMBIAR LA CONTRASEÑA
-    /* const response = await new Promise((resolve) => {
-      axiosInstance.post("/auth/login", userData)
+  const onSubmit = handleSubmit(async (userData) => {  
+    const response = await new Promise((resolve) => {
+      axiosInstance.post("/auth/forgot-password", userData)
         .then((response) => resolve(response))
         .catch((error) => setError(error))
-    }) */
+    })
+    if (response)
+      setSuccess(true)
   })
 
   return (
@@ -99,6 +100,12 @@ export default function ForgotPassword() {
           >
             Enviar mail
           </Button>
+          
+          {success && (
+            <Typography variant="body2" color="success.main">
+              Listo! Revisa tu casilla de correo.
+            </Typography>
+          )}
 
           {error && (
             <Typography variant="body2" color="error.main">
