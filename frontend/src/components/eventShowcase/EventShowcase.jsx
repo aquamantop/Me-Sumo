@@ -3,11 +3,11 @@ import EventCard from "./EventCard";
 import { PaperSXX } from "../customMui/CustomMui";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
-import Loader from "../loader";
+import CustomLoader from "../CustomLoader";
 
 const itemsPerPage = 3;
 
-function EventShowcase({keyword}) {
+function EventShowcase({keyword, filters}) {
 
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
@@ -17,14 +17,24 @@ function EventShowcase({keyword}) {
        
   useEffect(() => {
 
-    axiosInstance.get('/booking/approved?approved=false')
+    console.log(filters.activityId, filters.neighborhood, filters.date)
+    let endpoint = ""
+
+    filters.activityId==null & filters.neighborhood==null & filters.date ==null ?
+    endpoint =  '/booking/approved?approved=false' :
+    endpoint =  `/booking/filter_endpoint?full=true&${filters.neighborhood ? `neighborhood=${filters.neighborhood}` : ''}&${filters.activityId ? `activityId=${filters.activityId}` : ''}&${filters.date ? `date=${filters.date}` : ''}`
+
+
+    axiosInstance.get(endpoint)
+    //axiosInstance.get('/booking/approved?approved=false')
+    //axiosInstance.get(`/booking/filter_endpoint?full=true&${filters.selectedNeighborhood ? `neighborhood=${filters.selectedNeighborhood}` : ''}&${filters.selectedActivityId ? `activityId=${filters.selectedActivityId}` : ''}&${filters.selectedDate ? `date=${filters.selectedDate}` : ''}`)
     .then((response) => {
       setBookings(response.data)
       setLoading(false)
     //   console.log(response.data)
     })
     .catch((error) => setError(error))
-  }, [])
+  }, [filters])
 
 
   const sortedBookings = bookings.sort((a, b) => {
@@ -46,7 +56,7 @@ function EventShowcase({keyword}) {
   };
 
   if (loading) {
-    return <Loader />;
+    return <CustomLoader />;
   }
 
   return (
@@ -85,14 +95,16 @@ function EventShowcase({keyword}) {
           )}
         </Grid>
         {keyword === 'Todos' && (
-          <Pagination
-            count={numPages}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
-            sx={{ mt: 2, justifyContent: 'center' }}
-          /> 
+          <Box sx={{display: 'flex', justifyContent: 'center'}}>
+            <Pagination
+              count={numPages}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              sx={{ my: 2, mx: 'auto'}}
+            /> 
+          </Box>
         )}
       </Paper>
     </Container>

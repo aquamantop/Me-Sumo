@@ -2,6 +2,7 @@ import { Box, Typography, Card, CardContent, CardMedia, Button, Link } from "@mu
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
 import { ButtonSX } from "../customMui/CustomMui";
+import CustomLoader from "../CustomLoader";
 
 function EventCard({ booking }) {
 
@@ -17,7 +18,7 @@ function EventCard({ booking }) {
     //   console.log(response.data.capacity)
     //   console.log(booking.participants)
     //   console.log(response.data.capacity - booking.participants)
-      const availability = response.data.capacity - booking.participants;
+      const availability = response.data.capacity - booking.participants.length;
       const cardData = {
         "clubName": name,
         "bookingName":booking.name,
@@ -28,11 +29,17 @@ function EventCard({ booking }) {
       }
       setInfo(cardData);
     //   console.log(cardData);
+      setLoading(false)
       return cardData;
     })
     .catch((error) => setError(error)) 
 
   }, [booking])
+
+
+  if (loading) {
+    return <CustomLoader />;
+  }
 
   return (
   <>
@@ -47,7 +54,7 @@ function EventCard({ booking }) {
       }}
     >
     <CardContent>
-      <Typography variant="h6" color="primary.main">
+      <Typography variant="h6" color="primary.main" noWrap>
         Club: {info.clubName}
       </Typography>
       <Typography variant="body2" color="primary.main" noWrap>{info.bookingName}</Typography>
