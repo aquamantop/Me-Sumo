@@ -54,10 +54,10 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
 const days = [
   { id: 1, name: 'Lunes' },
   { id: 2, name: 'Martes' },
-  { id: 3, name: 'Miércoles' },
+  { id: 3, name: 'Miercoles' },
   { id: 4, name: 'Jueves' },
   { id: 5, name: 'Viernes' },
-  { id: 6, name: 'Sábado' },
+  { id: 6, name: 'Sabado' },
   { id: 7, name: 'Domingo' },
 ];
 
@@ -88,7 +88,11 @@ const Slot = () => {
             };
 
             court.slots.forEach((slot) => {
-              const conjuntoDias = slot.days.map((day) => day.name).sort().join(", ");
+              const conjuntoDias = slot.days.map((day) => day.name).sort((a, b) => {
+                const dayA = days.find((day) => day.name === a);
+                const dayB = days.find((day) => day.name === b);
+                return dayA.id - dayB.id;
+              }).join(", ");
               const horario = `${slot.startTime} - ${slot.endTime}`;
 
               // Verificar si el conjunto de días ya existe en el arreglo
