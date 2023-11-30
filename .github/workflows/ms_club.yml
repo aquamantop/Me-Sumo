@@ -49,7 +49,7 @@ jobs:
         echo "Finished building the app."
 
     - name: Archive Club Build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: clubs
         path: backend/ms-clubs/target/ms_clubs.jar
@@ -61,7 +61,7 @@ jobs:
     steps:
 
     - name: Download Club Build Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: clubs
 

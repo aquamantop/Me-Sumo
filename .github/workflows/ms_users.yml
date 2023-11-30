@@ -48,7 +48,7 @@ jobs:
         echo "Finished building the app."
 
     - name: Archive User Build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: users
         path: backend/ms-users/target/ms_users.jar
@@ -60,7 +60,7 @@ jobs:
     steps: 
 
     - name: Download User Build Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: users
     
