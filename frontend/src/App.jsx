@@ -15,6 +15,7 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import { BookingProvider } from './hooks/bookingContext'
 import Profile from './pages/Profile'
+import NewPassword from './pages/NewPassword'
 
 function App() {
   const theme = createTheme({
@@ -71,6 +72,7 @@ function App() {
                 <Route path='/event/:id' element={<Booking />} />
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
+                <Route path='/new-password' element={<NewPassword/>}/>
               </Routes>
             </div>
             <Footer/>
