@@ -220,7 +220,6 @@ const Slot = () => {
                 <TableRow>
                   <TableCell>Cancha</TableCell>
                   <TableCell>Conjunto de Días</TableCell>
-                  <TableCell>Eliminar</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -232,16 +231,8 @@ const Slot = () => {
                         <div key={conjunto.dias}>
                           <strong>{conjunto.dias}:</strong>
                           {conjunto.horarios.map((horario) => (
-                            <div key={horario.id}>{horario.horario}</div>
-                          ))}
-                        </div>
-                      ))}
-                    </TableCell>
-                    <TableCell>
-                      {cancha.conjuntosDias.map((conjunto) => (
-                        <div key={conjunto.dias}>
-                          {conjunto.horarios.map((horario) => (
-                            <div key={horario.id}>
+                            <div key={horario.id} style={{ display: 'flex', alignItems: 'center' }}>
+                              <div>{horario.horario}</div>
                               <IconButton onClick={() => handleOpenDialog(horario.id)}>
                                 <DeleteIcon />
                               </IconButton>
