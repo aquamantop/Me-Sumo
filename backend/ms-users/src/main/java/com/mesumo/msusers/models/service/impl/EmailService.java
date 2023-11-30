@@ -7,11 +7,14 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.springframework.mail.SimpleMailMessage;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +39,28 @@ public class EmailService {
             throw new RuntimeException(e);
         }
     }
+//    private String loadWelcomeEmailTemplate() {
+//        try {
+//            Path path = new ClassPathResource("template/welcome-email-template.html").getFile().toPath();
+//            return Files.readString(path, StandardCharsets.UTF_8);
+//        } catch (IOException e) {
+//            // Handle exception
+//            return "Error al cargar el template"; // Or throw a more specific exception
+//        }
+//    }
     private String loadWelcomeEmailTemplate() {
         try {
-            Path path = new ClassPathResource("template/welcome-email-template.html").getFile().toPath();
-            return Files.readString(path, StandardCharsets.UTF_8);
+            InputStream inputStream = getClass().getResourceAsStream("/template/welcome-email-template.html");
+
+            if (inputStream != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                    return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+                }
+            } else {
+                return "Error al cargar el template: InputStream es nulo";
+            }
         } catch (IOException e) {
-            // Handle exception
-            return "Error al cargar el template"; // Or throw a more specific exception
+            return "Error al cargar el template: " + e.getMessage();
         }
     }
 
