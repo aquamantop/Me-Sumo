@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box } from '@mui/material';
 import axiosInstance from "../../../../hooks/api/axiosConfig";
-
+import { ButtonSX } from "../../../customMui/CustomMui";
 
 const CustomCalendar = ({ courtId, activityId }) => {
   const { id: clubId } = useParams();
@@ -109,7 +109,12 @@ const CustomCalendar = ({ courtId, activityId }) => {
             mb: 2,
           }}
           >
-          <Button variant="contained" color="secondary" onClick={handleBookAppointment}>
+          <Button 
+            variant="contained" 
+            fullWidth 
+            sx={{...ButtonSX ,m:2}}
+          // onClick={handleBookAppointment}
+          >
             Reservar cancha
           </Button>
         </Box> 
