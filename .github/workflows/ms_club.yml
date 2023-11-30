@@ -70,7 +70,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.DEPLOY_KEY_CLUB }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
+        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
 
