@@ -9,8 +9,6 @@ export const ClubInfo = ({ club }) => {
   const { bookingInfo, saveBookingInfo } = useBookingContext();
 
   const { description, amenities, url, activities, name, neighborhood  } = club
-
-  const images = [{ original: url, thumbnail: url }]
   
   useEffect(() => {
     saveBookingInfo({
@@ -31,11 +29,11 @@ export const ClubInfo = ({ club }) => {
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}>
             <ImageGallery
-                items={images}
-                showThumbnails={0}
-                showBullets={0}
-                showFullscreenButton={0}
-                showPlayButton={0} 
+                showThumbnails={false}
+                showBullets={false}
+                showFullscreenButton={false}
+                showPlayButton={false} 
+                items={[{srcSet: url}]}
               />
             </Grid>
             <Grid item xs={6}>
