@@ -1,9 +1,5 @@
 package com.mesumo.msbookings.models.entities;
 
-
-import com.mesumo.msbookings.models.dto.ActivityDTO;
-import com.mesumo.msbookings.models.dto.ClubDTO;
-import com.mesumo.msbookings.models.dto.SlotDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.sql.Time;
@@ -26,20 +22,24 @@ public class Booking {
 
     private Long creatorId;
 
-    //private ClubDTO club;
     private Long clubId;
+
     private String clubName;
+
     private String neighborhoodName;
 
-//    private ActivityDTO activity;
     private Long activityId;
+
     private String activityName;
+
     private Long courtId;
 
-//    private SlotDTO slot;
     private Long slotId;
+
     private Date date;
+
     private Time startTime;
+
     private Time endTime;
 
     @ManyToMany
