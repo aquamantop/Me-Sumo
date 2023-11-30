@@ -71,7 +71,6 @@ jobs:
         pwd
         ls -la
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl stop club.service"
-        scp ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
+        scp /backend/ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl start club.service"
         echo "Finished deploying the app."
-      working-directory: /backend
