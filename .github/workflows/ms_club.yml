@@ -69,7 +69,7 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.DEPLOY_KEY_CLUB }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        chmod 400 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
@@ -77,10 +77,9 @@ jobs:
     - name: Deploy Backend
       run: |
         echo "Deploying started..."
-        echo "Current directory contents:"
-        cat ~/.ssh/id_rsa
-        ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service && \
-        scp ~/club/ms_clubs.jar ubuntu@${HOST}:~/club && \
-        sudo systemctl start club.service"
+        ssh ubuntu@${HOST} sudo systemctl stop club.service
+        scp backend/club/ms_clubs.jar ubuntu@${HOST}:~/club
+        ssh ubuntu@${HOST} sudo systemctl start club.service
+        echo "Finished deploying the app."
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}

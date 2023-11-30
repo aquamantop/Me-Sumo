@@ -114,4 +114,4 @@ jobs:
         scp ms-gateway/target/ms_gateway.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}:~/app/gateway
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}} "sudo systemctl start gateway.service"
         echo "Finished deploying the app."
-      working-directory: /backend
+      working-directory: backend
