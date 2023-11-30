@@ -23,7 +23,7 @@ public class ClubController {
     public ResponseEntity<Club> getById(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        response = new ResponseEntity(service.findById(id), HttpStatus.OK);
+        response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 
         return response;
     }

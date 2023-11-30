@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ms-clubs" />
+        <module name="ms-bookings" />
+        <module name="ms-users" />
+        <module name="ms-discovery" />
+        <module name="ms-gateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ms-bookings" target="17" />
+      <module name="ms-clubs" target="17" />
+      <module name="ms-discovery" target="17" />
+      <module name="ms-gateway" target="17" />
+      <module name="ms-users" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ms-bookings" options="-parameters" />
+      <module name="ms-clubs" options="-parameters" />
+      <module name="ms-discovery" options="-parameters" />
+      <module name="ms-gateway" options="-parameters" />
+      <module name="ms-users" options="-parameters" />
+    </option>
+  </component>
+</project>

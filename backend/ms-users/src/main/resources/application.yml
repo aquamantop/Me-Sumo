@@ -33,6 +33,10 @@ spring:
       write_dates_as_timestamps: false
     date_format: yyyy-MM-dd
 
+  mail:
+    username: mesumo.contacto@gmail.com
+    password: dzzs ywni lmjo djnt
+
 eureka:
   instance:
 #    hostname: localhost
