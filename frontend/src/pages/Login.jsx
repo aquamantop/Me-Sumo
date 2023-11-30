@@ -33,18 +33,6 @@ export default function Login() {
 
   const onSubmit = handleSubmit(async (userData) => {
     const response = await new Promise((resolve) => {
-      // axios({
-      //   method: "POST",
-      //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json"
-      //   },
-      //   data: userData
-      // })
-      //console.log(userData);
-      //axiosInstance.defaults.headers.common['Accept'] = 'application/json';
-      //axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
       axiosInstance
         .post("/auth/login", userData)
         .then((response) => resolve(response))
@@ -151,6 +139,18 @@ export default function Login() {
             </Typography>
           )}
         </Stack>
+        <Typography
+          variant="body2"
+          mt={"16px"}
+          color="primary.main"
+          sx={{
+            letterSpacing: " 4.68px"
+          }}
+        >
+          <Link href="/forgot-password" underline="none" color="secondary.main">
+            Olvidé mi constraseña
+          </Link>
+        </Typography>
         <Typography
           variant="h5"
           mt={"36px"}
