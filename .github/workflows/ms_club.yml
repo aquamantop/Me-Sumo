@@ -44,8 +44,7 @@ jobs:
       run: |
         echo "Building app..."
         cd backend/ms-clubs
-        ls
-        mvn install --file pom.xml -X
+        mvn install --file pom.xml
         echo "Finished building the app."
 
     - name: Archive Backend Build
@@ -72,4 +71,4 @@ jobs:
         scp ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl start club.service"
         echo "Finished deploying the app."
-      working-directory: ./backend
+      working-directory: /backend
