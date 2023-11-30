@@ -212,7 +212,7 @@ const Slot = () => {
       ) : (
         <Paper>
           <Box p={2}>
-            <Typography variant="h5">Canchas del Club</Typography>
+            <Typography variant="h5">Horarios de turnos</Typography>
           </Box>
           <TableContainer>
             <Table>
