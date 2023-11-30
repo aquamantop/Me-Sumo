@@ -39,14 +39,19 @@ public class User implements UserDetails {
     private Neighborhood neighborhood;
 
     @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public String getNameUser(){
+        return userName;
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
     }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
