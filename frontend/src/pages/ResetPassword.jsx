@@ -7,11 +7,13 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import CustomInput from "../components/customInput/CustomInput"
 import { useNavigate } from "react-router-dom"
+import { useParams } from 'react-router';
 import Swal from "sweetalert2"
 import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
 
-export default function NewPassword() {
+export default function ResetPassword() {
+  const { token } = useParams();
   const navigate = useNavigate();
 
   const {
@@ -29,13 +31,12 @@ export default function NewPassword() {
 
 
   const onSubmit = handleSubmit(async (userData) => {
-    
-    // TODO - AGREGAR EL ENDPOINT PARA CAMBIAR LA CONTRASEÑA
-    /* const response = await new Promise((resolve) => {
-      axiosInstance.post("/auth/login", userData)
+    localStorage.setItem("accessToken", JSON.stringify(token));
+    const response = await new Promise((resolve) => {
+      axiosInstance.post("/auth/reset-password", userData)
         .then((response) => resolve(response))
         .catch((error) => setError(error))
-    }) */
+    })
 
     if (!error) {
       setError("")
@@ -59,16 +60,16 @@ export default function NewPassword() {
         className="content"
       >
         <Typography
-          variant="h3"
+          variant="h4"
           color="primary.main"
           sx={{
             letterSpacing: 13
           }}
         >
-          ¡Hola!
+          Nueva Contraseña
         </Typography>
         <Typography
-          variant="h4"
+          variant="h6"
           color="primary.main"
           sx={{
             fontWeight: "regular",
@@ -76,7 +77,7 @@ export default function NewPassword() {
             marginBottom: "36px"
           }}
         >
-          ¡Ingresa una nueva contraseña!
+          Ingresa tu nueva contraseña para completar el restablecimiento.
         </Typography>
         <Stack
           sx={{ margin: "auto", px: 5 }}
