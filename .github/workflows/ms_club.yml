@@ -67,6 +67,9 @@ jobs:
     - name: Deploy Backend
       run: |
         echo "Deploying started..."
+        echo "Current directory contents:"
+        pwd
+        ls -la
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl stop club.service"
         scp ms-clubs/target/ms_clubs.jar ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}}:~/club
         ssh ubuntu@${{secrets.DEPLOY_SERVER_IP_CLUB}} "sudo systemctl start club.service"
