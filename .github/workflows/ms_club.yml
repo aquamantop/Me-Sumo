@@ -27,6 +27,7 @@ jobs:
         aws-region: us-east-1
 
   build-club:
+    needs: config-aws
     name: Build Club with Maven
     runs-on: ubuntu-20.04
     steps:
@@ -68,10 +69,8 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         echo "${DEPLOY_KEY_CLUB}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        sleep 5  # Esperar 5 segundos antes de los comandos SSH
-        echo "HOST: $HOST"
-        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
+        chmod 400 ~/.ssh/id_rsa
+        ssh-keyscan ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
 
