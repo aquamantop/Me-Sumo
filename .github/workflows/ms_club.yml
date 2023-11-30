@@ -84,3 +84,4 @@ jobs:
         scp backend/ms-clubs/target/ms_clubs.jar ubuntu@${HOST}:~/club
         ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl start club.service"
         echo "Finished deploying the app."
+        
