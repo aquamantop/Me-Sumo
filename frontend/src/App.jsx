@@ -15,6 +15,7 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import Profile from './pages/Profile'
 import Slots from './pages/Slots'
+import Bookings from './pages/Bookings'
 
 function App() {
   const theme = createTheme({
@@ -71,6 +72,7 @@ function App() {
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
+                <Route path='/bookings/:idClub' element={<Bookings />} />
               </Routes>
             </div>
             <Footer/>
