@@ -50,7 +50,7 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
 
-    - name: Archive Backend Build
+    - name: Archive Eureka Build
       uses: actions/upload-artifact@v2
       with:
         name: eureka
@@ -63,7 +63,7 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
   
-    - name: Archive Backend Build
+    - name: Archive Gateway Build
       uses: actions/upload-artifact@v2
       with:
         name: gateway
@@ -107,9 +107,9 @@ jobs:
     - name: Build Api Gateway
       run: |
         echo "Deploying started..."
-        ssh ubuntu@${HOST} "sudo systemctl stop gateway.service"
+        ssh ubuntu@${HOST} sudo systemctl stop gateway.service
         scp ms_gateway.jar ubuntu@${HOST}:~/app/gateway
-        ssh ubuntu@${HOST} "sudo systemctl start gateway.service"
+        ssh ubuntu@${HOST} sudo systemctl start gateway.service
         echo "Finished deploying the app."
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
