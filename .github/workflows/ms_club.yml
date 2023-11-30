@@ -80,7 +80,7 @@ jobs:
         echo "Current directory contents:"
         cat ~/.ssh/id_rsa
         ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service && \
-        cp ~/club/ms_clubs.jar ubuntu@${HOST}:~/club && \
+        scp ~/club/ms_clubs.jar ubuntu@${HOST}:~/club && \
         sudo systemctl start club.service"
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
