@@ -4,9 +4,9 @@ import { Container, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { ExpandMore as ExpandMoreIcon, ExpandLess as ExpandLessIcon } from '@mui/icons-material';
 import axiosInstance from "../hooks/api/axiosConfig";
 
-const Bookings = () => {
+const Bookings = ({idClub}) => {
   const [bookings, setBookings] = useState([]);
-  const { idClub } = useParams(); // Reemplaza con el ID del club que deseas obtener las reservas
+  //const { idClub } = useParams(); // Reemplaza con el ID del club que deseas obtener las reservas
 
   useEffect(() => {
     const fetchBookings = async () => {

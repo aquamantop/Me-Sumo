@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from 'react-router';
 import {
   Container,
@@ -75,6 +76,18 @@ const Slot = () => {
   const [selectedCourt, setSelectedCourt] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleGoBack = () => {
+    
+  if (location.pathname === '/') {
+    navigate(-1);
+  } else {
+    navigate('/');
+  }
+  };
 
   useEffect(() => {
     axiosInstance.get(`/club/${id}`)
@@ -327,7 +340,14 @@ const Slot = () => {
           </FormContainer>
         </Paper>
       )}
+      <><div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <IconButton onClick={handleGoBack} variant="contained" color="primary">
+            Volver a reservas
+          </IconButton>
+        </div>
+      </>
     </Container>
+    
   );
 };
 
