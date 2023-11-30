@@ -6,22 +6,4 @@ const axiosInstance  = axios.create({
   //baseURL: "http://localhost:8090/", // Reemplaza con tu base URL
 });
 
-const getAccessToken = () => {
-  // Lógica para obtener el token de acceso, por ejemplo, desde el almacenamiento local
-  return localStorage.getItem("accessToken");
-};
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const accessToken = getAccessToken();
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${JSON.parse(accessToken)}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 export default axiosInstance ;
