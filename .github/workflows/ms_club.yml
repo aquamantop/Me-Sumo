@@ -78,8 +78,7 @@ jobs:
       run: |
         echo "Deploying started..."
         echo "Current directory contents:"
-        pwd
-        ls -la
+        cat ~/.ssh/id_rsa
         ssh -o BatchMode=yes ubuntu@${HOST} "sudo systemctl stop club.service && \
         cp ~/club/ms_clubs.jar ubuntu@${HOST}:~/club && \
         sudo systemctl start club.service"
