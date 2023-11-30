@@ -1,14 +1,25 @@
+import React, { useEffect } from "react";
 import { Grid, Typography, Box, Link, Button, Card } from "@mui/material";
-import EventCard from "../eventShowcase/EventCard";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
 import CourtCard from "./courtCard/CourtCard";
+import { useBookingContext } from '../../hooks/bookingContext';
 
 export const ClubInfo = ({ club }) => {
+  const { bookingInfo, saveBookingInfo } = useBookingContext();
 
-  const { description, amenities, url, activities  } = club
+  const { description, amenities, url, activities, name, neighborhood  } = club
 
-  const images = [{original: url, thumbnail: url}]
+  const images = [{ original: url, thumbnail: url }]
+  
+  useEffect(() => {
+    saveBookingInfo({
+      ...bookingInfo,
+        clubName: name,
+        neighborhoodName: neighborhood.name
+      })
+  }, [])
+
 
   return (
     <>
@@ -59,23 +70,12 @@ export const ClubInfo = ({ club }) => {
               {activities.map((activity) => (
                 activity.courts.sort((a, b) => a.id - b.id).map((court) => {
                   return <Grid item xs={12} sm={6} key={court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court} activityId={activity.id}/>
+                      <CourtCard court={court} activityId={activity.id} activityName={activity.name +" "+ activity.type} />
                   </Grid>
                 })
               ))} 
             </Grid>
           </Grid>
-          <Box mt={2} textAlign="center">
-            <Link href="/new-event">
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ my: 2 }}
-              >
-                Crear evento
-              </Button>
-            </Link>
-          </Box>
         </Grid>
       </Grid>
     </>

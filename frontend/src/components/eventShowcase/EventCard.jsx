@@ -18,7 +18,7 @@ function EventCard({ booking }) {
     //   console.log(response.data.capacity)
     //   console.log(booking.participants)
     //   console.log(response.data.capacity - booking.participants)
-      const availability = response.data.capacity - booking.participants;
+      const availability = response.data.capacity - booking.participants.length;
       const cardData = {
         "clubName": name,
         "bookingName":booking.name,
