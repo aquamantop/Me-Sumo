@@ -51,13 +51,17 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
+const normalizeString = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 const days = [
   { id: 1, name: 'Lunes' },
   { id: 2, name: 'Martes' },
-  { id: 3, name: 'Miercoles' },
+  { id: 3, name: 'Miércoles' },
   { id: 4, name: 'Jueves' },
   { id: 5, name: 'Viernes' },
-  { id: 6, name: 'Sabado' },
+  { id: 6, name: 'Sábado' },
   { id: 7, name: 'Domingo' },
 ];
 
@@ -88,9 +92,9 @@ const Slot = () => {
             };
 
             court.slots.forEach((slot) => {
-              const conjuntoDias = slot.days.map((day) => day.name).sort((a, b) => {
-                const dayA = days.find((day) => day.name === a);
-                const dayB = days.find((day) => day.name === b);
+              const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
+                const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
+                const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
                 return dayA.id - dayB.id;
               }).join(", ");
               const horario = `${slot.startTime} - ${slot.endTime}`;
@@ -162,7 +166,11 @@ const Slot = () => {
         // Actualizar la lista de canchas después de agregar el slot
         const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
-            const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort().join(", ");
+            const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort((a, b) => {
+              const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
+              const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
+              return dayA.id - dayB.id;
+            }).join(", ");
             const horario = `${startTime} - ${endTime}`;
             const conjuntoExistente = cancha.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
             if (conjuntoExistente) {
