@@ -68,7 +68,7 @@ jobs:
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
-        echo "${DEPLOY_KEY_CLUB}" > ~/.ssh/id_rsa
+        echo "${{ secrets.DEPLOY_KEY_CLUB }}" > ~/.ssh/id_rsa
         chmod 400 ~/.ssh/id_rsa
         ssh-keyscan ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
       env:
