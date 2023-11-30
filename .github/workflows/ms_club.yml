@@ -69,9 +69,11 @@ jobs:
         mkdir -p ~/.ssh
         echo "${DEPLOY_KEY_CLUB}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{secrets.DEPLOY_SERVER_IP_CLUB}} >> ~/.ssh/known_hosts
+        sleep 5  # Esperar 5 segundos antes de los comandos SSH
+        echo "HOST: $HOST"
+        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
       env:
-        HOST: ${{secrets.DEPLOY_SERVER_IP_CLUB}}
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
 
     - name: Deploy Backend
       run: |
