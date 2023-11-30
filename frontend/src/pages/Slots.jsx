@@ -156,9 +156,9 @@ const Slot = () => {
       .post('/slot/add', slotData)
       .then((response) => {
         // Actualizar la lista de canchas después de agregar el slot
-        /*const updatedCanchas = canchas.map((cancha) => {
+        const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
-            const conjuntoDias = daysToAdd.map((day) => days.find((item) => item.id === day.id).name).sort().join(", ");
+            const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort().join(", ");
             const horario = `${startTime} - ${endTime}`;
             const conjuntoExistente = cancha.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
             if (conjuntoExistente) {
@@ -169,8 +169,7 @@ const Slot = () => {
           }
           return cancha;
         });
-        setCanchas(updatedCanchas);*/
-        window.location.reload();
+        setCanchas(updatedCanchas);
       })
       .catch((error) => console.error(error));
   
