@@ -36,7 +36,7 @@ function BookingSearch( {onUpdateFilters} ) {
         try {
             const response = await axiosInstance.get('/activity/');
             const mapping = response.data.reduce((acc, activity) => {
-                const key = `${activity.type} ${activity.name}`;
+                const key = `${activity.name} ${activity.type} `;
                 acc[key] = activity.id;
                 return acc;
             }, {});
@@ -76,7 +76,7 @@ function BookingSearch( {onUpdateFilters} ) {
     useEffect(() => {
         const allClubActivities = clubs.flatMap((club) =>
             club.activities.map((activity) => ({
-                label: `${activity.type} ${activity.name}`,
+                label: `${activity.name} ${activity.type}`,
                 value: activity.id,
             }))
         );

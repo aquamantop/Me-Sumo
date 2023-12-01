@@ -7,9 +7,10 @@ import { ButtonSX } from "../../../customMui/CustomMui";
 import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
-const CustomCalendar = ({ courtId, activityId, activityName }) => {
+const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
   const { id } = useParams();
-  const clubId = parseInt(id)
+  
+  clubId === null  && parseInt(id)
 
   const { bookingInfo, saveBookingInfo } = useBookingContext();
 

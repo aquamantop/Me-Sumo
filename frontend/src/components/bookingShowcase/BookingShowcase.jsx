@@ -7,7 +7,7 @@ import axiosInstance from "../../hooks/api/axiosConfig";
 import CustomLoader from "../CustomLoader";
 
 
-const BookingShowcase = ({activityId, clubId}) => {
+const BookingShowcase = ({ clubId, activityId }) => {
 
     const [courts, setCourts] = useState([])
     const [error, setError] = useState(null);
@@ -15,14 +15,13 @@ const BookingShowcase = ({activityId, clubId}) => {
 
     useEffect(() => {
 
-        console.log(activityId, clubId)
+        console.log(clubId, activityId)
 
         if (activityId !== null && clubId !== null) {
             axiosInstance.get(`/court/club-activity?clubId=${clubId}&activityId=${activityId}`)
             .then((response) => {
                 setCourts(response.data)
                 setLoading(false)
-                console.log(response.data)
             })
         } else {
             setLoading(false);
@@ -31,7 +30,11 @@ const BookingShowcase = ({activityId, clubId}) => {
   
     return (
       <>
-        <Container sx={{ mb: 2 }}>
+        <Container sx={{ 
+            mb: 2 
+            // , backgroundImage: courts.length!=0  ? courts[0].club.url : 'none'
+            // , backgroundSize: 'cover'
+        }}>
           <Paper sx={PaperSXX}>
             <Box sx={BoxSX}>
               <Typography variant="h5" color="primary.main">
@@ -49,10 +52,10 @@ const BookingShowcase = ({activityId, clubId}) => {
                 <Grid item xs={12} key={index}>
                   <Accordion sx={{background:'none'}}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography variant="h6" color="secondary.main" sx={{fontSize:'22px'}}>{court.club.name} | {court.activity.name}-{court.activity.type} | {court.name} </Typography>
+                      <Typography variant="h6" color="secondary.main" sx={{fontSize:'22px'}}>  {court.name} | {court.club.name} | {court.activity.name}-{court.activity.type} </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <CourtCard court={court} activityId={1} />
+                      <CourtCard court={court} activityId={activityId} activityName={court.activity.name} clubId={clubId} />
                     </AccordionDetails>
                   </Accordion>
                 </Grid>
