@@ -6,124 +6,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axiosInstance from "../../hooks/api/axiosConfig";
 import CustomLoader from "../CustomLoader";
 
-//const itemsPerPage = 5;
-const cards = [1,2,3,4,5,6,7,8,9,10];
-const court = {
-    "id": 1,
-    "name": "Cancha 1 F5",
-    "court_type": "CESPED_SINTETICO",
-    "inside": false,
-    "slots": [
-        {
-            "id": 13,
-            "capacity": 10,
-            "days": [
-                {
-                    "id": 7,
-                    "name": "Domingo"
-                },
-                {
-                    "id": 2,
-                    "name": "Martes"
-                },
-                {
-                    "id": 4,
-                    "name": "Jueves"
-                },
-                {
-                    "id": 5,
-                    "name": "Viernes"
-                },
-                {
-                    "id": 6,
-                    "name": "Sabado"
-                },
-                {
-                    "id": 3,
-                    "name": "Miercoles"
-                },
-                {
-                    "id": 1,
-                    "name": "Lunes"
-                }
-            ],
-            "startTime": "16:00:00",
-            "endTime": "17:00:00"
-        },
-        {
-            "id": 47,
-            "capacity": 10,
-            "days": [
-                {
-                    "id": 5,
-                    "name": "Viernes"
-                },
-                {
-                    "id": 3,
-                    "name": "Miercoles"
-                },
-                {
-                    "id": 1,
-                    "name": "Lunes"
-                }
-            ],
-            "startTime": "19:00:00",
-            "endTime": "20:00:00"
-        },
-        {
-            "id": 46,
-            "capacity": 10,
-            "days": [
-                {
-                    "id": 4,
-                    "name": "Jueves"
-                }
-            ],
-            "startTime": "17:00:00",
-            "endTime": "18:00:00"
-        },
-        {
-            "id": 50,
-            "capacity": 10,
-            "days": [
-                {
-                    "id": 5,
-                    "name": "Viernes"
-                },
-                {
-                    "id": 3,
-                    "name": "Miercoles"
-                },
-                {
-                    "id": 1,
-                    "name": "Lunes"
-                }
-            ],
-            "startTime": "19:00:00",
-            "endTime": "20:00:00"
-        },
-        {
-            "id": 51,
-            "capacity": 10,
-            "days": [
-                {
-                    "id": 5,
-                    "name": "Viernes"
-                },
-                {
-                    "id": 3,
-                    "name": "Miercoles"
-                },
-                {
-                    "id": 1,
-                    "name": "Lunes"
-                }
-            ],
-            "startTime": "19:00:00",
-            "endTime": "20:00:00"
-        }
-    ]
-}
 
 const BookingShowcase = ({activityId, clubId}) => {
 
@@ -131,30 +13,12 @@ const BookingShowcase = ({activityId, clubId}) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // const [page, setPage] = useState(1);
-    // const startIndex = (page - 1) * itemsPerPage;
-    // const endIndex = startIndex + itemsPerPage;
-    // const paginatedCourts = cards.slice(startIndex, endIndex);
-    // const numPages = Math.ceil(cards.length / itemsPerPage);
-
-    // const handlePageChange = (event, value) => {
-    //   setPage(value);
-    // };
-
-    // if (loading) {
-    //     return <CustomLoader />;
-    // }
-
     useEffect(() => {
 
-        // console.log(filters.activityId, filters.neighborhood, filters.date)
-        //let endpoint = ""
-  
-        //filters.activityId==null & filters.neighborhood==null & filters.date ==null ?
-        //endpoint =  '/booking/approved?approved=false' :
-        //endpoint =  `/booking/filter_endpoint?full=true&${filters.neighborhood ? `neighborhood=${filters.neighborhood}` : ''}&${filters.activityId ? `activityId=${filters.activityId}` : ''}&${filters.date ? `date=${filters.date}` : ''}`
+        console.log(activityId, clubId)
+
         if (activityId !== null && clubId !== null) {
-            axiosInstance.get('/court/')
+            axiosInstance.get(`/court/club-activity?clubId=${clubId}&activityId=${activityId}`)
             .then((response) => {
                 setCourts(response.data)
                 setLoading(false)
@@ -164,9 +28,6 @@ const BookingShowcase = ({activityId, clubId}) => {
             setLoading(false);
         }
     }, [activityId, clubId]);
-  
-
-
   
     return (
       <>
@@ -184,11 +45,11 @@ const BookingShowcase = ({activityId, clubId}) => {
                     Aplique los filtros para encontrar las canchas disponibles
                 </Typography>
                 </Box> :
-              courts.map((slot, index) => (
+                courts.map((court, index) => (
                 <Grid item xs={12} key={index}>
                   <Accordion sx={{background:'none'}}>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography variant="h6" sx={{fontSize:'14px'}}>{` Club${index + 1} | Cancha - ${index + 1}`}</Typography>
+                      <Typography variant="h6" color="secondary.main" sx={{fontSize:'22px'}}>{court.club.name} | {court.activity.name}-{court.activity.type} | {court.name} </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <CourtCard court={court} activityId={1} />

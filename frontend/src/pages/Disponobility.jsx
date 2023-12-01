@@ -7,7 +7,7 @@ import BookingShowcase from "../components/bookingShowcase/BookingShowcase";
 function Disponibility() {
   const [selectedFilters, setSelectedFilters] = useState({
     activityId: null,
-    club: null,
+    clubId: null,
   });
 
   const handleFilterChange = (filters) => {
@@ -35,7 +35,7 @@ function Disponibility() {
         <Grid item xs={12} sm={9} sx={{ overflowY: 'auto', scrollbarWidth: 'thin' }}>
           <BookingShowcase
             activityId={selectedFilters.activityId}
-            clubId={selectedFilters.club}
+            clubId={selectedFilters.clubId}
           />
         </Grid>
       </Grid>

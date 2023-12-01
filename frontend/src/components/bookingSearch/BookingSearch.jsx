@@ -53,6 +53,9 @@ function BookingSearch( {onUpdateFilters} ) {
 
     const handleClubChange = (event, value) => {
         setSelectedClub(value);
+        console.log('Clubesssssss')
+        console.log(value)
+        console.log(value.id)
     };
 
     const handleButtonClick = () => {
@@ -80,7 +83,7 @@ function BookingSearch( {onUpdateFilters} ) {
         const uniqueActivities = Array.from(new Set(allClubActivities.map(activity => activity.label)))
             .map(label => allClubActivities.find(activity => activity.label === label));
         setFilteredActivities(uniqueActivities);
-    }, [clubs]);
+    }, [clubs, selectedClub]);
 
 
     useEffect(() => {
