@@ -72,9 +72,9 @@ public class AuthService {
         if (!jwtService.isResetTokenValid(token)) {
             throw new IllegalArgumentException("Token inválido o expirado");
         }
-        String username = jwtService.getUsernameFromToken(token);
+        String email = jwtService.getEmailFromToken(token);
 
-        User user = userRepository.findByEmail(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
         user.setPassword(passwordEncoder.encode(password));

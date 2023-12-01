@@ -51,7 +51,7 @@ jobs:
         echo "Finished building the app."
 
     - name: Archive Eureka Build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: eureka
         path: backend/ms-discovery/target/ms_discovery.jar
@@ -64,7 +64,7 @@ jobs:
         echo "Finished building the app."
   
     - name: Archive Gateway Build
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: gateway
         path: backend/ms-gateway/target/ms_gateway.jar
@@ -85,7 +85,7 @@ jobs:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
 
     - name: Download Eureka Build Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: eureka
 
@@ -100,7 +100,7 @@ jobs:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
 
     - name: Download Gateway Build Artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: gateway
 
