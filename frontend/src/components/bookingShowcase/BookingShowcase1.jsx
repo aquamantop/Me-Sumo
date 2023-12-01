@@ -1,13 +1,13 @@
-import React, { useEffect , useState } from 'react';
-import { Box, Container, Grid, Typography, Paper, Pagination, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import { PaperSXX, BoxSX } from '../customMui/CustomMui';
-import CourtCard from '../clubShowcase/courtCard/CourtCard';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Container, Grid, Typography, Paper, Pagination } from "@mui/material";
+import { PaperSXX , BoxSX} from "../customMui/CustomMui";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../../hooks/api/axiosConfig";
 import CustomLoader from "../CustomLoader";
+import CourtCard from "../clubShowcase/courtCard/CourtCard";
 
-//const itemsPerPage = 5;
-const cards = [1,2,3,4,5,6,7,8,9,10];
+
+const itemsPerPage = 2;
+const cards = [1,2,3];
 const court = {
     "id": 1,
     "name": "Cancha 1 F5",
@@ -125,84 +125,97 @@ const court = {
     ]
 }
 
-const BookingShowcase = ({activityId, clubId}) => {
+const BookingShowcase1 = () => {
 
-    const [courts, setCourts] = useState([])
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
 
+    //axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
+    // const [clubs, setClubs] = useState([]);
+    // const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(true);
     // const [page, setPage] = useState(1);
+  
+    // useEffect(() => {
+    //   // axios({
+    //   //   method: "GET",
+    //   //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/club/",
+    //   //   headers: {
+    //   //     Accept: "application/json",
+    //   //     "Content-Type": "application/json"
+    //   //   }
+    //   // })
+    //   axiosInstance.get('/club/')
+    //     .then((response) => {
+    //       setClubs(response.data)
+    //       setLoading(false)
+    //   })
+    //   .catch((error) => setError(error))
+    // }, [])
+  
+  
     // const startIndex = (page - 1) * itemsPerPage;
     // const endIndex = startIndex + itemsPerPage;
-    // const paginatedCourts = cards.slice(startIndex, endIndex);
-    // const numPages = Math.ceil(cards.length / itemsPerPage);
-
+    // const paginatedBookings = clubs.slice(startIndex, endIndex);
+  
+    // const numPages = Math.ceil(clubs.length / itemsPerPage);
+  
     // const handlePageChange = (event, value) => {
     //   setPage(value);
     // };
-
+  
     // if (loading) {
-    //     return <CustomLoader />;
+    //   return <CustomLoader />;
     // }
-
-    useEffect(() => {
-
-        // console.log(filters.activityId, filters.neighborhood, filters.date)
-        //let endpoint = ""
-  
-        //filters.activityId==null & filters.neighborhood==null & filters.date ==null ?
-        //endpoint =  '/booking/approved?approved=false' :
-        //endpoint =  `/booking/filter_endpoint?full=true&${filters.neighborhood ? `neighborhood=${filters.neighborhood}` : ''}&${filters.activityId ? `activityId=${filters.activityId}` : ''}&${filters.date ? `date=${filters.date}` : ''}`
-        if (activityId !== null && clubId !== null) {
-            axiosInstance.get('/court/')
-            .then((response) => {
-                setCourts(response.data)
-                setLoading(false)
-                console.log(response.data)
-            })
-        } else {
-            setLoading(false);
-        }
-    }, [activityId, clubId]);
-  
-
-
   
     return (
       <>
-        <Container sx={{ mb: 2 }}>
-          <Paper sx={PaperSXX}>
-            <Box sx={BoxSX}>
-              <Typography variant="h5" color="primary.main">
-                Canchas disponibles
-              </Typography>
-            </Box>
-            <Grid container>
-                {courts.length === 0 ?
-                <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>  
-                <Typography variant="h6" color="secondary.main" sx={{paddingTop:'100px', paddingBottom:'100px'}}>
-                    Aplique los filtros para encontrar las canchas disponibles
-                </Typography>
-                </Box> :
-              courts.map((slot, index) => (
-                <Grid item xs={12} key={index}>
-                  <Accordion sx={{background:'none'}}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography variant="h6" sx={{fontSize:'14px'}}>{` Club${index + 1} | Cancha - ${index + 1}`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <CourtCard court={court} activityId={1} />
-                    </AccordionDetails>
-                  </Accordion>
+      {/* { loading && <p>Loading...</p>}
+        {
+          !loading && ( */}
+            <Container sx={{ mb: 2 }}>
+              <Paper sx={PaperSXX}>
+                <Box sx={BoxSX}>
+                  <Typography variant="h5" color="primary.main">
+                    Canchas disponibles
+                  </Typography>
+                </Box>
+                <Grid container>
+                  <Typography variant="h6" color="primary.main">
+                    {cards.length == 0 ? "No hay clubes disponibles" : ""}
+                  </Typography>
+                  {cards.map((card, index) => {
+                    return (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        key={index}
+                        sx={{ p: 2 }}
+                      >
+                        <CourtCard
+                          court={court} 
+                          activityId={1}
+                        />
+                      </Grid>
+                    )
+                  }
+                  )}
                 </Grid>
-              ))}
-            </Grid>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            </Box>
-          </Paper>
-        </Container>
-      </>
+                <Box sx={{display: 'flex', justifyContent: 'center'}}>
+                  <Pagination
+                  count={1}
+                  page={1}
+                //   onChange={handlePageChange}
+                  color="primary"
+                  size="large"
+                  sx={{ my: 2 }}
+                  />
+                </Box>
+              </Paper>
+            </Container>
+          {/* )} */}
+    </>
     );
+
   };
-  
-  export default BookingShowcase;
+export default BookingShowcase1

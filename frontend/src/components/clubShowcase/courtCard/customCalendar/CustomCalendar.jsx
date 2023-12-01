@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers';
-import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box } from '@mui/material';
+import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box, Link } from '@mui/material';
 import axiosInstance from "../../../../hooks/api/axiosConfig";
 import { ButtonSX } from "../../../customMui/CustomMui";
+import { useBookingContext } from '../../../../hooks/bookingContext';
 
-const CustomCalendar = ({ courtId, activityId }) => {
-  const { id: clubId } = useParams();
+
+const CustomCalendar = ({ courtId, activityId, activityName }) => {
+  const { id } = useParams();
+  const clubId = parseInt(id)
+
+  const { bookingInfo, saveBookingInfo } = useBookingContext();
 
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null);
 
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     axiosInstance.get(`booking/court_slots?clubId=${clubId}&courtId=${courtId}&activityId=${activityId}`)
@@ -23,6 +28,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
         setLoading(false);
       })
       .catch((error) => setError(error));
+      console.log(clubId, courtId, activityId)
   }, []);
 
   function reorganizarDatos(datosEntrada) {
@@ -43,19 +49,30 @@ const CustomCalendar = ({ courtId, activityId }) => {
   const handleDateChange = (date) => {
     const formatDate = new Date(date).toISOString().split('T')[0];
     setSelectedDate(formatDate)
-    setSelectedHour(null)
+    setSelectedSlot(null)
   };
 
   const availableHoursForSelectedDate = selectedDate ? booking[selectedDate] : []
 
-  const handleHourChange = (hour) => {
-    setSelectedHour(hour)
+  const handleHourChange = (id) => {
+    setSelectedSlot(id)
   };
 
-  const handleBookAppointment = () => {
-    console.log('Fecha seleccionada:', selectedDate);
-    console.log('ID Hora seleccionada:', selectedHour);
-    // Agrega tu lógica de reserva aquí
+  const handleBooking = () => {
+    const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot)
+    
+    if (data) {
+      saveBookingInfo({
+        ...bookingInfo,
+        selectedDate,
+        selectedHour: data.startTime,
+        slotId: data.id,
+        clubId,
+        courtId,
+        activityId,
+        activityName
+      });
+    }
   };
 
 
@@ -80,7 +97,7 @@ const CustomCalendar = ({ courtId, activityId }) => {
             }}
         >
           <ToggleButtonGroup
-            value={selectedHour}
+            value={selectedSlot}
             exclusive
             size="small"
             color="secondary"
@@ -90,14 +107,16 @@ const CustomCalendar = ({ courtId, activityId }) => {
               availableHoursForSelectedDate
                 .flatMap((timeSlot) => {
                   const startHour = parseInt(timeSlot.startTime.split(':')[0], 10);
-                  return [{ id: timeSlot.id, startHour }];
+                  return [{ id: timeSlot.id, startHour: `${startHour}:00` }];
                 })
                 .sort((a, b) => a.startHour - b.startHour)
-                .map((timeSlot) => (
+              .map((timeSlot) => {
+                return (
                   <ToggleButton key={timeSlot.id} variant="outlined" value={timeSlot.id}>
-                    {`${timeSlot.startHour}:00`}
+                    {timeSlot.startHour}
                   </ToggleButton>
-              ))
+                )
+              })
             )}
           </ToggleButtonGroup>
         </Box>
@@ -109,14 +128,15 @@ const CustomCalendar = ({ courtId, activityId }) => {
             mb: 2,
           }}
           >
+        <Link href="/new-event">
           <Button 
             variant="contained" 
             fullWidth 
             sx={{...ButtonSX ,m:2}}
-          // onClick={handleBookAppointment}
           >
-            Reservar cancha
+            Confirmar evento
           </Button>
+        </Link>
         </Box> 
     </>
   ); 

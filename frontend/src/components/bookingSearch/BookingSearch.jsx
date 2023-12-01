@@ -1,207 +1,201 @@
-import React, { useEffect, useState } from "react";
-import { Box } from "@mui/system";
+import React, { useState, useEffect } from 'react';
 import {
-    Typography,
-    Button,
-    TextField,
-    InputAdornment,
-    IconButton,
-    Autocomplete,
-    Paper,
-    createTheme,
-    ThemeProvider
-} from "@mui/material";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
-import CategoryIcon from '@mui/icons-material/Category';
-import { styled } from "@mui/material/styles";
-import { DesktopDatePicker, StaticDatePicker, TimePicker } from "@mui/x-date-pickers";
+  Button,
+  Autocomplete,
+  Box,
+  Typography,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from '@mui/material';
+import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
+import axiosInstance from '../../hooks/api/axiosConfig';
 import { ButtonSX, TextFieldSX, CustomTextField  } from "../customMui/CustomMui";
-import  axiosInstance  from "../../hooks/api/axiosConfig";
-import CustomLoader from "../CustomLoader";
-import dayjs from 'dayjs';
+
+function BookingSearch( {onUpdateFilters} ) {
+    const [activities, setActivities] = useState([]);
+    const [clubs, setClubs] = useState([]);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+    const [selectedClub, setSelectedClub] = useState(null);
+    const [filteredClubs, setFilteredClubs] = useState([]);
+    const [filteredActivities, setFilteredActivities] = useState([]);
+    const [mappedActivities, setMappedActivities] = useState({})
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+    const fetchClubs = async () => {
+        try {
+            const response = await axiosInstance.get('/club/');
+            setClubs(response.data);
+            setFilteredClubs(response.data.map((club) => club.name));
+        } catch (error) {
+            console.error('Error fetching clubs:', error);
+        }
+    };
+
+    const fetchActivities = async () => {
+        try {
+            const response = await axiosInstance.get('/activity/');
+            const mapping = response.data.reduce((acc, activity) => {
+                const key = `${activity.type} ${activity.name}`;
+                acc[key] = activity.id;
+                return acc;
+            }, {});
+            setMappedActivities(mapping);
+            setActivities(mapping);
+        } catch (error) {
+            console.error('Error fetching activities:', error);
+        }
+    };
+
+    const handleActivityChange = (event, value) => {
+        setSelectedActivity(value);
+    };
+
+    const handleClubChange = (event, value) => {
+        setSelectedClub(value);
+    };
+
+    const handleButtonClick = () => {
+        onUpdateFilters({
+            activityId: selectedActivity.value,
+            clubId: selectedClub.id,
+        });
+        console.log(selectedActivity.value, selectedClub.id)
+    };
 
 
-function BookingSearch({ onUpdateFilters }) {
-
-    // const today = new Date();
-    // const [bookings, setBookings] = useState([]);
-    // const [activities, setActivities] = useState([]);
-    // const [activitiesMap, setActivitiesMap] = useState({});
-    // const [neighborhoods, setNeighborhoods] = useState([]);
-    // const [dates, setDates] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [selectedActivity, setSelectedActivity] = useState(null);
-    // const [selectedActivityId, setSelectedActivityId] = useState(null);
-    // const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
-    // const [selectedDate, setSelectedDate] = useState(null);
-
-    // const shouldDisableDate = (date) => {
-    //     if (!date || !dayjs(date).isValid()) {
-    //         return true;
-    //     }
-    //     const formattedDate = dayjs(date).format('YYYY-MM-DD');        
-    //     return !dates.includes(formattedDate);
-    // };
+    useEffect(() => {
+        fetchClubs();
+        fetchActivities();
+    }, []);
 
 
-    // useEffect(() => {
-    //     const fetchBookings = async () => {
-    //         try {
-
-    //             //if (selectedActivity!=null) setSelectedActivityId(activitiesMap[selectedActivity]);
-
-    //             const response = await axiosInstance.get(`/booking/filter_endpoint?${selectedNeighborhood ? `neighborhood=${selectedNeighborhood}` : ''}&${selectedActivityId ? `activityId=${selectedActivityId}` : ''}&${selectedDate ? `date=${selectedDate}` : ''}`);
-
-    //             setNeighborhoods(response.data.neighborhood);
-    //             setActivities(response.data.activities.map(activity => activity.name));
-    //             setActivitiesMap(
-    //                 response.data.activities.reduce((acc, activity) => {
-    //                     acc[activity.name] = activity.id;
-    //                     return acc;
-    //                 }, {})
-    //             );
-    //             setDates(response.data.bookingDates);
-    //             setLoading(false);
-    //             console.log(response.data.bookingDates)
-    //         } catch (error) {
-    //             console.error('Error fetching bookings:', error);
-    //         }
-    //     };
-    //     fetchBookings();
-    // }, [selectedActivity, selectedNeighborhood, selectedDate]);
+    useEffect(() => {
+        const allClubActivities = clubs.flatMap((club) =>
+            club.activities.map((activity) => ({
+                label: `${activity.type} ${activity.name}`,
+                value: activity.id,
+            }))
+        );
+        const uniqueActivities = Array.from(new Set(allClubActivities.map(activity => activity.label)))
+            .map(label => allClubActivities.find(activity => activity.label === label));
+        setFilteredActivities(uniqueActivities);
+    }, [clubs]);
 
 
-    // const handleActivityChange = (selectedValue) => {
-    //     setSelectedActivity(selectedValue);
-    //     setSelectedActivityId(activitiesMap[selectedValue]);
-    // };
+    useEffect(() => {
+        console.log(filteredClubs);
+        if (selectedActivity) {
+            console.log(selectedActivity.value)
+            const selectedActivityId = selectedActivity.value
+  
+            console.log(selectedActivityId);
+            setFilteredClubs(
+                clubs.filter((club) =>
+                club.activities.some((activity) => activity.id === selectedActivityId)
+                )
+            );
+        }
+    }, [selectedActivity, clubs, activities]);
+
+
+    useEffect(() => {
+        if (selectedActivity && selectedClub) {
+            setIsButtonDisabled(false);
+        } else {
+            setIsButtonDisabled(true);
+        }
+    }, [selectedActivity, selectedClub]);
     
-    // const handleNeighborhoodChange = (selectedNeighborhood) => {
-    //     setSelectedNeighborhood(selectedNeighborhood);
-    // };
-
-    // const handleDateChange = (date) => {
-    //     if (!date || !dayjs(date).isValid()) {
-    //         return true;
-    //     }
-    //     const formattedDate = dayjs(date).format('YYYY-MM-DD');  
-    //     console.log(formattedDate)
-    //     setSelectedDate(formattedDate)
-    // };
-
-
-    // if (loading) {
-    //     return <CustomLoader />;
-    // }
 
     return (
         <>
             <Box
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    mx:2,
-                    position: "sticky",
-                    top: "140px"
-
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    mx: 2,
+                    position: 'sticky',
+                    top: '140px',
                 }}
             >
                 <Typography variant="h5" component="h5" color="primary.main">
-                    Buscar diponibilidad
+                    Buscar disponibilidad
                 </Typography>
-                    
+
                 <Autocomplete
                     id="activity"
                     disablePortal
                     fullWidth
-                    options={["actividad1","actividad2"]}
-                    // value={selectedActivity}
-                    // onChange={(event, value) => handleActivityChange(value)}
-                    renderInput={(params)=>
+                    options={filteredActivities}
+                    getOptionLabel={(option) => option.label || ''}
+                    value={selectedActivity}
+                    onChange={handleActivityChange}
+                    renderInput={(params) => (
                     <TextField
-                    {...params}
+                        {...params}
                         label="Elegir Actividad"
                         id="custom-css-outlined-input"
-                        sx={{ mt: 2}}
+                        sx={{ mt: 2 }}
                         InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton>
-                                        <AccessibilityNewOutlinedIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
+                        ...params.InputProps,
+                        startAdornment: (
+                            <InputAdornment position="start">
+                            <IconButton>
+                                <AccessibilityNewOutlinedIcon />
+                            </IconButton>
+                            </InputAdornment>
+                        ),
                         }}
                     />
-                    }
+                    )}
                 />
 
                 <Autocomplete
-                id="club"
-                disablePortal
-                fullWidth
-                options={["club1","club2"]}
-                // value={selectedNeighborhood}
-                // onChange={(event, value) => handleNeighborhoodChange(value)}
-                renderInput={(params)=>
-                   <TextField
-                   {...params}
-                   label="Elegir Club"
-                    id="custom-css-outlined-input"
-                    sx={{ mt: 2}}
-                    InputProps={{
-                      ...params.InputProps,
+                    id="club"
+                    disablePortal
+                    fullWidth
+                    options={filteredClubs}
+                    getOptionLabel={(option) => option.name || ''}
+                    value={selectedClub}
+                    onChange={handleClubChange}
+                    disabled={!selectedActivity}
+                    renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Elegir Club"
+                        id="custom-css-outlined-input"
+                        sx={{ mt: 2 }}
+                        InputProps={{
+                        ...params.InputProps,
                         startAdornment: (
                             <InputAdornment position="start">
-                                <IconButton>
-                                    <LocationOnOutlinedIcon />
-                                </IconButton>
+                            <IconButton>
+                                <AccessibilityNewOutlinedIcon />
+                            </IconButton>
                             </InputAdornment>
                         ),
-                    }}
-                   
-                   />
-                  }
+                        }}
+                    />
+                    )}
                 />
-                
-                {/* <DesktopDatePicker
-                    label='Elegir Fecha'
-                    inputFormat="dd.MM.yyyy"
-                    sx={{ mt: 1.5 }}
-                    shouldDisableDate={shouldDisableDate}
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    slotProps={{
-                        textField: { 
-                            fullWidth: true,
-                            
-                        },
-                        layout: {
-                            sx: {
-                                '.MuiDateCalendar-root': {
-                                    borderRadius: 2,
-                                    borderWidth: 1,
-                                    border: '1px solid',
-                                },
-                            }
-                        }
-                    }}
-                /> */}
 
                 <Button 
-                    // onClick={() => onUpdateFilters({ activityId: selectedActivityId, neighborhood: selectedNeighborhood, date: selectedDate })}
+                    //onClick={() => onUpdateFilters({ activityId: selectedActivityId, neighborhood: selectedNeighborhood, date: selectedDate })}
                     variant="contained" 
                     fullWidth 
                     sx={{...ButtonSX,m:2}}
+                    disabled={isButtonDisabled}
+                    onClick={handleButtonClick}
+                    
                 >
                     Buscar
                 </Button>
+
             </Box>
         </>
-    );
+  );
 }
 
 export default BookingSearch;

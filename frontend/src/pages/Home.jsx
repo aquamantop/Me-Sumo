@@ -1,5 +1,5 @@
 import {useState} from "react";
-import EventSearch from "../components/EventSearch/EventSearch";
+import EventSearch from "../components/eventSearch/EventSearch";
 import EventShowcase from "../components/eventShowcase/EventShowcase";
 import { Grid, Tabs, Tab } from "@mui/material";
 import Header from "../components/header/Header";
@@ -23,8 +23,7 @@ function Home() {
 
 
   return (
-    <>
-      
+    <>  
       <Grid
         container
         className="content"
@@ -51,8 +50,7 @@ function Home() {
           )}
           {tabValue === 1 && <ClubShowcase />}
         </Grid>
-      </Grid>
-      
+      </Grid>  
     </>
   );
 }
