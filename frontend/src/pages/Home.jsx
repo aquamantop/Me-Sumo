@@ -19,6 +19,7 @@ function Home() {
   const [userInfo, setUserInfo] = useState({});
   const { user } = useUserContext();
   const navigate = useNavigate();
+  const [clubId, setClubId] = useState(null);
 
   useEffect(() => {
     console.log(user)
@@ -27,9 +28,15 @@ function Home() {
         .then((response) => {
           setUserInfo(response.data);
           console.log(response.data)
+          const name = response.data.firstName;
+          axiosInstance.get(`/club/by-name/${name}`)
+          .then((response) => {
+            setClubId(response.data.id);
+          })
         })
         .catch((error) => setError(error))
   }, [])
+
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
@@ -41,12 +48,12 @@ function Home() {
   };
 
   const handleClick = () => {
-    navigate(`/new-slot/${userInfo.firstName}`);
+    navigate(`/new-slot/${clubId}`);
   };
 
   return (
     <>
-      {!userInfo?.role ? (
+      {(!userInfo?.role || userInfo.role === 'ROLE_USER') ? (
         <Grid
           container
           className="content"
@@ -78,7 +85,7 @@ function Home() {
       ) : (userInfo?.role === "ROLE_CLUB" && <>
         <Container>
           <Paper>
-            <Bookings idClub={userInfo.firstName} />
+            <Bookings idClub={clubId} />
           </Paper>
         </Container>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
