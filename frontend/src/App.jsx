@@ -15,6 +15,8 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import { BookingProvider } from './hooks/bookingContext'
 import Profile from './pages/Profile'
+import Slots from './pages/Slots'
+import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 
@@ -73,6 +75,8 @@ function App() {
                 <Route path='/event/:id' element={<Booking />} />
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
+                <Route path='/new-slot/:id' element={<Slots />}/>
+                <Route path='/bookings/:idClub' element={<Bookings />} />
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
               </Routes>
