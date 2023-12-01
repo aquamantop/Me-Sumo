@@ -11,6 +11,7 @@ export const ClubInfo = ({ club }) => {
   const { description, amenities, url, activities, name, neighborhood  } = club
   
   useEffect(() => {
+    console.log(bookingInfo)
     saveBookingInfo({
       ...bookingInfo,
         clubName: name,
