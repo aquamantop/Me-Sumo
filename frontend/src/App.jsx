@@ -13,9 +13,12 @@ import Booking from './pages/Event'
 import { UserProvider } from './hooks/userContext'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
+import { BookingProvider } from './hooks/bookingContext'
 import Profile from './pages/Profile'
 import Slots from './pages/Slots'
 import Bookings from './pages/Bookings'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   const theme = createTheme({
@@ -60,6 +63,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <UserProvider>
+            <BookingProvider>  
             <Header/>
             <div class='content'>
               <Routes>
@@ -73,9 +77,12 @@ function App() {
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
                 <Route path='/bookings/:idClub' element={<Bookings />} />
+                <Route path='/forgot-password' element={<ForgotPassword/>}/>
+                <Route path='/reset-password' element={<ResetPassword/>}/>
               </Routes>
             </div>
             <Footer/>
+          </BookingProvider>
           </UserProvider>
         </LocalizationProvider>
       </ThemeProvider>
