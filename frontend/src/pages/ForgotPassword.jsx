@@ -1,4 +1,4 @@
-import LockSharpIcon from "@mui/icons-material/LockSharp"
+import EmailSharpIcon from "@mui/icons-material/EmailSharp"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Stack from "@mui/material/Stack"
@@ -7,11 +7,10 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import CustomInput from "../components/customInput/CustomInput"
 import { useNavigate } from "react-router-dom"
-import Swal from "sweetalert2"
 import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
 
-export default function NewPassword() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
 
   const {
@@ -20,34 +19,22 @@ export default function NewPassword() {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      password: "",
-      confirmPassword: ""
+      email: "",
     }
   })
 
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
 
 
-  const onSubmit = handleSubmit(async (userData) => {
-    
-    // TODO - AGREGAR EL ENDPOINT PARA CAMBIAR LA CONTRASEÑA
-    /* const response = await new Promise((resolve) => {
-      axiosInstance.post("/auth/login", userData)
+  const onSubmit = handleSubmit(async (userData) => {  
+    const response = await new Promise((resolve) => {
+      axiosInstance.post("/auth/forgot-password", userData)
         .then((response) => resolve(response))
         .catch((error) => setError(error))
-    }) */
-
-    if (!error) {
-      setError("")
-      Swal.fire({
-        title: "Cambio de contraseña exitoso!",
-        icon: "success",
-        timer: 1500
-      })
-      navigate("/login")
-    } else {
-      setError("Algo salió mal!")
-    }
+    })
+    if (response)
+      setSuccess(true)
   })
 
   return (
@@ -59,16 +46,16 @@ export default function NewPassword() {
         className="content"
       >
         <Typography
-          variant="h3"
+          variant="h4"
           color="primary.main"
           sx={{
             letterSpacing: 13
           }}
         >
-          ¡Hola!
+          Restablecer Contraseña
         </Typography>
         <Typography
-          variant="h4"
+          variant="h6"
           color="primary.main"
           sx={{
             fontWeight: "regular",
@@ -76,7 +63,7 @@ export default function NewPassword() {
             marginBottom: "36px"
           }}
         >
-          ¡Ingresa una nueva contraseña!
+          Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
         </Typography>
         <Stack
           sx={{ margin: "auto", px: 5 }}
@@ -87,43 +74,23 @@ export default function NewPassword() {
           onSubmit={onSubmit}
         >
           <CustomInput
-            name="password"
+            name="email"
             control={control}
-            placeholder="Nueva contraseña"
-            error={!!errors.password}
-            helperText={errors?.password?.message}
-            type="password"
+            placeholder="Email"
+            error={!!errors.email}
+            helperText={errors?.email?.message}
+            type="email"
             rules={{
               required: {
                 value: true,
-                message: "La contraseña es requerida"
+                message: "El correo es requerido"
               },
               pattern: {
-                value: /^.{6,}$/,
-                message: "La contraseña debe tener al menos 6 caracteres"
+                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                message: "Correo no válido"
               }
             }}
-            icon={<LockSharpIcon />}
-          />
-
-          <CustomInput
-            name="confirmPassword"
-            control={control}
-            type="password"
-            placeholder="Confirmar contraseña"
-            error={!!errors.confirmPassword}
-            helperText={errors?.confirmPassword?.message}
-            rules={{
-              required: {
-                value: true,
-                message: "La contraseña es requerida"
-              },
-              pattern: {
-                value: /^.{6,}$/,
-                message: "La contraseña debe tener al menos 6 caracteres"
-              }
-            }}
-            icon={<LockSharpIcon />}
+            icon={<EmailSharpIcon />}
           />
 
           <Button
@@ -131,8 +98,14 @@ export default function NewPassword() {
             type='submit'
             sx={{...ButtonSX}}
           >
-            Guardar
+            Enviar mail
           </Button>
+          
+          {success && (
+            <Typography variant="body2" color="success.main">
+              Listo! Revisa tu casilla de correo.
+            </Typography>
+          )}
 
           {error && (
             <Typography variant="body2" color="error.main">
