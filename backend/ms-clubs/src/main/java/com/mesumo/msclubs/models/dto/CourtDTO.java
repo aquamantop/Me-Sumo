@@ -16,6 +16,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class CourtDTO {
 
+    private Long id;
+
     private String name;
 
     private CourtClubDTO club;

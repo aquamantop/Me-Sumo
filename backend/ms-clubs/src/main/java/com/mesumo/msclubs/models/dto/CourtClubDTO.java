@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourtClubDTO {
 
+    private Long id;
+
     private String name;
 
     private NeighborhoodDTO neighborhood;

@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CourtActivityDTO {
 
+    private Long id;
+
     private String name;
 
     private String type;

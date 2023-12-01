@@ -15,6 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class ClubDTO {
 
+    private Long id;
+
     private String name;
 
     private NeighborhoodDTO neighborhood;
