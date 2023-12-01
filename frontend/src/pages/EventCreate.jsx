@@ -1,5 +1,5 @@
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
-import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
+import { PaperSXX, CustomTextField, ButtonSX, CustomButton } from "../components/customMui/CustomMui";
 import { useBookingContext } from '../hooks/bookingContext'
 
 const EventCreate = () => {
@@ -88,7 +88,7 @@ const EventCreate = () => {
                     <Button
                     variant="contained"
                     color="secondary"
-                    sx={{ my:2 }}
+                    sx={{ ...ButtonSX, my:2 }}
                     >
                     Crear evento
                     </Button>

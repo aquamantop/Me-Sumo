@@ -29,7 +29,6 @@ const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
         setLoading(false);
       })
       .catch((error) => setError(error));
-      console.log(clubId, courtId, activityId)
   }, []);
 
   function reorganizarDatos(datosEntrada) {
@@ -60,8 +59,8 @@ const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
   };
 
   const handleBooking = () => {
-    const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot)
-    
+    const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot);
+
     if (data) {
       saveBookingInfo({
         ...bookingInfo,
@@ -130,11 +129,7 @@ const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
           }}
           >
         <Link href="/new-event">
-          <Button 
-            variant="contained" 
-            fullWidth 
-            sx={{...ButtonSX ,m:2}}
-          >
+          <Button variant="contained" color="secondary" onClick={handleBooking} sx={{...ButtonSX}} >
             Confirmar evento
           </Button>
         </Link>

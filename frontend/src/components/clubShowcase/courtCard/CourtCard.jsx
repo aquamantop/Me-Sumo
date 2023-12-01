@@ -5,7 +5,8 @@ import CustomCalendar from "./customCalendar/CustomCalendar";
 const CourtCard = ({ court, activityId, activityName, clubId }) => {
 
   console.log("CourtCard")
-  console.log(  clubId )
+  console.log(court.id, activityId, activityName, clubId )
+
 
   const { name, court_type, inside } = court
 
