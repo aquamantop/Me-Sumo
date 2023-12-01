@@ -8,12 +8,12 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-    # Base de datos produccion
+  #  Base de datos produccion
     url: jdbc:mysql://db.ctd.academy/pi21023c02_GRUPO5?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: pi21023c02_GRUPO5
     password: eethoo7U
 
-    # Base de datos local
+  #  Base de datos local
 #    url: jdbc:mysql://localhost:3306/me_sumo?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
 #    username: root
 #    password: <<Insert password BDD>>
@@ -27,10 +27,11 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
   jackson:
-     serialization:
-       write_dates_as_timestamps: false
-     date-format: yyyy-MM-dd
+    serialization:
+      write_dates_as_timestamps: false
+    date-format: yyyy-MM-dd
 
 eureka:
   instance:

@@ -45,7 +45,7 @@ public class ActivityController {
     public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
         ResponseEntity response = null;
 
-        response = new ResponseEntity(service.findByIdDTO(id), HttpStatus.OK);
+        response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
         return response;
     }
@@ -56,8 +56,8 @@ public class ActivityController {
         List<ActivityDTO> list = service.findAllDTO();
 
         if(list != null){
-            response = new ResponseEntity(list, HttpStatus.OK);
-        } else response = new ResponseEntity("Empty list", HttpStatus.NOT_FOUND);
+            response = new ResponseEntity<>(list, HttpStatus.OK);
+        } else response = new ResponseEntity<>("Empty list", HttpStatus.NOT_FOUND);
 
         return response;
     }

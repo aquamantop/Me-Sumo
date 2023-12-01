@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/system";
 import {
     Typography,
@@ -7,9 +7,7 @@ import {
     InputAdornment,
     IconButton,
     Autocomplete,
-    Paper,
-    createTheme,
-    ThemeProvider
+    Paper
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
@@ -102,10 +100,7 @@ function EventSearch({ onUpdateFilters }) {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    mx:2,
-                    position: "sticky",
-                    top: "140px"
-
+                    mx:2
                 }}
             >
                 <Typography variant="h5" component="h5" color="primary.main">
@@ -147,18 +142,20 @@ function EventSearch({ onUpdateFilters }) {
                 value={selectedNeighborhood}
                 onChange={(event, value) => handleNeighborhoodChange(value)}
                 renderInput={(params)=>
-                   <TextField
+                   <CssTextField
                    {...params}
                    label="Elegir Barrio"
                     id="custom-css-outlined-input"
-                    sx={{ mt: 2}}
+                    fullWidth
+                    sx={{mt: 2}}
+                    
                     InputProps={{
                       ...params.InputProps,
                         startAdornment: (
                             <InputAdornment position="start">
-                                <IconButton>
+                                <CssIconButton>
                                     <LocationOnOutlinedIcon />
-                                </IconButton>
+                                </CssIconButton>
                             </InputAdornment>
                         ),
                     }}

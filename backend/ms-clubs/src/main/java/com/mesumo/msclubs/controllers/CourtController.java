@@ -6,15 +6,12 @@ import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.service.ICourtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/court")
 public class CourtController {
-    ICourtService courtService;
+    private final ICourtService courtService;
 
     public CourtController(ICourtService courtService) {
         this.courtService = courtService;

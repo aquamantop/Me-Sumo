@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Grupo-5.iml" filepath="$PROJECT_DIR$/.idea/Grupo-5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/ms-bookings/ms-bookings.iml" filepath="$PROJECT_DIR$/backend/ms-bookings/ms-bookings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/ms-clubs/ms-clubs.iml" filepath="$PROJECT_DIR$/backend/ms-clubs/ms-clubs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/ms-discovery/ms-discovery.iml" filepath="$PROJECT_DIR$/backend/ms-discovery/ms-discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/ms-gateway/ms-gateway.iml" filepath="$PROJECT_DIR$/backend/ms-gateway/ms-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/ms-users/ms-users.iml" filepath="$PROJECT_DIR$/backend/ms-users/ms-users.iml" />
+    </modules>
+  </component>
+</project>

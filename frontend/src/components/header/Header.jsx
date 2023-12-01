@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   AppBar,
   Toolbar,
@@ -7,30 +7,14 @@ import {
   Button,
   SvgIcon,
   Icon,
-  Avatar,
-  Menu,
-  MenuItem,
 } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import logoDesktop from '../../assets/logoDesktop2.svg'
 import logoMobile from '../../assets/logoMobile2.svg'
 import { Link } from 'react-router-dom'
-import { useUserContext } from '../../hooks/userContext'
-import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
 
 const Header = () => {
-  const [anchorEl, setAnchorEl] = useState(null)
-
   const isMobile = useMediaQuery('(max-width:600px)')
-  const {user, logoutUser} = useUserContext();
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <AppBar position='sticky' sx={{ background: '#03081B' }}>

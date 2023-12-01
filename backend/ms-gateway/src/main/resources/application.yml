@@ -17,14 +17,12 @@ spring:
           uri: http://ec2-34-229-118-35.compute-1.amazonaws.com:8080
           predicates:
             - Path=/club/**, /neighborhood/**, /activity/**, /court/**, /slot/**
-
 #        MS USERS
         - id: ms-users
 #          uri: http://localhost:8081
           uri: http://ec2-3-85-198-231.compute-1.amazonaws.com:8081
           predicates:
             - Path=/user/**, /auth/**
-
 #        MS BOOKINGS
         - id: ms-bookings
 #          uri: http://localhost:8084

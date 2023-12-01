@@ -21,19 +21,17 @@ import ResetPassword from './pages/ResetPassword'
 function App() {
   const theme = createTheme({
     palette: {
-      mode: 'dark',
       primary: {
-        main: '#C3FD74',
+        main: '#C3FD74', //verde
       },
       secondary: {
-        main: '#3FEBBD',
+        main: '#62E8FF', //azul
       },
-      warning: {
-        main: '#ed6c02',
+      info: {
+        main: '#FCBA7D',
       },
       background: {
         paper: '#03081B',
-        default: '#03081B',
       },
     },
     components: {

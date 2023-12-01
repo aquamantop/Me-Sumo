@@ -3,6 +3,7 @@ package com.mesumo.msusers.jwt;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -36,13 +37,13 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username=getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));
+        final String email = getEmailFromToken(token);
+        return (email.equals(userDetails.getUsername())&& !isTokenExpired(token));
     }
 
     private Claims getAllClaims(String token) {
@@ -65,6 +66,18 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
+    }
+
+    public boolean isResetTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
 }

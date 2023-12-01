@@ -28,8 +28,9 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails user=userRepository.findByEmail(request.getEmail()).orElseThrow();
-        String token=jwtService.getToken(user);
+        UserDetails user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.getToken(user);
+        
         return AuthResponse.builder()
                 .token(token)
                 .build();
@@ -42,12 +43,12 @@ public class AuthService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode( request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
                 .build();
 
         Optional<User> userExists =  userRepository.findByEmail(user.getEmail());
-        if(!userExists.isEmpty()) {
+        if(userExists.isPresent()) {
             throw new ResourceAlreadyExistsException(": Cannot finish your registration. User with email: "+ user.getEmail() +" already exists");
         }
 
@@ -56,6 +57,29 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
                 .build();
+    }
+
+    public AuthResponse generateResetPasswordToken(PasswordRequest request) throws ResourceNotFoundException {
+        UserDetails user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        String token = jwtService.getToken(user);
+        return AuthResponse.builder()
+                .token(token)
+                .build();
+    }
+
+    public void resetPassword(String token, String password) throws Exception {
+        if (!jwtService.isResetTokenValid(token)) {
+            throw new IllegalArgumentException("Token inválido o expirado");
+        }
+        String email = jwtService.getEmailFromToken(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+
     }
 
 }

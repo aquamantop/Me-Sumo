@@ -3,35 +3,42 @@ package com.mesumo.msusers.models.service.impl;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.entities.User;
+import com.mesumo.msusers.models.entities.dto.UserDTO;
+import com.mesumo.msusers.models.mappers.UserMapper;
 import com.mesumo.msusers.models.repository.IUserRepository;
 import com.mesumo.msusers.models.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IUserService {
 
-    @Autowired
-    IUserRepository userRepository ;
+    private final IUserRepository userRepository ;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserMapper userMapper = new UserMapper();
 
     @Override
-    public User findById(Long id) throws ResourceNotFoundException {
+    public UserDTO findById(Long id) throws ResourceNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
-        return user.get();
+        return userMapper.convertToDto(user.get());
     }
 
     @Override
-    public Set<User> findAll() {
+    public Set<UserDTO> findAll() {
         List<User> users = userRepository.findAll();
-        return new HashSet<>(users);
+        Set<UserDTO> list = new TreeSet<>(Comparator.comparingLong(UserDTO::getUserId));
+        users.forEach(user -> {
+            list.add(userMapper.convertToDto(user));
+        });
+        return list;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class UserService implements IUserService {
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
 
-        if (user.getUsername() != null) userExists.setUserName(user.getUsername());
+        if (user.getNameUser() != null) userExists.setUserName(user.getNameUser());
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
         if (user.getEmail() != null) userExists.setEmail(user.getEmail());
@@ -71,12 +78,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findByEmail(String email) throws ResourceNotFoundException {
+    public UserDTO findByEmail(String email) throws ResourceNotFoundException {
         Optional<User> userExists = userRepository.findByEmail(email);
         if (userExists.isEmpty()){
             throw new ResourceNotFoundException("User not found");
         }
-        return userExists.get();
+        return userMapper.convertToDto(userExists.get());
     }
 
 }
