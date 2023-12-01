@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Grid, Typography } from "@mui/material";
-import BookingSearch from "../components/bookingSearch/bookingSearch";
 import BookingShowcase from "../components/bookingShowcase/BookingShowcase";
+import BookingSearch from "../components/bookingSearch/BookingSearch";
 
 
 function Disponibility() {
