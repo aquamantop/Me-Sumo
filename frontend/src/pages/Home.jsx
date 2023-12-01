@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import EventSearch from "../components/eventSearch/EventSearch";
+import EventSearch from "../components/EventSearch/EventSearch";
 import EventShowcase from "../components/eventShowcase/EventShowcase";
 import { Grid, Tabs, Tab } from "@mui/material";
 import Header from "../components/header/Header";
