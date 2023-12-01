@@ -26,57 +26,20 @@ public class ClubService implements IClubService {
     @Override
     public Club findById(Long id) throws ResourceNotFoundException {
         Optional<Club> club = repository.findById(id);
+        return getClub(club);
+    }
 
-        if (club.isEmpty()) {
-            throw new ResourceNotFoundException("Club not found");
-        }
-
-        Set<Activity> filteredActivities = new HashSet<>();
-
-        for (Activity activity : club.get().getActivities()) {
-            Set<Court> filteredCourts = activity.getCourts().stream()
-                    .filter(court -> Objects.equals(court.getClub().getId(), club.get().getId()))
-                    .collect(Collectors.toSet());
-
-            if (!filteredCourts.isEmpty()) {
-                Activity filteredActivity = new Activity();
-                filteredActivity.setId(activity.getId());
-                filteredActivity.setName(activity.getName());
-                filteredActivity.setType(activity.getType());
-                filteredActivity.setCourts(filteredCourts);
-                filteredActivities.add(filteredActivity);
-            }
-        }
-
-        club.get().setActivities(filteredActivities);
-
-        return club.get();
+    public Club findByName(String name) throws ResourceNotFoundException {
+        Optional<Club> club = repository.findByName(name);
+        return getClub(club);
     }
 
     @Override
     public List<Club> findAll() {
         List<Club> clubs = repository.findAll();
-
         for (Club club : clubs) {
-            Set<Activity> filteredActivities = new HashSet<>();
-            for (Activity activity : club.getActivities()) {
-                Set<Court> filteredCourts = activity.getCourts().stream()
-                        .filter(court -> Objects.equals(court.getClub().getId(), club.getId()))
-                        .collect(Collectors.toSet());
-
-                if (!filteredCourts.isEmpty()) {
-                    Activity filteredActivity = new Activity();
-                    filteredActivity.setId(activity.getId());
-                    filteredActivity.setName(activity.getName());
-                    filteredActivity.setType(activity.getType());
-                    filteredActivity.setCourts(filteredCourts);
-                    filteredActivities.add(filteredActivity);
-                }
-            }
-
-            club.setActivities(filteredActivities);
+            getActivitiesClub(club);
         }
-
         return clubs;
     }
 
@@ -119,37 +82,12 @@ public class ClubService implements IClubService {
             }
 
             if (club.getActivities() != null) {
-                Set<Activity> newActivities = newClub.get().getActivities();
-                Set<Activity> activities = club.getActivities();
-                activities.forEach(activity -> {
-                    AtomicInteger cont = new AtomicInteger();
-                    newActivities.forEach(activity1 -> {
-                        if (Objects.equals(activity.getId(), activity1.getId())){
-                            cont.getAndIncrement();
-                        }
-                    });
-                    if(cont.get() == 0) {
-                        newActivities.add(activity);
-                    }
-                });
+                Set<Activity> newActivities = getActivitiesClubUpdate(club, newClub);
                 newClub.get().setActivities(newActivities);
             }
 
             if (club.getAmenities() != null) {
-                Set<Amenity> newAmenities = newClub.get().getAmenities();
-                Set<Amenity> amenities = club.getAmenities();
-                amenities.forEach(amenity -> {
-                    AtomicInteger cont = new AtomicInteger();
-                    newAmenities.forEach(amenity1 -> {
-                        if (Objects.equals(amenity.getId(), amenity1.getId())){
-                            cont.getAndIncrement();
-                        }
-                    });
-                    if(cont.get() == 0) {
-                        newAmenities.add(amenity);
-                    }
-                });
-                newClub.get().setAmenities(newAmenities);
+                newClub.get().setAmenities(getAmenities(club, newClub));
             }
 
             if(club.getUrl() != null){
@@ -170,11 +108,38 @@ public class ClubService implements IClubService {
             throw new ResourceNotFoundException("Club not found");
         }
 
-        Set<Activity> filteredActivities = new HashSet<>();
+        getActivitiesClub(club.get());
 
-        for (Activity activity : club.get().getActivities()) {
+        return clubMapper.convertToDto(club.get());
+    }
+
+    @Override
+    public List<ClubDTO> findAllDTO() {
+        List<Club> clubs = repository.findAll();
+        List<ClubDTO> clubDTO = new ArrayList<>();
+
+        for (Club club : clubs) {
+            getActivitiesClub(club);
+            ClubDTO dto = clubMapper.convertToDto(club);
+            clubDTO.add(dto);
+        }
+
+        return clubDTO;
+    }
+
+    private Club getClub(Optional<Club> club) throws ResourceNotFoundException {
+        if (club.isEmpty()) {
+            throw new ResourceNotFoundException("Club not found");
+        }
+        getActivitiesClub(club.get());
+        return club.get();
+    }
+
+    private void getActivitiesClub(Club club) {
+        Set<Activity> filteredActivities = new HashSet<>();
+        for (Activity activity : club.getActivities()) {
             Set<Court> filteredCourts = activity.getCourts().stream()
-                    .filter(court -> Objects.equals(court.getClub().getId(), club.get().getId()))
+                    .filter(court -> Objects.equals(court.getClub().getId(), club.getId()))
                     .collect(Collectors.toSet());
 
             if (!filteredCourts.isEmpty()) {
@@ -186,41 +151,41 @@ public class ClubService implements IClubService {
                 filteredActivities.add(filteredActivity);
             }
         }
-
-        club.get().setActivities(filteredActivities);
-
-        return clubMapper.convertToDto(club.get());
+        club.setActivities(filteredActivities);
     }
 
-    @Override
-    public List<ClubDTO> findAllDTO() {
-        List<Club> clubs = repository.findAll();
-        List<ClubDTO> clubDTO = new ArrayList<>();
-
-        for (Club club : clubs) {
-            Set<Activity> filteredActivities = new HashSet<>();
-
-            for (Activity activity : club.getActivities()) {
-                Set<Court> filteredCourts = activity.getCourts().stream()
-                        .filter(court -> Objects.equals(court.getClub().getId(), club.getId()))
-                        .collect(Collectors.toSet());
-
-                if (!filteredCourts.isEmpty()) {
-                    Activity filteredActivity = new Activity();
-                    filteredActivity.setId(activity.getId());
-                    filteredActivity.setName(activity.getName());
-                    filteredActivity.setType(activity.getType());
-                    filteredActivity.setCourts(filteredCourts);
-                    filteredActivities.add(filteredActivity);
+    private static Set<Amenity> getAmenities(Club club, Optional<Club> newClub) {
+        Set<Amenity> newAmenities = newClub.get().getAmenities();
+        Set<Amenity> amenities = club.getAmenities();
+        amenities.forEach(amenity -> {
+            AtomicInteger cont = new AtomicInteger();
+            newAmenities.forEach(amenity1 -> {
+                if (Objects.equals(amenity.getId(), amenity1.getId())){
+                    cont.getAndIncrement();
                 }
+            });
+            if(cont.get() == 0) {
+                newAmenities.add(amenity);
             }
+        });
+        return newAmenities;
+    }
 
-            club.setActivities(filteredActivities);
-            ClubDTO dto = clubMapper.convertToDto(club);
-            clubDTO.add(dto);
-        }
-
-        return clubDTO;
+    private static Set<Activity> getActivitiesClubUpdate(Club club, Optional<Club> newClub) {
+        Set<Activity> newActivities = newClub.get().getActivities();
+        Set<Activity> activities = club.getActivities();
+        activities.forEach(activity -> {
+            AtomicInteger cont = new AtomicInteger();
+            newActivities.forEach(activity1 -> {
+                if (Objects.equals(activity.getId(), activity1.getId())){
+                    cont.getAndIncrement();
+                }
+            });
+            if(cont.get() == 0) {
+                newActivities.add(activity);
+            }
+        });
+        return newActivities;
     }
 
 }

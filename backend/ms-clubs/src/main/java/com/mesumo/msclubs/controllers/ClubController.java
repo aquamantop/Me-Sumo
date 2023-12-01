@@ -28,6 +28,15 @@ public class ClubController {
         return response;
     }
 
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<Club> getByName(@PathVariable String name) throws ResourceNotFoundException {
+        ResponseEntity response = null;
+
+        response = new ResponseEntity<>(service.findByName(name), HttpStatus.OK);
+
+        return response;
+    }
+
     @GetMapping("/")
     public ResponseEntity getAll() {
         ResponseEntity response = null;
