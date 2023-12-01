@@ -19,6 +19,9 @@ import Slots from './pages/Slots'
 import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import Disponibility from './pages/Disponobility'
+
+
 
 function App() {
   const theme = createTheme({
@@ -74,6 +77,7 @@ function App() {
                 <Route path='/register' element={<Register />} />
                 <Route path='/event/:id' element={<Booking />} />
                 <Route path='/new-event' element={<EventCreate/>}/>
+                <Route path='/disponibility' element={<Disponibility/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
                 <Route path='/bookings/:idClub' element={<Bookings />} />
