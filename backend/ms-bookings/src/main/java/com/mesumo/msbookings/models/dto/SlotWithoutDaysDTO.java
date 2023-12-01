@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalTime;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +14,8 @@ import java.time.LocalTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SlotWithoutDaysDTO {
     private Long id;
-    private int capacity;
 
+    private int capacity;
 
     private LocalTime startTime;
 

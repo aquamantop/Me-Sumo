@@ -10,5 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NeighborhoodDTO {
+
+    private Long id;
+
     String name;
+
 }
