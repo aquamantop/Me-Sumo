@@ -1,0 +1,49 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: ms-clubs
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #  Base de datos produccion
+    url: jdbc:mysql://db.ctd.academy/pi21023c02_GRUPO5?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    username: pi21023c02_GRUPO5
+    password: eethoo7U
+
+  #  Base de datos local
+#    url: jdbc:mysql://localhost:3306/me_sumo?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+#    username: root
+#    password: <<Insert password BDD>>
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+    date-format: yyyy-MM-dd
+
+eureka:
+  instance:
+#    hostname: localhost
+    hostname: ec2-107-21-182-26.compute-1.amazonaws.com
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+logging:
+  level:
+    org.springframework.security: DEBUG

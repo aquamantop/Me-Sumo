@@ -1,0 +1,85 @@
+name: Build & Deploy MS Clubs
+
+on:
+  push:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-clubs/**'
+  pull_request:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-clubs/**'
+
+jobs:
+  config-aws:
+    name: Config AWS credentials
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+  build-club:
+    needs: config-aws
+    name: Build Club with Maven
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Build MS Club
+      run: |
+        echo "Building app..."
+        cd backend/ms-clubs
+        mvn install --file pom.xml
+        echo "Finished building the app."
+
+    - name: Archive Club Build
+      uses: actions/upload-artifact@v3
+      with:
+        name: clubs
+        path: backend/ms-clubs/target/ms_clubs.jar
+
+  deploy-club:
+    needs: build-club
+    name: Deploy MS Club
+    runs-on: ubuntu-latest      
+    steps:
+
+    - name: Download Club Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: clubs
+
+    - name: Configure SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY_CLUB }}" > ~/.ssh/id_rsa
+        chmod 400 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_CLUB }} >> ~/.ssh/known_hosts
+      env:
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
+
+    - name: Deploy Club
+      run: |
+        echo "Deploying started..."
+        ssh ubuntu@${HOST} sudo systemctl stop club.service
+        scp ms_clubs.jar ubuntu@${HOST}:~/club
+        ssh ubuntu@${HOST} sudo systemctl start club.service
+        echo "Finished deploying the app."
+      env:
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
