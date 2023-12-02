@@ -68,6 +68,7 @@ public class UserService implements IUserService {
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
 
+        if (user.getPassword() != null) userExists.setPassword(user.getPassword());
         if (user.getNameUser() != null) userExists.setUserName(user.getNameUser());
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
