@@ -13,6 +13,7 @@ import React from "react";
 import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
 import { useUserContext } from "../hooks/userContext";
 import { ButtonSX } from "../components/customMui/CustomMui";
+import { Link } from "@mui/material";
 
 const Profile = () => {
     return (
@@ -111,14 +112,14 @@ const Profile = () => {
                             </Typography>
                             <Divider sx={{ mt: 1, mb: 2 }} />
                             <Typography variant="body1">¡Ups! parece que no te has inscripto a ningun evento</Typography>                
-                            {/* <Link to=''> aqui va la ruta*/}
+                            <Link href='/disponibility'>
                               <Button 
                                 variant="contained" 
                                 fullWidth 
                                 sx={{...ButtonSX, my: 2}}>
                                     Crear evento
                               </Button>
-                            {/* </Link> */}
+                            </Link>
                         </Container>
                       </Grid>
                     </Grid>

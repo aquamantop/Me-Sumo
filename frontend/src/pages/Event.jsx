@@ -45,13 +45,11 @@ const Booking = () => {
         setBoxMessage(message);
         setBoxOpen(true);
     };
-
   
     const handleButtonClick = () => {
         if (user && isParticipant==false) {
             axiosInstance.post(`/booking/participant/${id}`, userInfo)
             .then(response => {
-                console.log(response.data);
                 showMessage(okMessage);
                 axiosInstance.get(`/booking/${id}`)
                 .then(response => {
@@ -80,7 +78,6 @@ const Booking = () => {
 
     
     useEffect(() => {
-        console.log(user)
         user && 
         axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
@@ -115,7 +112,6 @@ const Booking = () => {
 
                 const isUserParticipant = cardData.bookingParticipants.some(participant => participant.userId === userInfo.userId);
                 setIsParticipant(isUserParticipant);
-                console.log(isUserParticipant)
                 setLoading(false);
                 return cardData;
             })

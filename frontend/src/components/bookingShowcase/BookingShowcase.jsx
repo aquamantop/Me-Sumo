@@ -15,8 +15,6 @@ const BookingShowcase = ({ clubId, activityId }) => {
 
     useEffect(() => {
 
-        console.log(clubId, activityId)
-
         if (activityId !== null && clubId !== null) {
             axiosInstance.get(`/court/club-activity?clubId=${clubId}&activityId=${activityId}`)
             .then((response) => {
@@ -32,8 +30,6 @@ const BookingShowcase = ({ clubId, activityId }) => {
       <>
         <Container sx={{ 
             mb: 2 
-            // , backgroundImage: courts.length!=0  ? courts[0].club.url : 'none'
-            // , backgroundSize: 'cover'
         }}>
           <Paper sx={PaperSXX}>
             <Box sx={BoxSX}>

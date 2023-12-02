@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import EventSearch from "../components/EventSearch/EventSearch";
+import EventSearch from "../components/eventSearch/EventSearch";
 import EventShowcase from "../components/eventShowcase/EventShowcase";
 import { Grid, Tabs, Tab } from "@mui/material";
 import Header from "../components/header/Header";
@@ -22,12 +22,10 @@ function Home() {
   const [clubId, setClubId] = useState(null);
 
   useEffect(() => {
-    console.log(user)
     user &&
       axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
           setUserInfo(response.data);
-          console.log(response.data)
           const name = response.data.firstName;
           axiosInstance.get(`/club/by-name/${name}`)
           .then((response) => {
@@ -43,7 +41,6 @@ function Home() {
   };
 
   const handleFilterChange = (filters) => {
-    console.log(filters)
     setSelectedFilters(filters);
   };
 
