@@ -20,17 +20,18 @@ const Footer = () => {
             display: 'flex',
             justifyContent:'center',
             fontSize: {xs: 20, sm: 30},
+            color: 'black'
              }}>
           Tus ganas de jugar, ya no se postergan
         </Typography>
         <div>
-            <IconButton color="inherit">
+            <IconButton color="black">
             <InstagramIcon />
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton color="black">
             <TwitterIcon />
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton color="black">
             <FacebookIcon />
             </IconButton>
         </div>

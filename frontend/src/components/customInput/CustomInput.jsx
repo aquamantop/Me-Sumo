@@ -14,7 +14,7 @@ const CustomInput = ({
   minLength,
   onFocus,
   icon,
-  placeholder,
+  placeholder
 }) => {
   return (
     <Controller
@@ -22,7 +22,6 @@ const CustomInput = ({
       control={control}
       render={({ field }) => (
         <TextField
-          sx={{ backgroundColor: "white", borderRadius: "3px" }}
           label={label}
           error={error}
           type={type}
@@ -36,7 +35,7 @@ const CustomInput = ({
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">{icon}</InputAdornment>
-            ),
+            )
           }}
           placeholder={placeholder}
         />
