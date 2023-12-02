@@ -19,7 +19,7 @@ import Slots from './pages/Slots'
 import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
-import Disponibility from './pages/Disponobility'
+import Disponibility from './pages/Disponibility'
 
 
 

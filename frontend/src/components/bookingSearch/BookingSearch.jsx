@@ -53,9 +53,6 @@ function BookingSearch( {onUpdateFilters} ) {
 
     const handleClubChange = (event, value) => {
         setSelectedClub(value);
-        console.log('Clubesssssss')
-        console.log(value)
-        console.log(value.id)
     };
 
     const handleButtonClick = () => {
@@ -63,7 +60,6 @@ function BookingSearch( {onUpdateFilters} ) {
             activityId: selectedActivity.value,
             clubId: selectedClub.id,
         });
-        console.log(selectedActivity.value, selectedClub.id)
     };
 
 
@@ -87,12 +83,8 @@ function BookingSearch( {onUpdateFilters} ) {
 
 
     useEffect(() => {
-        console.log(filteredClubs);
         if (selectedActivity) {
-            console.log(selectedActivity.value)
             const selectedActivityId = selectedActivity.value
-  
-            console.log(selectedActivityId);
             setFilteredClubs(
                 clubs.filter((club) =>
                 club.activities.some((activity) => activity.id === selectedActivityId)
@@ -185,7 +177,6 @@ function BookingSearch( {onUpdateFilters} ) {
                 />
 
                 <Button 
-                    //onClick={() => onUpdateFilters({ activityId: selectedActivityId, neighborhood: selectedNeighborhood, date: selectedDate })}
                     variant="contained" 
                     fullWidth 
                     sx={{...ButtonSX,m:2}}

@@ -10,24 +10,6 @@ const EventCreate = () => {
 
     const slotCapacity = activityName.slice(-1) * 2;
 
-    /* bookingData = {
-        name: "Otra Reserva de Franco",
-        slotId: 6,
-        activityId: 3,
-        activityName: "Fútbol 5",
-        creatorId: 17,
-        clubId: 2,
-        clubName: "Belgrano",
-        neighborhoodName: "Belgrano",
-        courtId: 1,
-        date: "2023-11-30",
-        startTime: "10:30:00",
-        endTime: "11:30:00",
-        participants: [],
-        message: "Mensaje de la reserva",
-        approved: false
-    } */
-
     return (
         <>
             <Container className="content">

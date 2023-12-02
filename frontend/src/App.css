@@ -4,6 +4,5 @@ body {
 }
  .content {
   min-height: calc(100vh - 159.5px);
-  /* El tamaño del viewport - (header + footer) */
 } 
 
