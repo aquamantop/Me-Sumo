@@ -56,6 +56,7 @@ export default function Login() {
     })
 
     if (!error) {
+      console.log(userData);
       loginUser(userData);
       setError("")
       Swal.fire({
