@@ -160,7 +160,7 @@ export default function Login() {
         >
           Todavía no tenés usuario?{" "}
           <Link href="/register" underline="none" color="secondary.main">
-            Registrate ;)
+            Registrate 
           </Link>
         </Typography>
       </Box>
