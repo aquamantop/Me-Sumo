@@ -1,4 +1,5 @@
-import PersonIcon from "@mui/icons-material/Person"
+import EmailSharpIcon from "@mui/icons-material/EmailSharp"
+import LockSharpIcon from "@mui/icons-material/LockSharp"
 import { Link } from "@mui/material"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -6,19 +7,16 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import CustomInput from "../components/customInput/CustomInput"
 import { useNavigate } from "react-router-dom"
-import Footer from "../components/footer/Footer"
-import Header from "../components/header/Header"
-import axios from "axios"
 import Swal from "sweetalert2"
-import axiosInstance from "../hooks/api/axiosConfig";
-import { ButtonSX } from '../components/customMui/CustomMui'
-import { useUserContext } from '../hooks/userContext'
+import CustomInput from "../components/customInput/CustomInput"
+import { ButtonSX } from "../components/customMui/CustomMui"
+import axiosInstance from "../hooks/api/axiosConfig"
+import { useUserContext } from "../hooks/userContext"
 
 export default function Login() {
-  const navigate = useNavigate();
-  const { loginUser } = useUserContext();
+  const navigate = useNavigate()
+  const { loginUser } = useUserContext()
 
   const {
     handleSubmit,
@@ -33,31 +31,16 @@ export default function Login() {
 
   const [error, setError] = useState("")
 
-
   const onSubmit = handleSubmit(async (userData) => {
-    
-
     const response = await new Promise((resolve) => {
-      // axios({
-      //   method: "POST",
-      //   url: "http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/login",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json"
-      //   },
-      //   data: userData
-      // })
-      //console.log(userData);
-      //axiosInstance.defaults.headers.common['Accept'] = 'application/json';
-      //axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
-      axiosInstance.post("/auth/login", userData)
+      axiosInstance
+        .post("/auth/login", userData)
         .then((response) => resolve(response))
         .catch((error) => setError(error))
     })
 
     if (!error) {
-      console.log(userData);
-      loginUser(userData);
+      loginUser(userData)
       setError("")
       Swal.fire({
         title: "Ingreso exitoso!",
@@ -72,11 +55,11 @@ export default function Login() {
 
   return (
     <>
-      
       <Box
         backgroundColor="background.paper"
         align="center"
         className="content"
+        sx={{ mb: -1.1 }}
       >
         <Typography
           fontSize={50}
@@ -123,7 +106,7 @@ export default function Login() {
                 message: "Correo no válido"
               }
             }}
-            icon={<PersonIcon />}
+            icon={<EmailSharpIcon />}
           />
 
           <CustomInput
@@ -143,14 +126,10 @@ export default function Login() {
                 message: "La contraseña debe tener al menos 6 caracteres"
               }
             }}
-            icon={<PersonIcon />}
+            icon={<LockSharpIcon />}
           />
 
-          <Button
-            variant='contained'
-            type='submit'
-            sx={{...ButtonSX}}
-          >
+          <Button variant="contained" type="submit" sx={{ ...ButtonSX }}>
             Iniciar Sesión
           </Button>
 
@@ -161,6 +140,18 @@ export default function Login() {
           )}
         </Stack>
         <Typography
+          variant="body2"
+          mt={"16px"}
+          color="primary.main"
+          sx={{
+            letterSpacing: " 4.68px"
+          }}
+        >
+          <Link href="/forgot-password" underline="none" color="secondary.main">
+            Olvidé mi constraseña
+          </Link>
+        </Typography>
+        <Typography
           variant="h5"
           mt={"36px"}
           color="primary.main"
@@ -168,9 +159,9 @@ export default function Login() {
             letterSpacing: " 4.68px"
           }}
         >
-          Todavía no tenés usuario?{' '}
-          <Link href='/register' underline='none' color='secondary.main'>
-            Registrate ;
+          Todavía no tenés usuario?{" "}
+          <Link href="/register" underline="none" color="secondary.main">
+            Registrate 
           </Link>
         </Typography>
       </Box>

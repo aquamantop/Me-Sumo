@@ -1,9 +1,15 @@
-import Header from "../components/header/Header";
-import Footer from "../components/footer/Footer";
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
-import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
+import { PaperSXX, CustomTextField, ButtonSX, CustomButton } from "../components/customMui/CustomMui";
+import { useBookingContext } from '../hooks/bookingContext'
 
 const EventCreate = () => {
+
+    const { bookingInfo } = useBookingContext();
+    
+    const { selectedDate, selectedHour, clubId, courtId, activityId, clubName, neighborhoodName, activityName } = bookingInfo;
+
+    const slotCapacity = activityName.slice(-1) * 2;
+
     return (
         <>
             <Container className="content">
@@ -31,10 +37,17 @@ const EventCreate = () => {
                             flexDirection="column"
                             m={2}
                             >
-                            <CustomTextField label="Club" margin="normal"/>
-                            <CustomTextField label="Actividad" margin="normal"/>
-                            <CustomTextField label="Fecha" margin="normal" />
-                            <CustomTextField label="Barrio" margin="normal"/>
+                            <CustomTextField name="clubName" label="Club" margin="normal" disabled={clubName} value={clubName?clubName:""}/>
+                            <CustomTextField name="activityName" label="Actividad" margin="normal" disabled={activityName} value={activityName?activityName:""} />
+                            <Grid container>
+                                <Grid item xs={12} sm={6}>
+                                    <CustomTextField name="date" label="Fecha" margin="normal" disabled={selectedDate} value={selectedDate?selectedDate:""}/>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <CustomTextField name="startTime" label="Hora" margin="normal" disabled={selectedHour} value={selectedHour?selectedHour:""}/>
+                                </Grid>
+                            </Grid>
+                            <CustomTextField name="neighborhoodName" label="Barrio" margin="normal" disabled={neighborhoodName} value={neighborhoodName?neighborhoodName:""}/>
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -43,8 +56,9 @@ const EventCreate = () => {
                             flexDirection="column"
                             m={2}
                             >
-                            <CustomTextField label="Cupo" margin="normal"/>
-                            <CustomTextField 
+                            <CustomTextField name="participants" label="Cupo" margin="normal" disabled={slotCapacity} value={slotCapacity?slotCapacity:""}/>
+                            <CustomTextField label="Nombre del evento" margin="normal"/>
+                            <CustomTextField
                             label="Mensaje del organizador"
                             multiline
                             rows={4}
@@ -56,7 +70,7 @@ const EventCreate = () => {
                     <Button
                     variant="contained"
                     color="secondary"
-                    sx={{ my:2 }}
+                    sx={{ ...ButtonSX, my:2 }}
                     >
                     Crear evento
                     </Button>

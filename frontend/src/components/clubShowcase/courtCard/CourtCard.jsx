@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, CardContent, Typography, Box, Button, Link } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import CustomCalendar from "./customCalendar/CustomCalendar";
 
-const CourtCard = ({ court, activityId }) => {
+const CourtCard = ({ court, activityId, activityName, clubId }) => {
 
   const { name, court_type, inside } = court
 
@@ -38,7 +38,7 @@ const CourtCard = ({ court, activityId }) => {
           <Typography variant="body2" color="secondary.main">
             { field } | { inside ? "Techada" : "No Techada" }
           </Typography>
-          <CustomCalendar courtId={ court.id } activityId={ activityId }/>
+          <CustomCalendar courtId={ court.id } activityId={ activityId } activityName={activityName} clubId={clubId} />
         </CardContent>
       </Card>
     </>

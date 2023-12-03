@@ -21,6 +21,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CustomLoader from "../components/CustomLoader";
 import { updateUser } from "../hooks/api/userApi";
 import axios from "axios";
+import { Link } from "@mui/material";
 
 const Profile = () => {
   const { user } = useUserContext();
@@ -220,14 +221,14 @@ const handleSaveClick = async () => {
                   </Typography>
                   <Divider sx={{ mt: 1, mb: 2 }} />
                   <Typography variant="body1">¡Ups! parece que no te has inscripto a ningun evento</Typography>
-                  {/* <Link to=''> aqui va la ruta*/}
+                  <Link href='/disponibility'>
                   <Button
                     variant="contained"
                     fullWidth
                     sx={{ ...ButtonSX, my: 2 }}>
                     Crear evento
                   </Button>
-                  {/* </Link> */}
+                  </Link>
                 </Container>
               </Grid>
             </Grid>

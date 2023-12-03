@@ -1,30 +1,39 @@
+import React, { useEffect } from "react";
 import { Grid, Typography, Box, Link, Button, Card } from "@mui/material";
-import EventCard from "../eventShowcase/EventCard";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
 import CourtCard from "./courtCard/CourtCard";
+import { useBookingContext } from '../../hooks/bookingContext';
 
 export const ClubInfo = ({ club }) => {
+  const { bookingInfo, saveBookingInfo } = useBookingContext();
 
-  const { description, amenities, url, activities  } = club
+  const { description, amenities, url, activities, name, neighborhood  } = club
+  
+  useEffect(() => {
+    saveBookingInfo({
+      ...bookingInfo,
+        clubName: name,
+        neighborhoodName: neighborhood.name
+      })
+  }, [])
 
-  const images = [{original: url, thumbnail: url}]
 
   return (
     <>
       <Grid container >
-        <Grid item xs={12} md={9}  p={2} sx={{borderBottom: {xs:'2px solid #62E8FF', md:'none'}, borderRight: {xs:'none', md:'2px solid #62E8FF'}}}>
+        <Grid item xs={12} md={9}  p={2} sx={{borderBottom: {xs:'2px solid #3FEBBD', md:'none'}, borderRight: {xs:'none', md:'2px solid #3FEBBD'}}}>
           <Typography variant="h6" color="primary.main">
             { description }
           </Typography>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}>
             <ImageGallery
-                items={images}
-                showThumbnails={0}
-                showBullets={0}
-                showFullscreenButton={0}
-                showPlayButton={0} 
+                showThumbnails={false}
+                showBullets={false}
+                showFullscreenButton={false}
+                showPlayButton={false} 
+                items={[{srcSet: url}]}
               />
             </Grid>
             <Grid item xs={6}>
@@ -59,23 +68,12 @@ export const ClubInfo = ({ club }) => {
               {activities.map((activity) => (
                 activity.courts.sort((a, b) => a.id - b.id).map((court) => {
                   return <Grid item xs={12} sm={6} key={court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court} activityId={activity.id}/>
+                      <CourtCard court={court} activityId={activity.id} activityName={activity.name +" "+ activity.type} clubId={club.id}/>
                   </Grid>
                 })
               ))} 
             </Grid>
           </Grid>
-          <Box mt={2} textAlign="center">
-            <Link href="/new-event">
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ my: 2 }}
-              >
-                Crear evento
-              </Button>
-            </Link>
-          </Box>
         </Grid>
       </Grid>
     </>
