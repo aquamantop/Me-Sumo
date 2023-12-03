@@ -92,7 +92,8 @@ const handleSaveClick = async () => {
 
   return (
     <>
-      {loading ? (<CustomLoader />) : (
+    {user ? (
+      loading ? (<CustomLoader />) : (
         <Container sx={{ mb: 2 }}>
           <Paper sx={PaperSXX}>
             <Box sx={{ ...BoxSX }}>
@@ -232,7 +233,23 @@ const handleSaveClick = async () => {
             </Grid>
           </Paper>
         </Container>
-      )}
+      )
+
+    ) : (
+      <>
+      <Box
+      display='flex'
+      flexDirection='column'
+      justifyContent='center'
+      alignItems='center'
+      className='content'
+      >
+        <Typography variant='h5' color='primary.main'>
+          ¡Ups! Parece que no has iniciado sesion.
+        </Typography>
+      </Box>
+      </>
+    )}
     </>
   );
 };
