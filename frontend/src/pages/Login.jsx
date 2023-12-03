@@ -56,7 +56,6 @@ export default function Login() {
   return (
     <>
       <Box
-        backgroundColor="background.paper"
         align="center"
         className="content"
         sx={{ mb: -1.1 }}

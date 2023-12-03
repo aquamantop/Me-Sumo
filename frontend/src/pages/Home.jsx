@@ -12,6 +12,8 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import Bookings from "./Bookings.jsx";
 import { Container, Paper } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
+import sports from "../assets/fondo.png"
+
 
 function Home() {
   const [tabValue, setTabValue] = useState(0);
@@ -50,11 +52,22 @@ function Home() {
 
   return (
     <>
+    
       {(!userInfo?.role || userInfo.role === 'ROLE_USER') ? (
         <Grid
           container
           className="content"
-          sx={{ height: "auto", mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '30px' }}
+          
+          sx={{ height: "auto"
+            , mx: "auto"
+            , maxWidth: "1400px"
+            , display: 'flex'
+            , flexDirection: 'row'
+            , justifyContent: 'space-between'
+            , marginTop: '30px'
+            // ,backgroundImage: `url(${sports})`, backgroundSize: 'cover', backgroundPosition: 'center' 
+          }}
+          
         >
           <Grid item xs={12} sm={3}>
             <EventSearch onUpdateFilters={handleFilterChange} />

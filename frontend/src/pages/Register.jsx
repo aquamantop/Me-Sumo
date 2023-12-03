@@ -63,7 +63,6 @@ export default function Register() {
     <>
       
       <Box
-        backgroundColor='background.paper'
         align='center'
         sx={{ mb: 10, mx: 'auto', maxWidth: '1200px' }}
       >
