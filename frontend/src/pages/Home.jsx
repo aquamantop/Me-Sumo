@@ -12,7 +12,6 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import Bookings from "./Bookings.jsx";
 import { Container, Paper } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import sports from "../assets/fondo.png"
 
 
 function Home() {
