@@ -17,7 +17,7 @@ import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
 import { useUserContext } from "../hooks/userContext";
 import { ButtonSX } from "../components/customMui/CustomMui";
 import axiosInstance from "../hooks/api/axiosConfig";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, CallMade } from "@mui/icons-material";
 import CustomLoader from "../components/CustomLoader";
 import { updateUser } from "../hooks/api/userApi";
 import axios from "axios";
@@ -25,7 +25,6 @@ import { Link } from "@mui/material";
 
 const Profile = () => {
   const { user } = useUserContext();
-  const [showPassword, setShowPassword] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [loading, setLoading] = useState(true);
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -33,6 +32,7 @@ const Profile = () => {
   const [updatedInfo, setUpdatedInfo] = useState({});
   const [alertError, setAlertError] = useState(false);
   const [alertSuccess, setAlertSuccess] = useState(false);
+  const [helperText, setHelperText] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,11 +51,9 @@ const Profile = () => {
     fetchData();
   }, [loading])
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleNeighborhoodChange = (selectedNeighborhood) => {
-    setSelectedNeighborhood(selectedNeighborhood);
-};
+ const showHelperText = () => {
+  setHelperText(false);
+ }
 
 const handleInputChange = (fieldName, value) => {
   setUpdatedInfo((prevInfo) => ({
@@ -153,16 +151,16 @@ const handleSaveClick = async () => {
                     </Grid>
                     <Grid item xs={6}>
                       <TextField
-                        type={showPassword ? 'text' : 'password'}
+                        disabled
+                        type='password'
+                        defaultValue={'default'}
+                        helperText={helperText ? '' : 'Puedes cambiar tu contraseña desde el icono'}
+                        onClick={showHelperText}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                edge="end"
-                              >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              <IconButton href='/forgot-password' edge="end">
+                                <CallMade />
                               </IconButton>
                             </InputAdornment>
                           )
