@@ -20,7 +20,7 @@ import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Disponibility from './pages/Disponibility'
-
+import Layout from './pages/Layout'
 
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <UserProvider>
             <BookingProvider>  
-            <Header/>
+            <Layout>
             <div class='content'>
               <Routes>
                 <Route path='/' element={<Home />} />
@@ -85,7 +85,7 @@ function App() {
                 <Route path='/reset-password' element={<ResetPassword/>}/>
               </Routes>
             </div>
-            <Footer/>
+            </Layout>
           </BookingProvider>
           </UserProvider>
         </LocalizationProvider>
