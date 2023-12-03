@@ -38,8 +38,8 @@ const Header = () => {
     sx={{
       background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 30%)",
       boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-      backdropFilter: "blur(5px)",
-      WebkitBackdropFilter: "blur(5px)",
+      backdropFilter: "blur(3px)",
+      WebkitBackdropFilter: "blur(3px)",
     }}
     >
       {/* <Paper sx={{...PaperSXX, backgroundColor:'none'}}> */}
