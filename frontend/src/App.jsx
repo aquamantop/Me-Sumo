@@ -19,6 +19,7 @@ import Slots from './pages/Slots'
 import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import Reports from './pages/Reports'
 
 function App() {
   const theme = createTheme({
@@ -79,6 +80,7 @@ function App() {
                 <Route path='/bookings/:idClub' element={<Bookings />} />
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
+                <Route path='/reports' element={<Reports/>}/>
               </Routes>
             </div>
             <Footer/>

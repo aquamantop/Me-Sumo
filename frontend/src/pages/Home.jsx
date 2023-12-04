@@ -27,12 +27,13 @@ function Home() {
       axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
           setUserInfo(response.data);
-          console.log(response.data)
+
           const name = response.data.firstName;
+          if(response.data.role === 'ROLE_CLUB'){
           axiosInstance.get(`/club/by-name/${name}`)
           .then((response) => {
             setClubId(response.data.id);
-          })
+          })}
         })
         .catch((error) => setError(error))
   }, [])
@@ -51,9 +52,13 @@ function Home() {
     navigate(`/new-slot/${clubId}`);
   };
 
+  const handleClickReport = () => {
+    navigate(`/reports`);
+  }
+
   return (
     <>
-      {(!userInfo?.role || userInfo.role === 'ROLE_USER') ? (
+      {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? (
         <Grid
           container
           className="content"
@@ -81,6 +86,12 @@ function Home() {
             )}
             {tabValue === 1 && <ClubShowcase />}
           </Grid>
+          {userInfo?.role === 'ROLE_ADMIN' && <><div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <IconButton onClick={handleClickReport} variant="contained" color="primary">
+              Ver reportes
+            </IconButton>
+          </div></>
+          }
         </Grid>
       ) : (userInfo?.role === "ROLE_CLUB" && <>
         <Container>
