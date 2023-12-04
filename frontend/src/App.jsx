@@ -77,7 +77,6 @@ function App() {
                 <Route path='/new-event' element={<EventCreate/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
-                <Route path='/bookings/:idClub' element={<Bookings />} />
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/reports' element={<Reports/>}/>

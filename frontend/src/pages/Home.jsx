@@ -10,7 +10,7 @@ import { TabsSX } from "../components/customMui/CustomMui";
 import { useUserContext } from '../hooks/userContext'
 import axiosInstance from "../hooks/api/axiosConfig";
 import Bookings from "./Bookings.jsx";
-import { Container, Paper } from "@mui/material";
+import { Container, Paper, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 
 function Home() {
@@ -85,13 +85,13 @@ function Home() {
               </>
             )}
             {tabValue === 1 && <ClubShowcase />}
+            {userInfo?.role === 'ROLE_ADMIN' && <>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <Button variant="contained" color="primary" onClick={handleClickReport} style={{ marginTop: '10px' }}>
+            Ver reportes
+          </Button>
+          </div></>}            
           </Grid>
-          {userInfo?.role === 'ROLE_ADMIN' && <><div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-            <IconButton onClick={handleClickReport} variant="contained" color="primary">
-              Ver reportes
-            </IconButton>
-          </div></>
-          }
         </Grid>
       ) : (userInfo?.role === "ROLE_CLUB" && <>
         <Container>
