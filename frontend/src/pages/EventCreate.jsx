@@ -1,5 +1,5 @@
 import { Container, Paper, Box, Typography, Grid, TextField, Button } from "@mui/material";
-import { PaperSXX, CustomTextField, ButtonSX } from "../components/customMui/CustomMui";
+import { PaperSXX, CustomTextField, ButtonSX, CustomButton } from "../components/customMui/CustomMui";
 import { useBookingContext } from '../hooks/bookingContext'
 
 const EventCreate = () => {
@@ -9,24 +9,6 @@ const EventCreate = () => {
     const { selectedDate, selectedHour, clubId, courtId, activityId, clubName, neighborhoodName, activityName } = bookingInfo;
 
     const slotCapacity = activityName.slice(-1) * 2;
-
-    /* bookingData = {
-        name: "Otra Reserva de Franco",
-        slotId: 6,
-        activityId: 3,
-        activityName: "Fútbol 5",
-        creatorId: 17,
-        clubId: 2,
-        clubName: "Belgrano",
-        neighborhoodName: "Belgrano",
-        courtId: 1,
-        date: "2023-11-30",
-        startTime: "10:30:00",
-        endTime: "11:30:00",
-        participants: [],
-        message: "Mensaje de la reserva",
-        approved: false
-    } */
 
     return (
         <>
@@ -88,7 +70,7 @@ const EventCreate = () => {
                     <Button
                     variant="contained"
                     color="secondary"
-                    sx={{ my:2 }}
+                    sx={{ ...ButtonSX, my:2 }}
                     >
                     Crear evento
                     </Button>

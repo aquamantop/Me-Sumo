@@ -20,6 +20,9 @@ import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Reports from './pages/Reports'
+import Disponibility from './pages/Disponibility'
+import Layout from './pages/Layout'
+
 
 function App() {
   const theme = createTheme({
@@ -65,7 +68,7 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <UserProvider>
             <BookingProvider>  
-            <Header/>
+            <Layout>
             <div class='content'>
               <Routes>
                 <Route path='/' element={<Home />} />
@@ -75,6 +78,7 @@ function App() {
                 <Route path='/register' element={<Register />} />
                 <Route path='/event/:id' element={<Booking />} />
                 <Route path='/new-event' element={<EventCreate/>}/>
+                <Route path='/disponibility' element={<Disponibility/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
@@ -82,7 +86,7 @@ function App() {
                 <Route path='/reports' element={<Reports/>}/>
               </Routes>
             </div>
-            <Footer/>
+            </Layout>
           </BookingProvider>
           </UserProvider>
         </LocalizationProvider>

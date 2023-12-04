@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import EventSearch from "../components/EventSearch/EventSearch";
+import EventSearch from "../components/eventSearch/EventSearch.jsx";
 import EventShowcase from "../components/eventShowcase/EventShowcase";
 import { Grid, Tabs, Tab } from "@mui/material";
 import Header from "../components/header/Header";
@@ -13,6 +13,7 @@ import Bookings from "./Bookings.jsx";
 import { Container, Paper, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 
+
 function Home() {
   const [tabValue, setTabValue] = useState(0);
   const [selectedFilters, setSelectedFilters] = useState({ activityId: null, neighborhood: null, date: null });
@@ -22,7 +23,6 @@ function Home() {
   const [clubId, setClubId] = useState(null);
 
   useEffect(() => {
-    console.log(user)
     user &&
       axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
@@ -44,7 +44,6 @@ function Home() {
   };
 
   const handleFilterChange = (filters) => {
-    console.log(filters)
     setSelectedFilters(filters);
   };
 
@@ -58,11 +57,23 @@ function Home() {
 
   return (
     <>
+
       {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? (
+
         <Grid
           container
           className="content"
-          sx={{ height: "auto", mx: "auto", maxWidth: "1400px", display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '30px' }}
+          
+          sx={{ height: "auto"
+            , mx: "auto"
+            , maxWidth: "1400px"
+            , display: 'flex'
+            , flexDirection: 'row'
+            , justifyContent: 'space-between'
+            , marginTop: '30px'
+            // ,backgroundImage: `url(${sports})`, backgroundSize: 'cover', backgroundPosition: 'center' 
+          }}
+          
         >
           <Grid item xs={12} sm={3}>
             <EventSearch onUpdateFilters={handleFilterChange} />
