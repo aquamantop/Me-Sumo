@@ -10,7 +10,7 @@ import { TabsSX } from "../components/customMui/CustomMui";
 import { useUserContext } from '../hooks/userContext'
 import axiosInstance from "../hooks/api/axiosConfig";
 import Bookings from "./Bookings.jsx";
-import { Container, Paper } from "@mui/material";
+import { Container, Paper, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 
 
@@ -27,11 +27,13 @@ function Home() {
       axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
           setUserInfo(response.data);
+
           const name = response.data.firstName;
+          if(response.data.role === 'ROLE_CLUB'){
           axiosInstance.get(`/club/by-name/${name}`)
           .then((response) => {
             setClubId(response.data.id);
-          })
+          })}
         })
         .catch((error) => setError(error))
   }, [])
@@ -49,10 +51,15 @@ function Home() {
     navigate(`/new-slot/${clubId}`);
   };
 
+  const handleClickReport = () => {
+    navigate(`/reports`);
+  }
+
   return (
     <>
-    
-      {(!userInfo?.role || userInfo.role === 'ROLE_USER') ? (
+
+      {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? (
+
         <Grid
           container
           className="content"
@@ -89,6 +96,12 @@ function Home() {
               </>
             )}
             {tabValue === 1 && <ClubShowcase />}
+            {userInfo?.role === 'ROLE_ADMIN' && <>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <Button variant="contained" color="primary" onClick={handleClickReport} style={{ marginTop: '10px' }}>
+            Ver reportes
+          </Button>
+          </div></>}            
           </Grid>
         </Grid>
       ) : (userInfo?.role === "ROLE_CLUB" && <>

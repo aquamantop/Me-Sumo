@@ -19,6 +19,7 @@ import Slots from './pages/Slots'
 import Bookings from './pages/Bookings'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import Reports from './pages/Reports'
 import Disponibility from './pages/Disponibility'
 import Layout from './pages/Layout'
 
@@ -80,9 +81,9 @@ function App() {
                 <Route path='/disponibility' element={<Disponibility/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
-                <Route path='/bookings/:idClub' element={<Bookings />} />
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
+                <Route path='/reports' element={<Reports/>}/>
               </Routes>
             </div>
             </Layout>
