@@ -1,7 +1,7 @@
 body {
   background-color: #03081B;
   background-image: url("assets/fondo2.png");
-  background-size: cover;
+  background-size: contain;
   background-position: left;
   background-repeat: no-repeat;
   background-attachment: fixed;
