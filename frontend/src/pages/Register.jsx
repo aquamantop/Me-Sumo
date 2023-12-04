@@ -42,15 +42,6 @@ export default function Register() {
   const onSubmit = handleSubmit(async (userData) => {
 
     const response = await new Promise((resolve) => {
-        // axios({
-        //   method: "POST",
-        //   url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/register',
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   data: userData,
-        // })
         axiosInstance.post("/auth/register", userData)
         .then((response) => resolve(response))
         .catch((error) => resolve(error));
@@ -72,7 +63,6 @@ export default function Register() {
     <>
       
       <Box
-        backgroundColor='background.paper'
         align='center'
         sx={{ mb: 10, mx: 'auto', maxWidth: '1200px' }}
       >

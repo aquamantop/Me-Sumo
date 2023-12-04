@@ -56,7 +56,6 @@ export default function Login() {
   return (
     <>
       <Box
-        backgroundColor="background.paper"
         align="center"
         className="content"
         sx={{ mb: -1.1 }}
@@ -161,7 +160,7 @@ export default function Login() {
         >
           Todavía no tenés usuario?{" "}
           <Link href="/register" underline="none" color="secondary.main">
-            Registrate ;)
+            Registrate 
           </Link>
         </Typography>
       </Box>

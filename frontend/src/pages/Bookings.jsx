@@ -6,7 +6,6 @@ import axiosInstance from "../hooks/api/axiosConfig";
 
 const Bookings = ({idClub}) => {
   const [bookings, setBookings] = useState([]);
-  //const { idClub } = useParams(); // Reemplaza con el ID del club que deseas obtener las reservas
 
   useEffect(() => {
     const fetchBookings = async () => {

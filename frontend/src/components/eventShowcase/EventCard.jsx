@@ -11,13 +11,9 @@ function EventCard({ booking }) {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // console.log(booking.slotId)
     axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
     .then((response) => {
       const { name, url } = response.data.court.club;
-    //   console.log(response.data.capacity)
-    //   console.log(booking.participants)
-    //   console.log(response.data.capacity - booking.participants)
       const availability = response.data.capacity - booking.participants.length;
       const cardData = {
         "clubName": name,
@@ -28,7 +24,6 @@ function EventCard({ booking }) {
         "clubUrl":url
       }
       setInfo(cardData);
-    //   console.log(cardData);
       setLoading(false)
       return cardData;
     })

@@ -1,0 +1,29 @@
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+  
+  .content-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+
+/* Estilos generales para la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: ; /* Color del fondo de la barra de desplazamiento */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #C3FD74; /* Color del pulgar de la barra de desplazamiento */
+    border-radius: 6px; /* Bordes redondeados del pulgar */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #3FEBBD; /* Color del pulgar al pasar el ratón sobre él */
+  }

@@ -1,9 +1,14 @@
 body {
   background-color: #03081B;
-  margin: 0%;
+  background-image: url("assets/fondo3.png");
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
 }
  .content {
-  min-height: calc(100vh - 159.5px);
-  /* El tamaño del viewport - (header + footer) */
+  min-height: calc(100vh - 190px);
 } 
 

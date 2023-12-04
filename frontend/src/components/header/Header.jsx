@@ -10,6 +10,7 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Paper,
 } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import logoDesktop from '../../assets/logoDesktop2.svg'
@@ -33,7 +34,15 @@ const Header = () => {
   };
 
   return (
-    <AppBar position='sticky' sx={{ background: '#03081B' }}>
+    <AppBar position='sticky' 
+    sx={{
+      background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 30%)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      backdropFilter: "blur(3px)",
+      WebkitBackdropFilter: "blur(3px)",
+    }}
+    >
+      {/* <Paper sx={{...PaperSXX, backgroundColor:'none'}}> */}
       <Toolbar
         sx={{ mx: 2, p: 0, display: 'flex', justifyContent: 'space-between' }}
       >
@@ -101,6 +110,7 @@ const Header = () => {
           )}
         </Box>
       </Toolbar>
+      {/* </Paper> */}
     </AppBar>
   )
 }
