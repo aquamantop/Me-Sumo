@@ -16,7 +16,7 @@
   }
   
   ::-webkit-scrollbar-track {
-    background-color: ; /* Color del fondo de la barra de desplazamiento */
+    background-color: none ; /* Color del fondo de la barra de desplazamiento */
   }
   
   ::-webkit-scrollbar-thumb {

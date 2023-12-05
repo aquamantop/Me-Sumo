@@ -21,6 +21,7 @@ export default function Login() {
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -32,26 +33,29 @@ export default function Login() {
   const [error, setError] = useState("")
 
   const onSubmit = handleSubmit(async (userData) => {
-    const response = await new Promise((resolve) => {
-      axiosInstance
-        .post("/auth/login", userData)
-        .then((response) => resolve(response))
-        .catch((error) => setError(error))
-    })
-
-    if (!error) {
-      loginUser(userData)
-      setError("")
+    try {
+      const response = await axiosInstance.post("/auth/login", userData);
+      loginUser(userData);
+      setError("");
       Swal.fire({
         title: "Ingreso exitoso!",
         icon: "success",
-        timer: 1500
-      })
-      navigate("/login-success")
-    } else {
-      setError("Credenciales inválidas")
+        timer: 1500,
+      });
+      navigate("/login-success");
+    } catch (error) {
+      setError("Credenciales inválidas");
+      // Reset the form values when an error occurs
+      setValue("email", "");
+      setValue("password", "");
     }
-  })
+  });
+
+  const handleInputChange = () => {
+    setError("");
+    console.log(error);
+    console.log("holaaaaaaaaaaaaa");
+  };
 
   return (
     <>
@@ -94,6 +98,7 @@ export default function Login() {
             placeholder="Email"
             error={!!errors.email}
             helperText={errors?.email?.message}
+            onChange={handleInputChange}
             type="email"
             rules={{
               required: {
@@ -115,6 +120,7 @@ export default function Login() {
             placeholder="Contraseña"
             error={!!errors.password}
             helperText={errors?.password?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
