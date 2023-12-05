@@ -7,7 +7,7 @@ import { ButtonSX } from "../../../customMui/CustomMui";
 import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
-const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
+const CustomCalendar = ({ courtId, activityId, activityName, activityType, clubId }) => {
   const { id } = useParams();
   
   clubId === null  && parseInt(id)
@@ -73,7 +73,8 @@ const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
         clubId,
         courtId,
         activityId,
-        activityName
+        activityName,
+        activityType
       });
     }
   };

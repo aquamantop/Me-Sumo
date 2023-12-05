@@ -20,6 +20,7 @@ import BoxMessage from '../components/BoxMessage'
 import { useUserContext } from "../hooks/userContext"
 import axiosInstance from "../hooks/api/axiosConfig"
 import { useNavigate } from "react-router-dom"
+import { delay } from "../helpers/delay";
 
 const EventCreate = () => {
   const { bookingInfo } = useBookingContext();
@@ -36,10 +37,11 @@ const EventCreate = () => {
     clubName,
     neighborhoodName,
     activityName,
+    activityType,
     slotId
   } = bookingInfo
 
-  const slotCapacity = activityName.slice(-1) * 2
+  const slotCapacity = activityType * 2
   
     const [boxOpen, setBoxOpen] = useState(false)
     const [boxMessage, setBoxMessage] = useState('')
@@ -79,7 +81,7 @@ const EventCreate = () => {
       ...formData,
       slotId,
       activityId,
-      activityName,
+      activityName: activityName + " " + activityType,
       creatorId: 17,
       clubId,
       clubName,
@@ -92,6 +94,11 @@ const EventCreate = () => {
       approved: false
     }
 
+    const goHome = async () => {
+      await delay(2000)
+      navigate("/")
+    }
+
     if (!user) {
       showMessage(noOkMessage)
       setError("")
@@ -102,7 +109,7 @@ const EventCreate = () => {
           .then((response) => {
             resolve(response)
             showMessage(okMessage)
-            navigate("/")
+            goHome()
           })
           .catch((error) => setError(error))
       })
@@ -149,8 +156,8 @@ const EventCreate = () => {
                 <CustomTextField
                   name="activityName"
                   label="Actividad"
-                  disabled={activityName}
-                  value={activityName ? activityName : ""}
+                  disabled={activityName && activityType}
+                  value={activityName && activityType ? activityName +" " + activityType : ""}
                   fullWidth
                 />
               </Grid>
@@ -185,40 +192,34 @@ const EventCreate = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Stack
-                  component="form"
-                  onSubmit={onSubmit}
+                component="form"
+                onSubmit={onSubmit}
+                container spacing={2}
                 >
-              <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      name="participants"
-                      label="Cupo"
-                      disabled={slotCapacity}
+                  <CustomTextField
+                    name="participants"
+                    label="Cupo"
+                    disabled={slotCapacity}
                     value={slotCapacity ? slotCapacity : ""}
-                    fullWidth
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CustomInput
-                      name="name"
-                      control={control}
-                      label="Nombre del evento"
-                      type="text"
-                      error={!!errors.name}
-                      helperText={errors?.name?.message}
-                      rules={{
-                        required: {
-                          value: true,
-                          message: "El nombre es requerido",
-                        },
-                        pattern: {
-                          value: /^.{6,}$/,
-                          message: "Debe tener al menos 6 caracteres",
-                        },
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
+                  />
+                  <CustomInput
+                    name="name"
+                    control={control}
+                    label="Nombre del evento"
+                    type="text"
+                    error={!!errors.name}
+                    helperText={errors?.name?.message}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "El nombre es requerido",
+                      },
+                      pattern: {
+                        value: /^.{6,}$/,
+                        message: "Debe tener al menos 6 caracteres",
+                      },
+                    }}
+                  />
                   <CustomInput
                     name="message"
                     control={control}
@@ -239,7 +240,6 @@ const EventCreate = () => {
                       },
                     }}
                   />
-                  </Grid>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -253,7 +253,6 @@ const EventCreate = () => {
                       { error }
                     </Typography>
                   )}
-              </Grid>
               </Stack>
             </Grid>
           </Grid>
