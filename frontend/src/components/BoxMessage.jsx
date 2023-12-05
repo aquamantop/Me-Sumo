@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
 
-const BoxMessage = ({ open, message, onClose }) => {
+const BoxMessage = ({ open, title = "", message, onClose }) => {
 
 return (
     <Dialog open={open} onClose={onClose} width='300px' >
@@ -23,14 +23,15 @@ return (
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        {message.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
+        <React.Fragment>
             <Typography variant="h5" >
-                {line}
+                { title }
+            </Typography>
+            <Typography variant="h6" >
+                { message }
             </Typography>
             <br />
         </React.Fragment>
-        ))}
         <Button onClick={onClose} sx={{ ...ButtonSX }} fullWidth>
           ¡OK!
         </Button>
