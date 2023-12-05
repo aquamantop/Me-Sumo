@@ -167,10 +167,10 @@ const Slot = () => {
 
   const handleGoBack = () => {
     
-  if (location.pathname === '/') {
+  if (location.pathname === '/bookings/'+clubId) {
     navigate(-1);
   } else {
-    navigate('/');
+    navigate('/bookings/'+clubId, { replace: true });
   }
   };
 

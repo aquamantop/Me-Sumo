@@ -9,7 +9,6 @@ import ClubShowcase from "../components/clubShowcase/ClubShowcase";
 import { TabsSX } from "../components/customMui/CustomMui";
 import { useUserContext } from '../hooks/userContext'
 import axiosInstance from "../hooks/api/axiosConfig";
-import Bookings from "./Bookings.jsx";
 import { Container, Paper, Button } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 
@@ -47,9 +46,9 @@ function Home() {
     setSelectedFilters(filters);
   };
 
-  const handleClick = () => {
-    navigate(`/new-slot/${clubId}`);
-  };
+const handleClickBooking = () => {
+  navigate(`/bookings/${clubId}`);
+}
 
   const handleClickReport = () => {
     navigate(`/reports`);
@@ -57,9 +56,6 @@ function Home() {
 
   return (
     <>
-
-      {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? (
-
         <Grid
           container
           className="content"
@@ -101,22 +97,15 @@ function Home() {
             <Button variant="contained" color="primary" onClick={handleClickReport} style={{ marginTop: '10px' }}>
             Ver reportes
           </Button>
-          </div></>}            
+          </div></>}
+          {userInfo?.role === 'ROLE_CLUB' && <> 
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Button variant="contained" color="primary" onClick={handleClickBooking} style={{ marginTop: '10px' }}>
+            Ver reservas
+          </Button>
+          </div></>}
           </Grid>
-        </Grid>
-      ) : (userInfo?.role === "ROLE_CLUB" && <>
-        <Container>
-          <Paper>
-            <Bookings idClub={clubId} />
-          </Paper>
-        </Container>
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <IconButton onClick={handleClick} variant="contained" color="primary">
-            Horarios de turnos
-          </IconButton>
-        </div>
-      </>
-      )}
+        </Grid>    
     </>
   );
 }

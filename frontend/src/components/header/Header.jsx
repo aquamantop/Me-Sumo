@@ -23,8 +23,8 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const isMobile = useMediaQuery('(max-width:600px)')
-  const {user, logoutUser} = useUserContext();
-  const {userRole, setUserRole} = useState();
+  const {user, role, logoutUser} = useUserContext();
+   
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,9 +94,13 @@ const Header = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
-              > <Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
+              > 
+              {role === 'ROLE_USER' && <><Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
                   <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Mi Perfil</MenuItem>
-                </Link>
+                </Link></>}
+                {role === 'ROLE_ADMIN' && <><Link to='/reports' style={{textDecoration: 'none', color: 'inherit'}}>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Ver reportes</MenuItem>
+                </Link></>}
                 <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
               </Menu>
             </>

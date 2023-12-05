@@ -81,6 +81,7 @@ function App() {
                 <Route path='/disponibility' element={<Disponibility/>}/>
                 <Route path='/profile' element={<Profile/>}/>
                 <Route path='/new-slot/:id' element={<Slots />}/>
+                <Route path='/bookings/:id' element={<Bookings/>}/>
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/reports' element={<Reports/>}/>
