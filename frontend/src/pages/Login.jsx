@@ -45,7 +45,6 @@ export default function Login() {
       navigate("/login-success");
     } catch (error) {
       setError("Credenciales inválidas");
-      // Reset the form values when an error occurs
       setValue("email", "");
       setValue("password", "");
     }
