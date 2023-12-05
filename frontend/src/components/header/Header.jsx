@@ -24,6 +24,7 @@ const Header = () => {
 
   const isMobile = useMediaQuery('(max-width:600px)')
   const {user, logoutUser} = useUserContext();
+  const {userRole, setUserRole} = useState();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,6 +33,12 @@ const Header = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const getUserRole = () => {
+    if(user){
+      console.log(user.email)
+    }
+  }
 
   return (
     <AppBar position='sticky' 
@@ -88,7 +95,7 @@ const Header = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               > <Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
-                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Editar Perfil</MenuItem>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Mi Perfil</MenuItem>
                 </Link>
                 <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
               </Menu>
