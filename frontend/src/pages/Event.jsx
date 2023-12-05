@@ -25,14 +25,22 @@ const Booking = () => {
     const [initialLoading, setInitialLoading] = useState(false);
     
     const [boxOpen, setBoxOpen] = useState(false);
+    const [boxTitle, setBoxTitle] = useState('');
     const [boxMessage, setBoxMessage] = useState('');
     
 
-    const okMessage = '¡Sumado!\nYa estás participando ;D';
-    const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
+    const okMessage = {
+        title: '¡Sumado!',
+        message: 'Ya estás participando ;D'
+    };
+    
+    const noOkMessage = {
+        title: '¡Hola!',
+        message: 'Tenés que estar logueado para sumarte al evento!'
+    };
 
     
-    const handleBoxClose = (event, reason) => {
+    const handleBoxClose = (_, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -41,8 +49,9 @@ const Booking = () => {
     };
 
     
-    const showMessage = (message) => {
-        setBoxMessage(message);
+    const showMessage = (data) => {
+        setBoxTitle(data.title)
+        setBoxMessage(data.message);
         setBoxOpen(true);
     };
   
@@ -222,6 +231,7 @@ const Booking = () => {
                 </Button>
                 <BoxMessage
                     open={boxOpen}
+                    title={boxTitle}
                     message={boxMessage}
                     onClose={handleBoxClose}
                 />
