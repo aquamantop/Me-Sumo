@@ -84,6 +84,7 @@ const Slot = () => {
   const [slotsAllowed, setSlotsAllowed] = useState(false);
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [overlapError, setOverlapError] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -203,6 +204,7 @@ const Slot = () => {
   };
 
   const handleAddSlot = () => {
+    setOverlapError(false);
     const daysToAdd = selectedDays.map((day) => ({ id: day }));
     const slotData = {
       court: { id: selectedCourt },
@@ -215,6 +217,10 @@ const Slot = () => {
     axiosInstance
       .post('/slot/add', slotData)
       .then((response) => {
+      if(!response.data){
+     setOverlapError(true);
+        }
+      else{
         const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
             const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort((a, b) => {
@@ -235,7 +241,9 @@ const Slot = () => {
           return cancha;
         });
 
-        setCanchas(updatedCanchas);
+    setCanchas(updatedCanchas);
+            
+        }
       })
       .catch((error) => console.error(error));
 
@@ -320,12 +328,12 @@ const Slot = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box p={2}>
+          <Box p={2} display="flex" justifyContent="center">
             <Typography variant="h5">---------------------------------</Typography>
           </Box>
-          <FormContainer>
-            <Typography variant="h5">Agregar Franja Horaria</Typography>
-            <FormControlStyled component="fieldset">
+          <Typography variant="h5" display="flex" justifyContent="center" alignItems="center" marginBottom="2em">Agregar Franja Horaria</Typography>
+          <FormContainer display="flex" justifyContent="center" alignItems="center">
+              <FormControlStyled component="fieldset">
               <FormLabel component="legend">Días</FormLabel>
               <FormGroup>
                 {days.map((day) => (
@@ -337,7 +345,7 @@ const Slot = () => {
                 ))}
               </FormGroup>
             </FormControlStyled>
-            <FormControlStyled>
+            <FormControlStyled >
               <InputLabel>Cancha</InputLabel>
               <Select value={selectedCourt} onChange={handleCourtSelection}>
                 {canchas.map((cancha) => (
@@ -346,9 +354,11 @@ const Slot = () => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControlStyled>
+              
+              </FormControlStyled>
+           
             <TextField
-              label="Horario de Inicio"
+              label="Inicio"
               type="time"
               value={startTime}
               onChange={handleStartTimeChange}
@@ -361,7 +371,7 @@ const Slot = () => {
               sx={{ margin: '8px' }}
             />
             <TextField
-              label="Horario de Fin"
+              label="Fin"
               type="time"
               value={endTime}
               onChange={handleEndTimeChange}
@@ -373,10 +383,21 @@ const Slot = () => {
               }}
               sx={{ margin: '8px' }}
             />
+         
+          </FormContainer>
+          <FormContainer display="flex" justifyContent="center">
+            <FormControlStyled>
             <ButtonStyled variant="contained" color="primary" onClick={handleAddSlot}>
               Agregar
             </ButtonStyled>
-          </FormContainer>
+             
+          {overlapError && (
+            <Typography variant="body2" color="error" sx={{ marginTop: '8px' }}>
+              ¡Superposición de horarios!
+            </Typography>
+          )}
+          </FormControlStyled>
+        </FormContainer>
         </Paper>
       )}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
