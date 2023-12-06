@@ -1,8 +1,5 @@
 import React from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
-import { useTheme } from '@mui/system';
+import { Typography, Button } from "@mui/material";
 import { ButtonSX } from "./customMui/CustomMui";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,8 +15,8 @@ return (
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          textAlign: 'center',
           justifyContent: 'space-between',
-          height:'180px',
           background: 'linear-gradient(#6D006B, #0D2430)',
           color: '#fff',
           borderRadius: '8px',

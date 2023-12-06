@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useUserContext } from '../hooks/userContext';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from 'react-router';
 import {
@@ -67,7 +68,8 @@ const days = [
 ];
 
 const Slot = () => {
-  const { id } = useParams();
+  const {id} = useParams();
+  const [clubId, setClubId] = useState('');
   const [canchas, setCanchas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -76,23 +78,37 @@ const Slot = () => {
   const [selectedCourt, setSelectedCourt] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const { user } = useUserContext();
+  const [userInfo, setUserInfo] = useState({});
+  const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  const handleGoBack = () => {
-    
-  if (location.pathname === '/') {
-    navigate(-1);
-  } else {
-    navigate('/');
-  }
-  };
 
   useEffect(() => {
-    axiosInstance.get(`/club/${id}`)
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(`/user/search-email?email=${user.email}`);
+        setUserInfo(response.data);
+        
+        if (response.data.role !== 'ROLE_CLUB' ){
+                       
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+        }
+        axiosInstance.get(`/club/by-name/${response.data.firstName}`)
+        .then((response) => {
+          
+          setClubId(response.data.id);
+          if(response.data.id !== parseInt(id)){
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+          }
+          axiosInstance.get(`/club/${response.data.id}`)
+        .then((response) => {
+        
         const club = response.data;
+
+      
         const activities = club.activities;
         const canchasData = [];
 
@@ -129,7 +145,38 @@ const Slot = () => {
         setLoading(false);
       })
       .catch((error) => console.error(error));
-  }, []);
+          
+        })
+        
+        
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (user) {
+      fetchData();
+    } else {
+        alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+    }
+  }, [user]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleGoBack = () => {
+    
+  if (location.pathname === '/') {
+    navigate(-1);
+  } else {
+    navigate('/');
+  }
+  };
+
+  useEffect(() => {
+    
+  }, [clubId]);
 
   const handleDeleteSlot = () => {
     // Enviar petición DELETE al endpoint '/delete/{id}'

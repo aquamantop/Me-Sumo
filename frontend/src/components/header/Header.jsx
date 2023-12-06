@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -10,6 +10,7 @@ import {
   Avatar,
   Menu,
   MenuItem,
+  Paper,
 } from '@mui/material'
 import { useMediaQuery } from '@mui/material'
 import logoDesktop from '../../assets/logoDesktop2.svg'
@@ -17,12 +18,31 @@ import logoMobile from '../../assets/logoMobile2.svg'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../../hooks/userContext'
 import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
+import axiosInstance from '../../hooks/api/axiosConfig'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const isMobile = useMediaQuery('(max-width:600px)')
   const {user, logoutUser} = useUserContext();
+  const {userRole, setUserRole} = useState();
+  const [userInfo, setUserInfo] = useState({});
+
+  const fetchAndSetUserInfo = async (email) => {
+    try {
+      const userResponse = await axiosInstance.get(`/user/search-email?email=${email}`);
+      const { firstName } = userResponse.data;
+      setUserInfo({ firstName });
+    } catch (error) {
+      console.error('Error fetching user information:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.email) {
+      fetchAndSetUserInfo(user.email);
+    }
+  }, [user]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,8 +52,22 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const getUserRole = () => {
+    if(user){
+      console.log(user.email)
+    }
+  }
+
   return (
-    <AppBar position='sticky' sx={{ background: '#03081B' }}>
+    <AppBar position='sticky' 
+    sx={{
+      background: "linear-gradient(180deg, #0D2430 0%, rgba(13, 36, 48, 0) 30%)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      backdropFilter: "blur(3px)",
+      WebkitBackdropFilter: "blur(3px)",
+    }}
+    >
+      {/* <Paper sx={{...PaperSXX, backgroundColor:'none'}}> */}
       <Toolbar
         sx={{ mx: 2, p: 0, display: 'flex', justifyContent: 'space-between' }}
       >
@@ -63,14 +97,16 @@ const Header = () => {
                 borderColor: 'primary.main',
                 m: 0,
                 height: '35px',
+                minWidth: '200px',
                 display: 'flex',
                 gap:'8px',
                 flexDirection: 'row',
-                alignItems: 'center'
+                alignItems: 'flex-end',
+                justifyContent:'flex-end' 
               }}
               >
                 <Typography variant='body1' color='primary.main' align='inherit'>
-                  {user.email.split("@")[0]}
+                  ¡Hola {userInfo.firstName}!
                 </Typography>
                 <Avatar onClick={handleMenuOpen} sx={{cursor: 'pointer',}}></Avatar>
               </Box>
@@ -79,7 +115,7 @@ const Header = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               > <Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
-                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Editar Perfil</MenuItem>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Mi Perfil</MenuItem>
                 </Link>
                 <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
               </Menu>
@@ -101,6 +137,7 @@ const Header = () => {
           )}
         </Box>
       </Toolbar>
+      {/* </Paper> */}
     </AppBar>
   )
 }
