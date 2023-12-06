@@ -43,9 +43,8 @@ public class SlotService implements ISlotService {
         List<Long> dayIds = slot.getDays().stream()
                 .map(DayEntity::getId)
                 .toList();
-        Specification<Slot> spec = Specification.where(byCourt(slot.getCourt()))
-                .and(byTimeRange(slot.getStartTime(), slot.getEndTime()))
-                .and(byDays(dayIds));
+
+        Specification<Slot> spec = Specification.where(byUniqueDaysAndTime(slot.getCourt(), slot.getStartTime(), slot.getEndTime(), dayIds));
 
         Optional<Slot> existingSlot = repository.findOne(spec);
         if (existingSlot.isPresent()) {
