@@ -57,7 +57,7 @@ jobs:
         echo "Finished building the app."
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop user.service
-        scp ms_users.jar ubuntu@${HOST}:~/user
+        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-users/target/ms_users.jar ubuntu@${HOST}:~/user
         ssh ubuntu@${HOST} sudo systemctl start user.service
         echo "Finished deploying the app."
       env:
