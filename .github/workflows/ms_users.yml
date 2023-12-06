@@ -49,19 +49,16 @@ jobs:
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
 
-    - name: Build MS User
+    - name: Build & Deploy MS User
       run: |
         echo "Building app..."
         cd backend/ms-users
         mvn install --file pom.xml
         echo "Finished building the app."
-        
-    - name: Deploy User
-      run: |
-          echo "Deploying started..."
-          ssh ubuntu@${HOST} sudo systemctl stop user.service
-          scp ms_users.jar ubuntu@${HOST}:~/user
-          ssh ubuntu@${HOST} sudo systemctl start user.service
-          echo "Finished deploying the app."
+        echo "Deploying started..."
+        ssh ubuntu@${HOST} sudo systemctl stop user.service
+        scp ms_users.jar ubuntu@${HOST}:~/user
+        ssh ubuntu@${HOST} sudo systemctl start user.service
+        echo "Finished deploying the app."
       env:
           HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
