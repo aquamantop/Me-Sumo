@@ -16,7 +16,7 @@ const NotFound = () => {
     >
    
 
-    <img src="src/assets/404.png" alt="404" style={{width: '50%', height: '50vh'}}/>    
+    <img src="/assets/404.png" alt="404" style={{width: '50%', height: '50vh'}}/>    
       <Typography variant="h5" component="div" mt={2} textAlign="center" color="white">
         Ups! Nada por aquí, mejor buscá por {' '}
         <Link to="/" style={{ textDecoration: 'none', color: 'green' }}>
