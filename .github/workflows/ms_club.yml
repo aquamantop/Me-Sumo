@@ -26,7 +26,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-club:
+  deploy-club:
     needs: config-aws
     name: Build Club with Maven
     runs-on: ubuntu-latest
@@ -40,31 +40,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-
-    - name: Build MS Club
-      run: |
-        echo "Building app..."
-        cd backend/ms-clubs
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
-    - name: Archive Club Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: clubs
-        path: backend/ms-clubs/target/ms_clubs.jar
-
-  deploy-club:
-    needs: build-club
-    name: Deploy MS Club
-    runs-on: ubuntu-latest      
-    steps:
-
-    - name: Download Club Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: clubs
-
+    
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -74,11 +50,18 @@ jobs:
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
 
+    - name: Build MS Club
+      run: |
+        echo "Building app..."
+        cd backend/ms-clubs
+        mvn install --file pom.xml
+        echo "Finished building the app."
+
     - name: Deploy Club
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop club.service
-        scp ms_clubs.jar ubuntu@${HOST}:~/club
+        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-clubs/target/ms_clubs.jar ubuntu@${HOST}:~/club
         ssh ubuntu@${HOST} sudo systemctl start club.service
         echo "Finished deploying the app."
       env:
