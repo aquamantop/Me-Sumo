@@ -6,30 +6,37 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import { useUserContext } from '../hooks/userContext';
 import { useNavigate } from 'react-router-dom';
 
-
 const Bookings = () => {
-  const {id} = useParams();
+  const { id } = useParams();
   const [bookings, setBookings] = useState([]);
   const { user } = useUserContext();
-  const [userInfo, setUserInfo] = useState({});
-  const [clubId, setClubId] = useState(0);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
+  const [clubId, setClubId] = useState(null);
+  const [bookingsAllowed, setBookingsAllowed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    user &&
+  
+    if (user) {
       axiosInstance.get(`/user/search-email?email=${user.email}`)
         .then((response) => {
           setUserInfo(response.data);
+          
           if(response.data.role === 'ROLE_CLUB'){
           const name = response.data.firstName;
           axiosInstance.get(`/club/by-name/${name}`)
           .then((response) => {
             setClubId(response.data.id);
+          
             if(response.data.id !== parseInt(id)){
-              console.log(response.data.id + "vs" + id)
               alert("No tiene permiso para acceder a esta página.");
               window.location.href = "/";
+            }else{
+              setBookingsAllowed(true);
+              setIsLoading(false);
+          
             }
           })}else{
             alert("No tiene permiso para acceder a esta página.");
@@ -37,23 +44,29 @@ const Bookings = () => {
           }
         })
         .catch((error) => setError(error))
-    const fetchBookings = async () => {
-      try {
-        const response = await axiosInstance.get(`/booking/approved/${id}?approved=true`);
-        setBookings(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (user) {
-      fetchBookings();
-    } else {
-        alert("No tiene permiso para acceder a esta página.");
-            window.location.href = "/";
+    ;
+  } else {
+    alert("No tiene permiso para acceder a esta página.");
+    navigate('/');
+  } 
+  }, []);
+  
+  const fetchBookings = async () => {
+    try {
+      const response = await axiosInstance.get(`/booking/approved/${id}?approved=true`);
+      setBookings(response.data);
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    
-  }, [id]);
+useEffect(() => { 
+  if (!isLoading && user && bookingsAllowed) {
+    fetchBookings();
+  }
+   
+  }, [isLoading, user, bookingsAllowed]);
+
 
   const [expandedBookingId, setExpandedBookingId] = useState(null);
 

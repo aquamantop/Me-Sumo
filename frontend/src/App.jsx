@@ -22,6 +22,7 @@ import ResetPassword from './pages/ResetPassword'
 import Reports from './pages/Reports'
 import Disponibility from './pages/Disponibility'
 import Layout from './pages/Layout'
+import NotFound from './pages/NotFound'
 
 
 function App() {
@@ -85,6 +86,8 @@ function App() {
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/reports' element={<Reports/>}/>
+                <Route path='/booking/:id' element={<Bookings />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
             </Layout>

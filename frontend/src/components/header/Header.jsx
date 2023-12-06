@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -18,14 +18,17 @@ import logoMobile from '../../assets/logoMobile2.svg'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../../hooks/userContext'
 import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
-import axiosInstance from '../../hooks/api/axiosConfig'
+import { useLocation } from 'react-router-dom'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const isMobile = useMediaQuery('(max-width:600px)')
-  const {user, role, logoutUser} = useUserContext();
-   
+  const {user, logoutUser} = useUserContext();
+  const [menuOptions, setMenuOptions] = useState(["", "Cerrar Sesión"])
+  const [link, setLink] = useState('')
+  const location = useLocation();
+  
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,12 +37,26 @@ const Header = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+   
+  const getMenuOptions = () => {
+    if (user) {
+      if (user.role == 'ROLE_CLUB') {
+        setMenuOptions(['Reservas', 'Cerrar Sesión'])
+        setLink('/booking/'+user.clubId)
+      }
+      if (user.role == 'ROLE_ADMIN') {
+        setMenuOptions(['Reportes', 'Cerrar Sesión'])
+        setLink('/reports')
+      }
+      if (user.role == 'ROLE_USER') {
+        setMenuOptions(['Mi Perfil', 'Cerrar Sesión'])
+        setLink('/profile')
+      }
+    } 
+  };
 
-  const getUserRole = () => {
-    if(user){
-      console.log(user.email)
-    }
-  }
+  
+
 
   return (
     <AppBar position='sticky' 
@@ -74,22 +91,21 @@ const Header = () => {
         <Box>
           { user ? (
             <>
-              <Box 
+              <Box
+              onClick = {getMenuOptions}
               sx={{
                 ...BoxSX,
                 borderColor: 'primary.main',
                 m: 0,
                 height: '35px',
-                minWidth: '200px',
                 display: 'flex',
                 gap:'8px',
                 flexDirection: 'row',
                 alignItems: 'flex-end',
-                justifyContent:'flex-end' 
               }}
               >
                 <Typography variant='body1' color='primary.main' align='inherit'>
-                  ¡Hola {userInfo.firstName}!
+                {user.email.split("@")[0]}
                 </Typography>
                 <Avatar onClick={handleMenuOpen} sx={{cursor: 'pointer',}}></Avatar>
               </Box>
@@ -97,14 +113,10 @@ const Header = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
-              > 
-              {role === 'ROLE_USER' && <><Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
-                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Mi Perfil</MenuItem>
-                </Link></>}
-                {role === 'ROLE_ADMIN' && <><Link to='/reports' style={{textDecoration: 'none', color: 'inherit'}}>
-                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Ver reportes</MenuItem>
-                </Link></>}
-                <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
+              > <Link to={link} style={{textDecoration: 'none', color: 'inherit'}}>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>{menuOptions[0]}</MenuItem>
+                </Link>
+                <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>{menuOptions[1]}</MenuItem>
               </Menu>
             </>
 

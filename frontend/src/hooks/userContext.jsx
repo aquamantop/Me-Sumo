@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getUserByEmail } from "./api/userApi"
 import axiosInstance from "./api/axiosConfig";
+
 
 const UserContext = createContext();
 
@@ -9,45 +11,46 @@ export const useUserContext = () => {
 
 export const UserProvider = ({children}) => {
   const storedUser = localStorage.getItem("user");
-  const storedRole = localStorage.getItem("role");
-  
   const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
-  const [role, setRole] = useState(storedRole ? JSON.parse(storedRole) : null);
   
+  const loginUser = async (userData) => {
+    console.log(userData)
+    const userInfo = await getUserByEmail(userData.email)
+    console.log(userInfo)
+    let clubId = null
 
-  async function getRole(email) {
-    const response = await axiosInstance.get(`/user/search-email?email=${email}`);
-    setRole(response.data.role);
-    localStorage.setItem("role", JSON.stringify(response.data.role));
-  }
-
-  async function getClubId(userName) {
-    const response = await axiosInstance.get(`/club/by-name/${userName}`);
-    setClubId(response.data.id);
+    if (userInfo.role == 'ROLE_CLUB') {
+      await axiosInstance.get(`/club/by-name/${userInfo.firstName}`)
+      .then((response) => {
+          clubId = response.data.id;
+      })
+      .catch(console.log("Error id club"))
+      }
     
-  }
-  
-  const loginUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    getRole(userData.email);
+
+    const data = {
+      ...userData,
+      role: userInfo.role,
+      clubId: clubId 
+    };
+
+    setUser(data);
+    localStorage.setItem("user", JSON.stringify(data));
   };
 
   const logoutUser = () => {
     setUser(null);
-    setRole(null);
     localStorage.removeItem("user");
   };
 
   useEffect(() => {
     return () => {
       localStorage.removeItem("user");
-      localStorage.removeItem("role");
     };
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, role, loginUser, logoutUser }}>
+    <UserContext.Provider value={{ user, loginUser, logoutUser }}>
       {children}
     </UserContext.Provider>
   );

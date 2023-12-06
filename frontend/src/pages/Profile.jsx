@@ -35,6 +35,9 @@ const Profile = () => {
   const [helperText, setHelperText] = useState(true);
 
   useEffect(() => {
+    if(user.role !== 'ROLE_USER'){
+      window.location.href = "/";
+    }
     const fetchData = async () => {
       try {
         const userResponse = await axiosInstance.get(`/user/search-email?email=${user.email}`);
