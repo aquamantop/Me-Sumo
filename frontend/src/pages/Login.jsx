@@ -46,7 +46,6 @@ export default function Login() {
           return;
       }
       setBoxOpen(false);
-      setIsParticipant(true);
   };
 
   

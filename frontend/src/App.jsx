@@ -13,7 +13,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
-import LoginSuccess from "./pages/LoginSuccess";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Reports from "./pages/Reports";
@@ -70,7 +69,6 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/club/:id" element={<Club />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/login-success" element={<LoginSuccess />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/event/:id" element={<Booking />} />
                     <Route path="/new-event" element={<EventCreate />} />
