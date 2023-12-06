@@ -53,7 +53,7 @@ jobs:
     needs: build-booking
     runs-on: ubuntu-latest
     steps:
-      
+
     - name: Build MS Booking
       run: |
         echo "Building app..."
@@ -65,7 +65,7 @@ jobs:
       run: |
           echo "Deploying started..."
           ssh ubuntu@${HOST} sudo systemctl stop booking.service
-          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-booknigs/target/ms_bookings.jar ubuntu@${HOST}:~/booking
+          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-bookings/target/ms_bookings.jar ubuntu@${HOST}:~/booking
           ssh ubuntu@${HOST} sudo systemctl start booking.service
           echo "Finished deploying the app."
       env:
