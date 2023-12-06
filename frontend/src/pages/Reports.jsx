@@ -56,7 +56,7 @@ const Reports = () => {
             title="MeSumoDash"
             width="100%"
             height="1000px"
-            src="https://app.powerbi.com/reportEmbed?reportId=2576de11-1a23-4328-966c-01ef836455d8&autoAuth=true&ctid=881738ec-4d01-419a-a9da-6c8825932861"
+            src="https://app.powerbi.com/reportEmbed?reportId=fbf5be60-e863-48ee-b268-00d15edaabf8&autoAuth=true&ctid=0eee030f-7df6-4a92-9658-9f61116b4800"
             frameBorder="0"
             allowFullScreen
           ></iframe>

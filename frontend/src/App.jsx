@@ -1,11 +1,12 @@
 import "./App.css";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { BookingProvider } from "./hooks/bookingContext";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { Route, Routes } from "react-router";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { Route, Routes } from 'react-router'
+import { ThemeProvider, createTheme } from '@mui/material'
 import { UserProvider } from "./hooks/userContext";
-import Booking from "./pages/Event";
+import Event from "./pages/Event";
+import Bookings from './pages/Bookings'
 import Club from "./pages/Club";
 import Disponibility from "./pages/Disponibility";
 import EventCreate from "./pages/EventCreate";
@@ -13,11 +14,13 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
+import NotFound from './pages/NotFound'
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Reports from "./pages/Reports";
 import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
+
 
 function App() {
   const theme = createTheme({
@@ -70,17 +73,16 @@ function App() {
                     <Route path="/club/:id" element={<Club />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/event/:id" element={<Booking />} />
+                    <Route path="/event/:id" element={<Event />} />
                     <Route path="/new-event" element={<EventCreate />} />
                     <Route path="/disponibility" element={<Disponibility />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/new-slot/:id" element={<Slots />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                    />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/reports" element={<Reports />} />
+                    <Route path='/booking/:id' element={<Bookings />} />
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
               </Layout>
