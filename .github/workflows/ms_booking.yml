@@ -26,8 +26,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-booking:
+  deploy-booking:
     needs: config-aws
+    name: Build Booking with Maven
     runs-on: ubuntu-latest
     steps:
           
@@ -55,12 +56,7 @@ jobs:
         cd backend/ms-bookings
         mvn install --file pom.xml
         echo "Finished building the app."
-        
-  deploy-booking:
-    needs: build-booking
-    runs-on: ubuntu-latest
-    steps:
-        
+
     - name: Deploy Booking
       run: |
           echo "Deploying started..."

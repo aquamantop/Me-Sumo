@@ -26,7 +26,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-club:
+  deploy-club:
     needs: config-aws
     name: Build Club with Maven
     runs-on: ubuntu-latest
@@ -56,12 +56,6 @@ jobs:
         cd backend/ms-clubs
         mvn install --file pom.xml
         echo "Finished building the app."
-        
-  deploy-club:
-    needs: build-club
-    runs-on: ubuntu-latest
-    steps:
-
 
     - name: Deploy Club
       run: |

@@ -26,8 +26,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-user:
+  deploy-user:
     needs: config-aws
+    name: Build User with Maven
     runs-on: ubuntu-latest
     steps:
 
@@ -40,18 +41,6 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build & Deploy MS User
-      run: |
-        echo "Building app..."
-        cd backend/ms-users
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
-  deploy-user:
-    needs: build-user
-    runs-on: ubuntu-latest
-    steps:
-
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -60,6 +49,13 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
+
+    - name: Build & Deploy MS User
+      run: |
+        echo "Building app..."
+        cd backend/ms-users
+        mvn install --file pom.xml
+        echo "Finished building the app."
         
     - name: Deploy User
       run: |

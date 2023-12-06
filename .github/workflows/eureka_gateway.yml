@@ -66,11 +66,6 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
 
-  deploy-eureka-and-gateway:
-    needs: build-eureka-and-gateway
-    runs-on: ubuntu-latest
-    steps:
-        
     - name: Deploy Eureka
       run: |
           echo "Deploying started..."
