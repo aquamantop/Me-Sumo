@@ -10,7 +10,7 @@ export default function LoginSuccess() {
         flexDirection='column'
         justifyContent='center'
         alignItems='center'
-        backgroundColor='background.paper'
+        // backgroundColor='background.paper'
         align='center'
         flex={1}
         className='content'
@@ -22,7 +22,7 @@ export default function LoginSuccess() {
             letterSpacing: 3,
           }}
         >
-          ¡Registro exitoso! Estás a un paso de marcar goles en nuestras
+          ¡Ya estás logueado! Estás a un paso de marcar goles en nuestras
           canchas.
         </Typography>
         <Link
@@ -37,7 +37,7 @@ export default function LoginSuccess() {
             marginBottom: '36px',
           }}
         >
-          ¡Reservá ahora!
+          ¡Sumate o creá tu propio evento!
         </Link>
       </Box>
       
