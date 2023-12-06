@@ -66,7 +66,7 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
 
-  deploy-eureka:
+  deploy-eureka-and-gateway:
     needs: build-eureka-and-gateway
     runs-on: ubuntu-latest
     steps:
@@ -80,11 +80,6 @@ jobs:
           echo "Finished deploying the app."
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
-
-  deploy-gateway:
-    needs: build-eureka-and-gateway
-    runs-on: ubuntu-latest
-    steps:
               
     - name: Deploy Api Gateway
       run: |

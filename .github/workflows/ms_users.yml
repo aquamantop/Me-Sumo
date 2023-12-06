@@ -49,19 +49,19 @@ jobs:
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
 
-  deploy-user:
-    needs: build-user
-    runs-on: ubuntu-latest
-    steps:
-
     - name: Build & Deploy MS User
       run: |
         echo "Building app..."
         cd backend/ms-users
         mvn install --file pom.xml
         echo "Finished building the app."
+
+  deploy-user:
+    needs: build-user
+    runs-on: ubuntu-latest
+    steps:
         
-    - name: Deploy Club
+    - name: Deploy User
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop user.service

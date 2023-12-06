@@ -48,11 +48,6 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_BOOKING }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_BOOKING }}
-        
-  deploy-booking:
-    needs: build-booking
-    runs-on: ubuntu-latest
-    steps:
 
     - name: Build MS Booking
       run: |
@@ -60,6 +55,11 @@ jobs:
         cd backend/ms-bookings
         mvn install --file pom.xml
         echo "Finished building the app."
+        
+  deploy-booking:
+    needs: build-booking
+    runs-on: ubuntu-latest
+    steps:
         
     - name: Deploy Booking
       run: |

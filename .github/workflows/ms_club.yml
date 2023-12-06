@@ -50,17 +50,18 @@ jobs:
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_CLUB }}
 
-  deploy-club:
-    needs: build-club
-    runs-on: ubuntu-latest
-    steps:
-
     - name: Build MS Club
       run: |
         echo "Building app..."
         cd backend/ms-clubs
         mvn install --file pom.xml
         echo "Finished building the app."
+        
+  deploy-club:
+    needs: build-club
+    runs-on: ubuntu-latest
+    steps:
+
 
     - name: Deploy Club
       run: |
