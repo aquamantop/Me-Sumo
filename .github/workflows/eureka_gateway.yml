@@ -58,6 +58,16 @@ jobs:
         cd backend/ms-discovery
         mvn install --file pom.xml
         echo "Finished building the app."
+        
+    - name: Deploy Eureka
+      run: |
+          echo "Deploying started..."
+          ssh ubuntu@${HOST} "sudo systemctl stop eureka.service"
+          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-discovery/target/ms_discovery.jar ubuntu@${HOST}:~/app/eureka
+          ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
+          echo "Finished deploying the app."
+      env:
+        HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
 
     - name: Build Gateway
       run: |
@@ -66,21 +76,11 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
 
-    - name: Deploy Eureka
-      run: |
-          echo "Deploying started..."
-          ssh ubuntu@${HOST} "sudo systemctl stop eureka.service"
-          scp ms_discovery.jar ubuntu@${HOST}:~/app/eureka
-          ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
-          echo "Finished deploying the app."
-      env:
-        HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
-
     - name: Deploy Api Gateway
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop gateway.service
-        scp ms_gateway.jar ubuntu@${HOST}:~/app/gateway
+        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-gateway/target/ms_gateway.jar ubuntu@${HOST}:~/app/gateway
         ssh ubuntu@${HOST} sudo systemctl start gateway.service
         echo "Finished deploying the app."
       env:

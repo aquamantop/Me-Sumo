@@ -39,30 +39,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-
-    - name: Build MS Booking
-      run: |
-        echo "Building app..."
-        cd backend/ms-bookings
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
-    - name: Archive Booking Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: bookings
-        path: backend/ms-bookings/target/ms_bookings.jar
-
-  deploy-booking: 
-    needs: build-booking
-    name: Deploy MS Booking
-    runs-on: ubuntu-latest
-    steps: 
-
-    - name: Download Booking Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: bookings
     
     - name: Configure SSH Key
       run: |
@@ -72,12 +48,19 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_BOOKING }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_BOOKING }}
+
+    - name: Build MS Booking
+      run: |
+        echo "Building app..."
+        cd backend/ms-bookings
+        mvn install --file pom.xml
+        echo "Finished building the app."
         
     - name: Deploy Booking
       run: |
           echo "Deploying started..."
           ssh ubuntu@${HOST} sudo systemctl stop booking.service
-          scp ms_bookings.jar ubuntu@${HOST}:~/booking
+          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-booknigs/target/ms_bookings.jar ubuntu@${HOST}:~/booking
           ssh ubuntu@${HOST} sudo systemctl start booking.service
           echo "Finished deploying the app."
       env:

@@ -55,6 +55,9 @@ jobs:
         cd backend/ms-users
         mvn install --file pom.xml
         echo "Finished building the app."
+        
+    - name: Deploy Club
+      run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop user.service
         scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-users/target/ms_users.jar ubuntu@${HOST}:~/user
