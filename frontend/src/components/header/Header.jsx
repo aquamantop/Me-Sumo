@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -18,6 +18,7 @@ import logoMobile from '../../assets/logoMobile2.svg'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../../hooks/userContext'
 import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
+import axiosInstance from '../../hooks/api/axiosConfig'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -79,14 +80,16 @@ const Header = () => {
                 borderColor: 'primary.main',
                 m: 0,
                 height: '35px',
+                minWidth: '200px',
                 display: 'flex',
                 gap:'8px',
                 flexDirection: 'row',
-                alignItems: 'center'
+                alignItems: 'flex-end',
+                justifyContent:'flex-end' 
               }}
               >
                 <Typography variant='body1' color='primary.main' align='inherit'>
-                  {user.email.split("@")[0]}
+                  ¡Hola {userInfo.firstName}!
                 </Typography>
                 <Avatar onClick={handleMenuOpen} sx={{cursor: 'pointer',}}></Avatar>
               </Box>

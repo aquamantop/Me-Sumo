@@ -7,7 +7,7 @@ import { ButtonSX } from "../../../customMui/CustomMui";
 import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
-const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
+const CustomCalendar = ({ courtId, activityId, activityName, activityType, clubId }) => {
   const { id } = useParams();
   
   clubId === null  && parseInt(id)
@@ -61,16 +61,20 @@ const CustomCalendar = ({ courtId, activityId, activityName, clubId }) => {
   const handleBooking = () => {
     const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot);
 
+    const { id: slotId, startTime, endTime } = data
+
     if (data) {
       saveBookingInfo({
         ...bookingInfo,
         selectedDate,
-        selectedHour: data.startTime,
-        slotId: data.id,
+        startTime,
+        endTime,
+        slotId,
         clubId,
         courtId,
         activityId,
-        activityName
+        activityName,
+        activityType
       });
     }
   };
