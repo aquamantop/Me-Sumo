@@ -28,7 +28,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
         
-  build-and-deploy-eureka-gateway:
+  build-eureka-and-gateway:
     needs: config-aws
     name: Build Eureka & Gateway with Maven
     runs-on: ubuntu-latest      
@@ -59,6 +59,18 @@ jobs:
         mvn install --file pom.xml
         echo "Finished building the app."
         
+    - name: Build Gateway
+      run: |
+        echo "Building app..."
+        cd backend/ms-gateway
+        mvn install --file pom.xml
+        echo "Finished building the app."
+
+  deploy-eureka:
+    needs: build-eureka-and-gateway
+    runs-on: ubuntu-latest
+    steps:
+        
     - name: Deploy Eureka
       run: |
           echo "Deploying started..."
@@ -69,13 +81,11 @@ jobs:
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
 
-    - name: Build Gateway
-      run: |
-        echo "Building app..."
-        cd backend/ms-gateway
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
+  deploy-gateway:
+    needs: build-eureka-and-gateway
+    runs-on: ubuntu-latest
+    steps:
+              
     - name: Deploy Api Gateway
       run: |
         echo "Deploying started..."

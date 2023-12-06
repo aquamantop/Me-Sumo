@@ -26,7 +26,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-and-deploy-user:
+  build-user:
     needs: config-aws
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +48,11 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
+
+  deploy-user:
+    needs: build-user
+    runs-on: ubuntu-latest
+    steps:
 
     - name: Build & Deploy MS User
       run: |

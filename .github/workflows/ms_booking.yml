@@ -39,7 +39,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    
+        
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -48,7 +48,12 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_BOOKING }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_BOOKING }}
-
+        
+  deploy-booking:
+    needs: build-booking
+    runs-on: ubuntu-latest
+    steps:
+      
     - name: Build MS Booking
       run: |
         echo "Building app..."
