@@ -1,22 +1,20 @@
-import PersonIcon from '@mui/icons-material/Person'
-import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp'
-import EmailSharpIcon from '@mui/icons-material/EmailSharp'
-import LockSharpIcon from '@mui/icons-material/LockSharp'
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { delay } from "../helpers/delay"
 import { Link } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import CustomInput from '../components/customInput/CustomInput'
-import Header from '../components/header/Header'
-import Footer from '../components/footer/Footer'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { useState } from 'react'
 import axiosInstance from "../hooks/api/axiosConfig";
-import { ButtonSX } from '../components/customMui/CustomMui'
+import Box from '@mui/material/Box'
+import BoxMessage from '../components/BoxMessage'
+import Button from '@mui/material/Button'
+import CustomInput from '../components/customInput/CustomInput'
+import EmailSharpIcon from '@mui/icons-material/EmailSharp'
+import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp'
+import LockSharpIcon from '@mui/icons-material/LockSharp'
+import PersonIcon from '@mui/icons-material/Person'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -37,42 +35,59 @@ export default function Register() {
     },
   })
 
-  const [error, setError] = useState('')
+  const [error, setError] = useState("")
+  const [boxOpen, setBoxOpen] = useState(false);
+  const [boxTitle, setBoxTitle] = useState('');
+  const [boxMessage, setBoxMessage] = useState('');
+  
+
+  const okMessage = {
+      title: '¡OK!',
+      message: 'Registro exitoso'
+  };
+  
+  const handleBoxClose = (_, reason) => {
+      if (reason === 'clickaway') {
+          return;
+      }
+      setBoxOpen(false);
+  };
+  
+  const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
+  };
+
+  const goLogin = async () => {
+    await delay(2000)
+    navigate("/login")
+  }
 
   const onSubmit = handleSubmit(async (userData) => {
-
-    const response = await new Promise((resolve) => {
-        // axios({
-        //   method: "POST",
-        //   url: 'http://ec2-107-21-182-26.compute-1.amazonaws.com:8090/auth/register',
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   data: userData,
-        // })
-        axiosInstance.post("/auth/register", userData)
-        .then((response) => resolve(response))
-        .catch((error) => resolve(error));
-    });
-
-    if (!error) {
-      Swal.fire({
-        title: "Registro exitoso!",
-        icon: "success",
-        timer: 1500
-      });
-      navigate('/login')
-    } else {
-      setError(error)
+    try {
+      const response = await axiosInstance.post("/auth/register", userData);
+      if (response) {
+        setError("");
+        showMessage(okMessage)
+        goLogin()
+      }
+    } catch (error) {
+      if(error.response.status == 403)
+        setError("Usuario ya registrado.");
+      else
+        setError("Algo salió mal. Por favor, volvé a intentarlo");
     }
-  })
+  });
+
+  const handleInputChange = () => {
+    setError("");
+  };
 
   return (
     <>
       
       <Box
-        backgroundColor='background.paper'
         align='center'
         sx={{ mb: 10, mx: 'auto', maxWidth: '1200px' }}
       >
@@ -110,6 +125,7 @@ export default function Register() {
             placeholder='Nombre *'
             error={!!errors.firstName}
             helperText={errors?.firstName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -125,6 +141,7 @@ export default function Register() {
             placeholder='Apellido *'
             error={!!errors.lastName}
             helperText={errors?.lastName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -140,6 +157,7 @@ export default function Register() {
             placeholder='Apodo *'
             error={!!errors.userName}
             helperText={errors?.userName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -155,6 +173,7 @@ export default function Register() {
             placeholder='Correo Electrónico *'
             error={!!errors.email}
             helperText={errors?.email?.message}
+            onChange={handleInputChange}
             type='email'
             rules={{
               required: {
@@ -176,6 +195,7 @@ export default function Register() {
             placeholder='Contraseña *'
             error={!!errors.password}
             helperText={errors?.password?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
@@ -195,6 +215,7 @@ export default function Register() {
             placeholder='Repetir Contraseña *'
             error={!!errors.confirmPassword}
             helperText={errors?.confirmPassword?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
@@ -220,7 +241,7 @@ export default function Register() {
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              { error.message }
+              { error }
             </Typography>
           )}
         </Stack>
@@ -238,6 +259,12 @@ export default function Register() {
             Iniciar sesión
           </Link>
         </Typography>
+        <BoxMessage
+            open={boxOpen}
+            title={boxTitle}
+            message={boxMessage}
+            onClose={handleBoxClose}
+        />
       </Box>
       
     </>

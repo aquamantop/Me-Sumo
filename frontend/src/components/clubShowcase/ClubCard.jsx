@@ -38,9 +38,6 @@ const ClubCard = ({ club }) => {
           alt="Imagen del Evento"
           height="200"
           image={club.url ? club.url : eventoImagen}
-          /* sx={{
-            objectFit: "cover"
-          }} */
         />
         <Box
           sx={{

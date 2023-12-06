@@ -1,14 +1,11 @@
 import React from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import { Card, CardContent, CardMedia, Typography, Box, Button, Link } from "@mui/material";
-import { useTheme } from '@mui/system';
+import { Typography, Button } from "@mui/material";
 import { ButtonSX } from "./customMui/CustomMui";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 
 
-const BoxMessage = ({ open, message, onClose }) => {
+const BoxMessage = ({ open, title = "", message, onClose }) => {
 
 return (
     <Dialog open={open} onClose={onClose} width='300px' >
@@ -18,22 +15,23 @@ return (
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          textAlign: 'center',
           justifyContent: 'space-between',
-          height:'180px',
           background: 'linear-gradient(#6D006B, #0D2430)',
           color: '#fff',
           borderRadius: '8px',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
-        {message.split('\n').map((line, index) => (
-        <React.Fragment key={index}>
+        <React.Fragment>
             <Typography variant="h5" >
-                {line}
+                { title }
+            </Typography>
+            <Typography variant="h6" >
+                { message }
             </Typography>
             <br />
         </React.Fragment>
-        ))}
         <Button onClick={onClose} sx={{ ...ButtonSX }} fullWidth>
           ¡OK!
         </Button>

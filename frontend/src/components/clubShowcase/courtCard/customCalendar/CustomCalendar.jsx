@@ -3,12 +3,14 @@ import { useParams } from 'react-router';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import { TextField, ToggleButton, ToggleButtonGroup, Button, Typography, Box, Link } from '@mui/material';
 import axiosInstance from "../../../../hooks/api/axiosConfig";
+import { ButtonSX } from "../../../customMui/CustomMui";
 import { useBookingContext } from '../../../../hooks/bookingContext';
 
 
-const CustomCalendar = ({ courtId, activityId, activityName }) => {
+const CustomCalendar = ({ courtId, activityId, activityName, activityType, clubId }) => {
   const { id } = useParams();
-  const clubId = parseInt(id)
+  
+  clubId === null  && parseInt(id)
 
   const { bookingInfo, saveBookingInfo } = useBookingContext();
 
@@ -59,16 +61,20 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
   const handleBooking = () => {
     const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot);
 
+    const { id: slotId, startTime, endTime } = data
+
     if (data) {
       saveBookingInfo({
         ...bookingInfo,
         selectedDate,
-        selectedHour: data.startTime,
-        slotId: data.id,
+        startTime,
+        endTime,
+        slotId,
         clubId,
         courtId,
         activityId,
-        activityName
+        activityName,
+        activityType
       });
     }
   };
@@ -127,7 +133,7 @@ const CustomCalendar = ({ courtId, activityId, activityName }) => {
           }}
           >
         <Link href="/new-event">
-          <Button variant="contained" color="secondary" onClick={handleBooking}>
+          <Button variant="contained" color="secondary" onClick={handleBooking} sx={{...ButtonSX}} >
             Confirmar evento
           </Button>
         </Link>

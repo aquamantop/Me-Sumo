@@ -48,9 +48,7 @@ function EventSearch({ onUpdateFilters }) {
     useEffect(() => {
         const fetchBookings = async () => {
             try {
-
-                //if (selectedActivity!=null) setSelectedActivityId(activitiesMap[selectedActivity]);
-
+                
                 const response = await axiosInstance.get(`/booking/filter_endpoint?${selectedNeighborhood ? `neighborhood=${selectedNeighborhood}` : ''}&${selectedActivityId ? `activityId=${selectedActivityId}` : ''}&${selectedDate ? `date=${selectedDate}` : ''}`);
 
                 setNeighborhoods(response.data.neighborhood);
@@ -63,7 +61,6 @@ function EventSearch({ onUpdateFilters }) {
                 );
                 setDates(response.data.bookingDates);
                 setLoading(false);
-                console.log(response.data.bookingDates)
             } catch (error) {
                 console.error('Error fetching bookings:', error);
             }
@@ -86,7 +83,6 @@ function EventSearch({ onUpdateFilters }) {
             return true;
         }
         const formattedDate = dayjs(date).format('YYYY-MM-DD');  
-        console.log(formattedDate)
         setSelectedDate(formattedDate)
     };
 

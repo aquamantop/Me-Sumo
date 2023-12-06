@@ -6,14 +6,15 @@ import Typography from "@mui/material/Typography"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import CustomInput from "../components/customInput/CustomInput"
-import { useNavigate } from "react-router-dom"
-import { useParams } from 'react-router';
+import { useNavigate, useLocation } from "react-router-dom"
 import Swal from "sweetalert2"
-import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
+import axiosInstance from "../hooks/api/axiosConfig";
 
 export default function ResetPassword() {
-  const { token } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get('token');
   const navigate = useNavigate();
 
   const {
@@ -29,13 +30,16 @@ export default function ResetPassword() {
 
   const [error, setError] = useState("")
 
-
   const onSubmit = handleSubmit(async (userData) => {
-    localStorage.setItem("accessToken", JSON.stringify(token));
+
     const response = await new Promise((resolve) => {
-      axiosInstance.post("/auth/reset-password", userData)
-        .then((response) => resolve(response))
-        .catch((error) => setError(error))
+      axiosInstance.post("/auth/reset-password", userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then((response) => resolve(response))
+      .catch((error) => setError(error))
     })
 
     if (!error) {

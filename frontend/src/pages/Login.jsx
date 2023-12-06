@@ -1,18 +1,19 @@
-import EmailSharpIcon from "@mui/icons-material/EmailSharp"
-import LockSharpIcon from "@mui/icons-material/LockSharp"
+import { ButtonSX } from "../components/customMui/CustomMui"
+import { delay } from "../helpers/delay";
 import { Link } from "@mui/material"
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import Swal from "sweetalert2"
-import CustomInput from "../components/customInput/CustomInput"
-import { ButtonSX } from "../components/customMui/CustomMui"
-import axiosInstance from "../hooks/api/axiosConfig"
+import { useState } from "react"
 import { useUserContext } from "../hooks/userContext"
+import axiosInstance from "../hooks/api/axiosConfig"
+import Box from "@mui/material/Box"
+import BoxMessage from '../components/BoxMessage'
+import Button from "@mui/material/Button"
+import CustomInput from "../components/customInput/CustomInput"
+import EmailSharpIcon from "@mui/icons-material/EmailSharp"
+import LockSharpIcon from "@mui/icons-material/LockSharp"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
 
 export default function Login() {
   const navigate = useNavigate()
@@ -30,33 +31,56 @@ export default function Login() {
   })
 
   const [error, setError] = useState("")
+  const [boxOpen, setBoxOpen] = useState(false);
+  const [boxTitle, setBoxTitle] = useState('');
+  const [boxMessage, setBoxMessage] = useState('');
+  
+
+  const okMessage = {
+      title: '¡OK!',
+      message: 'Ingreso exitoso'
+  };
+  
+  const handleBoxClose = (_, reason) => {
+      if (reason === 'clickaway') {
+          return;
+      }
+      setBoxOpen(false);
+  };
+
+  
+  const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
+  };
+
+  const goHome = async () => {
+    await delay(2000)
+    navigate("/")
+  }
 
   const onSubmit = handleSubmit(async (userData) => {
-    const response = await new Promise((resolve) => {
-      axiosInstance
-        .post("/auth/login", userData)
-        .then((response) => resolve(response))
-        .catch((error) => setError(error))
-    })
-
-    if (!error) {
-      loginUser(userData)
-      setError("")
-      Swal.fire({
-        title: "Ingreso exitoso!",
-        icon: "success",
-        timer: 1500
-      })
-      navigate("/login-success")
-    } else {
-      setError("Credenciales inválidas")
+    try {
+      const response = await axiosInstance.post("/auth/login", userData);
+      if (response) {
+        loginUser(userData);
+        setError("");
+        showMessage(okMessage)
+        goHome()
+      }
+    } catch (error) {
+      setError("Credenciales inválidas");
     }
-  })
+  });
+
+  const handleInputChange = () => {
+    setError("");
+  };
 
   return (
     <>
       <Box
-        backgroundColor="background.paper"
         align="center"
         className="content"
         sx={{ mb: -1.1 }}
@@ -95,6 +119,7 @@ export default function Login() {
             placeholder="Email"
             error={!!errors.email}
             helperText={errors?.email?.message}
+            onChange={handleInputChange}
             type="email"
             rules={{
               required: {
@@ -116,6 +141,7 @@ export default function Login() {
             placeholder="Contraseña"
             error={!!errors.password}
             helperText={errors?.password?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
@@ -135,7 +161,7 @@ export default function Login() {
 
           {error && (
             <Typography variant="body2" color="error.main">
-              Por favor vuelva a intentarlo, sus credenciales son inválidas
+              { error }
             </Typography>
           )}
         </Stack>
@@ -161,9 +187,15 @@ export default function Login() {
         >
           Todavía no tenés usuario?{" "}
           <Link href="/register" underline="none" color="secondary.main">
-            Registrate ;)
+            Registrate 
           </Link>
         </Typography>
+        <BoxMessage
+            open={boxOpen}
+            title={boxTitle}
+            message={boxMessage}
+            onClose={handleBoxClose}
+        />
       </Box>
     </>
   )

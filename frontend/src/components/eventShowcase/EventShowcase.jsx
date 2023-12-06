@@ -17,21 +17,16 @@ function EventShowcase({keyword, filters}) {
        
   useEffect(() => {
 
-    console.log(filters.activityId, filters.neighborhood, filters.date)
     let endpoint = ""
 
     filters.activityId==null & filters.neighborhood==null & filters.date ==null ?
     endpoint =  '/booking/approved?approved=false' :
     endpoint =  `/booking/filter_endpoint?full=true&${filters.neighborhood ? `neighborhood=${filters.neighborhood}` : ''}&${filters.activityId ? `activityId=${filters.activityId}` : ''}&${filters.date ? `date=${filters.date}` : ''}`
 
-
     axiosInstance.get(endpoint)
-    //axiosInstance.get('/booking/approved?approved=false')
-    //axiosInstance.get(`/booking/filter_endpoint?full=true&${filters.selectedNeighborhood ? `neighborhood=${filters.selectedNeighborhood}` : ''}&${filters.selectedActivityId ? `activityId=${filters.selectedActivityId}` : ''}&${filters.selectedDate ? `date=${filters.selectedDate}` : ''}`)
     .then((response) => {
       setBookings(response.data)
       setLoading(false)
-    //   console.log(response.data)
     })
     .catch((error) => setError(error))
   }, [filters])
@@ -46,8 +41,6 @@ function EventShowcase({keyword, filters}) {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const paginatedBookings = sortedBookings.slice(startIndex, endIndex);
-  console.log(paginatedBookings)
-  console.log(startIndex,endIndex)
 
   const numPages = Math.ceil(sortedBookings.length / itemsPerPage);
 
