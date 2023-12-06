@@ -25,24 +25,19 @@ public class SlotSpecification implements Specification<Slot> {
         return null;
     }
 
-    public static Specification<Slot> byCourt(Court court) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("court"), court);
-    }
 
-    public static Specification<Slot> byTimeRange(LocalTime startTime, LocalTime endTime) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.and(
-                        criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startTime),
-                        criteriaBuilder.lessThanOrEqualTo(root.get("endTime"), endTime)
-                );
-    }
-
-    public static Specification<Slot> byDays(Collection<Long> dayIds) {
+    public static Specification<Slot> byUniqueDaysAndTime(Court court, LocalTime startTime, LocalTime endTime, Collection<Long> dayIds) {
         return (root, query, criteriaBuilder) -> {
             Join<Slot, DayEntity> join = root.join("days");
-            return join.get("id").in(dayIds);
+
+            Predicate courtCondition = criteriaBuilder.equal(root.get("court"), court);
+            Predicate timeCondition = criteriaBuilder.and(
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startTime),
+                    criteriaBuilder.lessThanOrEqualTo(root.get("endTime"), endTime)
+            );
+            Predicate dayCondition = join.get("id").in(dayIds);
+
+            return criteriaBuilder.and(courtCondition, timeCondition, dayCondition);
         };
     }
-
-
 }
