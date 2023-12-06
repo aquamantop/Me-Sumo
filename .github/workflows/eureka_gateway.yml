@@ -27,13 +27,13 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
-
-  build-eureka-gateway:
+        
+  build-eureka-and-gateway:
     needs: config-aws
     name: Build Eureka & Gateway with Maven
     runs-on: ubuntu-latest      
     steps:
-    
+            
     - name: Checkout Repository
       uses: actions/checkout@v3
 
@@ -42,39 +42,7 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-
-    - name: Build Eureka
-      run: |
-        echo "Building app..."
-        cd backend/ms-discovery
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
-    - name: Archive Eureka Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: eureka
-        path: backend/ms-discovery/target/ms_discovery.jar
-
-    - name: Build Gateway
-      run: |
-        echo "Building app..."
-        cd backend/ms-gateway
-        mvn install --file pom.xml
-        echo "Finished building the app."
-  
-    - name: Archive Gateway Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: gateway
-        path: backend/ms-gateway/target/ms_gateway.jar
-
-  deploy-eureka-gateway:
-    needs: build-eureka-gateway
-    name: Deploy Eureka & Gateway
-    runs-on: ubuntu-latest
-    steps:
-
+        
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -84,31 +52,35 @@ jobs:
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
 
-    - name: Download Eureka Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: eureka
+    - name: Build Eureka
+      run: |
+        echo "Building app..."
+        cd backend/ms-discovery
+        mvn install --file pom.xml
+        echo "Finished building the app."
+        
+    - name: Build Gateway
+      run: |
+        echo "Building app..."
+        cd backend/ms-gateway
+        mvn install --file pom.xml
+        echo "Finished building the app."
 
     - name: Deploy Eureka
       run: |
           echo "Deploying started..."
           ssh ubuntu@${HOST} "sudo systemctl stop eureka.service"
-          scp ms_discovery.jar ubuntu@${HOST}:~/app/eureka
+          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-discovery/target/ms_discovery.jar ubuntu@${HOST}:~/app/eureka
           ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
           echo "Finished deploying the app."
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
-
-    - name: Download Gateway Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: gateway
-
-    - name: Build Api Gateway
+              
+    - name: Deploy Api Gateway
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop gateway.service
-        scp ms_gateway.jar ubuntu@${HOST}:~/app/gateway
+        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-gateway/target/ms_gateway.jar ubuntu@${HOST}:~/app/gateway
         ssh ubuntu@${HOST} sudo systemctl start gateway.service
         echo "Finished deploying the app."
       env:
