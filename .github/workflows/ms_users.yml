@@ -39,15 +39,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-    
-    - name: Configure SSH Key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.DEPLOY_KEY_USER }}" > ~/.ssh/id_rsa
-        chmod 400 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
-      env:
-        HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
 
     - name: Build & Deploy MS User
       run: |
@@ -60,6 +51,15 @@ jobs:
     needs: build-user
     runs-on: ubuntu-latest
     steps:
+
+    - name: Configure SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY_USER }}" > ~/.ssh/id_rsa
+        chmod 400 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
+      env:
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
         
     - name: Deploy User
       run: |
