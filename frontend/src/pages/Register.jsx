@@ -1,4 +1,5 @@
 import { ButtonSX } from '../components/customMui/CustomMui'
+import { delay } from "../helpers/delay"
 import { Link } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -50,9 +51,7 @@ export default function Register() {
           return;
       }
       setBoxOpen(false);
-      setIsParticipant(true);
   };
-
   
   const showMessage = (data) => {
       setBoxTitle(data.title)
@@ -65,36 +64,19 @@ export default function Register() {
     navigate("/login")
   }
 
-  /* const onSubmit = handleSubmit(async (userData) => {
-    const response = await new Promise((resolve) => {
-        axiosInstance.post("/auth/register", userData)
-        .then((response) => resolve(response))
-        .catch((error) => resolve(error));
-    });
-
-    if (!error) {
-      Swal.fire({
-        title: "Registro exitoso!",
-        icon: "success",
-        timer: 1500
-      });
-      navigate('/login')
-    } else {
-      setError(error)
-    }
-  }) */
-
   const onSubmit = handleSubmit(async (userData) => {
     try {
       const response = await axiosInstance.post("/auth/register", userData);
       if (response) {
-        loginUser(userData);
         setError("");
         showMessage(okMessage)
-        goHome()
+        goLogin()
       }
     } catch (error) {
-      setError("Credenciales inválidas");
+      if(error.response.status == 403)
+        setError("Usuario ya registrado.");
+      else
+        setError("Algo salió mal. Por favor, volvé a intentarlo");
     }
   });
 
@@ -259,7 +241,7 @@ export default function Register() {
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              { error.message }
+              { error }
             </Typography>
           )}
         </Stack>
