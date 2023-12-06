@@ -26,7 +26,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-  build-user:
+  build-and-deploy-user:
     needs: config-aws
     runs-on: ubuntu-latest
     steps:
@@ -39,30 +39,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-  
-    - name: Build MS User
-      run: |
-        echo "Building app..."
-        cd backend/ms-users
-        mvn install --file pom.xml
-        echo "Finished building the app."
-
-    - name: Archive User Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: users
-        path: backend/ms-users/target/ms_users.jar
-        
-  deploy-user: 
-    needs: build-user
-    name: Deploy MS User
-    runs-on: ubuntu-latest
-    steps: 
-
-    - name: Download User Build Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: users
     
     - name: Configure SSH Key
       run: |
@@ -72,6 +48,13 @@ jobs:
         ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
       env:
         HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
+
+    - name: Build MS User
+      run: |
+        echo "Building app..."
+        cd backend/ms-users
+        mvn install --file pom.xml
+        echo "Finished building the app."
         
     - name: Deploy User
       run: |
