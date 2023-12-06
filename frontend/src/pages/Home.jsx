@@ -18,8 +18,10 @@ function Home() {
     setSelectedFilters(filters);
   };
 
+
   return (
     <>
+
         <Grid
           container
           className="content"
@@ -58,6 +60,7 @@ function Home() {
             {tabValue === 1 && <ClubShowcase />}
           </Grid>
         </Grid>    
+
     </>
   );
 }

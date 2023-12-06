@@ -28,7 +28,6 @@ const Header = () => {
   const [menuOptions, setMenuOptions] = useState(["", "Cerrar Sesión"])
   const [link, setLink] = useState('')
   const location = useLocation();
-  
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,7 +54,6 @@ const Header = () => {
     } 
   };
 
-  
 
 
   return (
@@ -116,7 +114,9 @@ const Header = () => {
               > <Link to={link} style={{textDecoration: 'none', color: 'inherit'}}>
                   <MenuItem sx={MenuListSX} onClick={handleMenuClose}>{menuOptions[0]}</MenuItem>
                 </Link>
-                <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>{menuOptions[1]}</MenuItem>
+                <Link to='/' style={{textDecoration: 'none', color: 'inherit'}}>
+                  <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>{menuOptions[1]}</MenuItem>
+                </Link>
               </Menu>
             </>
 
