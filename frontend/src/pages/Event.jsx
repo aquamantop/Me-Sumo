@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router';
-import Header from '../components/header/Header'
-import Footer from '../components/footer/Footer'
-import { Container, Paper, Typography, Box, Button, Link, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { PaperSXX } from '../components/customMui/CustomMui'
-import axiosInstance from "../hooks/api/axiosConfig";
-import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
-import { CenterFocusStrong } from '@mui/icons-material';
+import { Container, Paper, Typography, Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { PaperSXX } from '../components/customMui/CustomMui'
+import { useParams } from 'react-router';
+import { useTheme } from '@mui/system';
 import { useUserContext } from '../hooks/userContext'
+import axiosInstance from "../hooks/api/axiosConfig";
 import BoxMessage from '../components/BoxMessage'
+import React, { useState, useEffect } from 'react'
 
 const Booking = () => {
     const { id } = useParams();
@@ -22,17 +19,25 @@ const Booking = () => {
     const [cardInfo, setCardInfo] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [initialLoading, setInitialLoading] = useState(false);
+    const initialLoading = false
     
     const [boxOpen, setBoxOpen] = useState(false);
+    const [boxTitle, setBoxTitle] = useState('');
     const [boxMessage, setBoxMessage] = useState('');
     
 
-    const okMessage = '¡Sumado!\nYa estás participando ;D';
-    const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
+    const okMessage = {
+        title: '¡Sumado!',
+        message: 'Ya estás participando ;D'
+    };
+
+    const noOkMessage = {
+        title: '¡Hola!',
+        message: 'Tenés que estar logueado para sumarte al evento!'
+    };
 
     
-    const handleBoxClose = (event, reason) => {
+    const handleBoxClose = (_, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -41,8 +46,9 @@ const Booking = () => {
     };
 
     
-    const showMessage = (message) => {
-        setBoxMessage(message);
+    const showMessage = (data) => {
+        setBoxTitle(data.title)
+        setBoxMessage(data.message);
         setBoxOpen(true);
     };
   
@@ -222,6 +228,7 @@ const Booking = () => {
                 </Button>
                 <BoxMessage
                     open={boxOpen}
+                    title={boxTitle}
                     message={boxMessage}
                     onClose={handleBoxClose}
                 />
