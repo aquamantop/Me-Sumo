@@ -4,13 +4,14 @@ import { Container, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { ExpandMore as ExpandMoreIcon, ExpandLess as ExpandLessIcon } from '@mui/icons-material';
 import axiosInstance from "../hooks/api/axiosConfig";
 
-const Bookings = ({idClub}) => {
+const Bookings = () => {
+  const { id } = useParams();
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axiosInstance.get(`/booking/approved/${idClub}?approved=true`);
+        const response = await axiosInstance.get(`/booking/approved/${id}?approved=true`);
         setBookings(response.data);
       } catch (error) {
         console.error(error);
@@ -18,7 +19,7 @@ const Bookings = ({idClub}) => {
     };
 
     fetchBookings();
-  }, [idClub]);
+  }, [id]);
 
   const [expandedBookingId, setExpandedBookingId] = useState(null);
 

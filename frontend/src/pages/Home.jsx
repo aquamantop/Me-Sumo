@@ -19,24 +19,24 @@ function Home() {
   const [selectedFilters, setSelectedFilters] = useState({ activityId: null, neighborhood: null, date: null });
   const [userInfo, setUserInfo] = useState({});
   const { user } = useUserContext();
-  const navigate = useNavigate();
-  const [clubId, setClubId] = useState(null);
+  // const navigate = useNavigate();
+  // const [clubId, setClubId] = useState(null);
 
-  useEffect(() => {
-    user &&
-      axiosInstance.get(`/user/search-email?email=${user.email}`)
-        .then((response) => {
-          setUserInfo(response.data);
+  // useEffect(() => {
+  //   user &&
+  //     axiosInstance.get(`/user/search-email?email=${user.email}`)
+  //       .then((response) => {
+  //         setUserInfo(response.data);
 
-          const name = response.data.firstName;
-          if(response.data.role === 'ROLE_CLUB'){
-          axiosInstance.get(`/club/by-name/${name}`)
-          .then((response) => {
-            setClubId(response.data.id);
-          })}
-        })
-        .catch((error) => setError(error))
-  }, [])
+  //         const name = response.data.firstName;
+  //         if(response.data.role === 'ROLE_CLUB'){
+  //         axiosInstance.get(`/club/by-name/${name}`)
+  //         .then((response) => {
+  //           setClubId(response.data.id);
+  //         })}
+  //       })
+  //       .catch((error) => setError(error))
+  // }, [])
 
 
   const handleChangeTab = (event, newValue) => {
@@ -47,18 +47,18 @@ function Home() {
     setSelectedFilters(filters);
   };
 
-  const handleClick = () => {
-    navigate(`/new-slot/${clubId}`);
-  };
+  // const handleClick = () => {
+  //   navigate(`/new-slot/${clubId}`);
+  // };
 
-  const handleClickReport = () => {
-    navigate(`/reports`);
-  }
+  // const handleClickReport = () => {
+  //   navigate(`/reports`);
+  // }
 
   return (
     <>
 
-      {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? (
+      {/* {(!userInfo?.role || userInfo.role === 'ROLE_USER') || userInfo.role === 'ROLE_ADMIN' ? ( */}
 
         <Grid
           container
@@ -96,15 +96,15 @@ function Home() {
               </>
             )}
             {tabValue === 1 && <ClubShowcase />}
-            {userInfo?.role === 'ROLE_ADMIN' && <>
+            {/* {userInfo?.role === 'ROLE_ADMIN' && <>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
             <Button variant="contained" color="primary" onClick={handleClickReport} style={{ marginTop: '10px' }}>
             Ver reportes
           </Button>
-          </div></>}            
+          </div></>}              */}
           </Grid>
         </Grid>
-      ) : (userInfo?.role === "ROLE_CLUB" && <>
+      {/* ) : (userInfo?.role === "ROLE_CLUB" && <>
         <Container>
           <Paper>
             <Bookings idClub={clubId} />
@@ -116,7 +116,7 @@ function Home() {
           </IconButton>
         </div>
       </>
-      )}
+      )} */}
     </>
   );
 }

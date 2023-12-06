@@ -24,7 +24,9 @@ const Header = () => {
 
   const isMobile = useMediaQuery('(max-width:600px)')
   const {user, logoutUser} = useUserContext();
-  const {userRole, setUserRole} = useState();
+
+  const [menuOptions, setMenuOptions] = useState(["Mi Perfil", "Cerrar Sesión"])
+  const [link, setLink] = useState('/profile')
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -33,12 +35,19 @@ const Header = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  const getUserRole = () => {
-    if(user){
-      console.log(user.email)
-    }
-  }
+   
+  const getMenuOptions = () => {
+    if (user) {
+      if (user.role == 'ROLE_CLUB') {
+        setMenuOptions(['Reservas', 'Cerrar Sesión'])
+        setLink('/booking/'+user.clubId)
+      }
+      if (user.role == 'ROLE_ADMIN') {
+        setMenuOptions(['Negocio', 'Cerrar Sesión'])
+      }
+      console.log(menuOptions)
+    } 
+  };
 
   return (
     <AppBar position='sticky' 
@@ -73,7 +82,8 @@ const Header = () => {
         <Box>
           { user ? (
             <>
-              <Box 
+              <Box
+              onClick = {getMenuOptions}
               sx={{
                 ...BoxSX,
                 borderColor: 'primary.main',
@@ -94,10 +104,10 @@ const Header = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
-              > <Link to='/profile' style={{textDecoration: 'none', color: 'inherit'}}>
-                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>Mi Perfil</MenuItem>
+              > <Link to={link} style={{textDecoration: 'none', color: 'inherit'}}>
+                  <MenuItem sx={MenuListSX} onClick={handleMenuClose}>{menuOptions[0]}</MenuItem>
                 </Link>
-                <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>Cerrar Sesión</MenuItem>
+                <MenuItem sx={MenuListSX} onClick={() => logoutUser()}>{menuOptions[1]}</MenuItem>
               </Menu>
             </>
 

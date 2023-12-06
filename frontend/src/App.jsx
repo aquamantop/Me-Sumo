@@ -84,6 +84,7 @@ function App() {
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/reports' element={<Reports/>}/>
+                <Route path='/booking/:id' element={<Bookings />} />
               </Routes>
             </div>
             </Layout>
