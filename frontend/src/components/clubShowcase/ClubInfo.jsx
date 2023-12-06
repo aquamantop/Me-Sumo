@@ -68,7 +68,7 @@ export const ClubInfo = ({ club }) => {
               {activities.map((activity) => (
                 activity.courts.sort((a, b) => a.id - b.id).map((court) => {
                   return <Grid item xs={12} sm={6} key={court.id} sx={{ p: 1 }}>
-                      <CourtCard court={court} activityId={activity.id} activityName={activity.name +" "+ activity.type} clubId={club.id}/>
+                      <CourtCard court={court} activityId={activity.id} activityName={activity.name} activityType={activity.type} clubId={club.id}/>
                   </Grid>
                 })
               ))} 
