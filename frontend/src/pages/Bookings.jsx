@@ -4,26 +4,78 @@ import { Box, Container, Paper, Typography, Table, TableHead, TableRow, TableCel
 import { ExpandMore as ExpandMoreIcon, ExpandLess as ExpandLessIcon } from '@mui/icons-material';
 import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
 import axiosInstance from "../hooks/api/axiosConfig";
+import { useUserContext } from '../hooks/userContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const Bookings = () => {
   const { id } = useParams();
   const [bookings, setBookings] = useState([]);
+  const { user } = useUserContext();
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
+  const [clubId, setClubId] = useState(null);
+  const [bookingsAllowed, setBookingsAllowed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await axiosInstance.get(`/booking/approved/${id}?approved=true`);
-        setBookings(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  
+    if (user) {
+      axiosInstance.get(`/user/search-email?email=${user.email}`)
+        .then((response) => {
+          setUserInfo(response.data);
+          
+          if(response.data.role === 'ROLE_CLUB'){
+          const name = response.data.firstName;
+          axiosInstance.get(`/club/by-name/${name}`)
+          .then((response) => {
+            setClubId(response.data.id);
+          
+            if(response.data.id !== parseInt(id)){
+              alert("No tiene permiso para acceder a esta página.");
+              window.location.href = "/";
+            }else{
+              setBookingsAllowed(true);
+              setIsLoading(false);
+          
+            }
+          })}else{
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";            
+          }
+        })
+        .catch((error) => setError(error))
+    ;
+  } else {
+    alert("No tiene permiso para acceder a esta página.");
+    navigate('/');
+  } 
+  }, []);
+  
+  const fetchBookings = async () => {
+    try {
+      const response = await axiosInstance.get(`/booking/approved/${id}?approved=true`);
+      setBookings(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+
+useEffect(() => { 
+  if (!isLoading && user && bookingsAllowed) {
     fetchBookings();
-  }, [id]);
+  }
+   
+  }, [isLoading, user, bookingsAllowed]);
+
 
   const [expandedBookingId, setExpandedBookingId] = useState(null);
+
+  const handleClick = () => {
+    navigate(`/new-slot/${id}`);
+  };
 
   const handleExpandBooking = (bookingId) => {
     setExpandedBookingId(bookingId === expandedBookingId ? null : bookingId);
@@ -89,7 +141,13 @@ const Bookings = () => {
           </TableBody>
         </Table>
       </Paper>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <IconButton onClick={handleClick} variant="contained" color="primary">
+            Horarios de turnos
+          </IconButton>
+      </div>
     </Container>
+    
   );
 };
 

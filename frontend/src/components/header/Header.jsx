@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -18,33 +18,16 @@ import logoMobile from '../../assets/logoMobile2.svg'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../../hooks/userContext'
 import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
-import axiosInstance from '../../hooks/api/axiosConfig'
+import { useLocation } from 'react-router-dom'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const isMobile = useMediaQuery('(max-width:600px)')
   const {user, logoutUser} = useUserContext();
-
-  const [menuOptions, setMenuOptions] = useState(["Mi Perfil", "Cerrar Sesión"])
-  const [link, setLink] = useState('/profile')
-  const [userInfo, setUserInfo] = useState({});
-
-  const fetchAndSetUserInfo = async (email) => {
-    try {
-      const userResponse = await axiosInstance.get(`/user/search-email?email=${email}`);
-      const { firstName } = userResponse.data;
-      setUserInfo({ firstName });
-    } catch (error) {
-      console.error('Error fetching user information:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (user && user.email) {
-      fetchAndSetUserInfo(user.email);
-    }
-  }, [user]);
+  const [menuOptions, setMenuOptions] = useState(["", "Cerrar Sesión"])
+  const [link, setLink] = useState('')
+  const location = useLocation();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,11 +44,17 @@ const Header = () => {
         setLink('/booking/'+user.clubId)
       }
       if (user.role == 'ROLE_ADMIN') {
-        setMenuOptions(['Negocio', 'Cerrar Sesión'])
+        setMenuOptions(['Reportes', 'Cerrar Sesión'])
+        setLink('/reports')
       }
-      console.log(menuOptions)
+      if (user.role == 'ROLE_USER') {
+        setMenuOptions(['Mi Perfil', 'Cerrar Sesión'])
+        setLink('/profile')
+      }
     } 
   };
+
+
 
   return (
     <AppBar position='sticky' 
@@ -107,16 +96,14 @@ const Header = () => {
                 borderColor: 'primary.main',
                 m: 0,
                 height: '35px',
-                minWidth: '200px',
                 display: 'flex',
                 gap:'8px',
                 flexDirection: 'row',
                 alignItems: 'flex-end',
-                justifyContent:'flex-end' 
               }}
               >
                 <Typography variant='body1' color='primary.main' align='inherit'>
-                  ¡Hola {userInfo.firstName}!
+                {user.email.split("@")[0]}
                 </Typography>
                 <Avatar onClick={handleMenuOpen} sx={{cursor: 'pointer',}}></Avatar>
               </Box>
