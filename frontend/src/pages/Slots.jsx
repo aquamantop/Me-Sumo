@@ -443,17 +443,8 @@ const Slot = () => {
               </Grid>
             </Grid>
           </FormContainer>
-
-
-
-
-
-
-        </Paper>
-        
+        </Paper>        
       )}
-
-
     </Container>
     
   );
