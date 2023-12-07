@@ -28,11 +28,17 @@ import {
   FormControlLabel,
   InputLabel,
   Select,
+  ListItemText,
   MenuItem
 } from '@mui/material';
 import { styled } from '@mui/system'
 import DeleteIcon from '@mui/icons-material/Delete';
+import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import axiosInstance from "../hooks/api/axiosConfig";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const FormContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -82,6 +88,11 @@ const Slot = () => {
   const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState(null);
 
+  const [expanded, setExpanded] = useState(false);
+
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
+  };
 
 
   useEffect(() => {
@@ -282,16 +293,27 @@ const Slot = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <Paper>
-          <Box p={2}>
-            <Typography variant="h5">Horarios de turnos</Typography>
+        
+        <Paper sx={PaperSXX}>
+        <Box sx={BoxSX}>
+          <Typography variant="h5" color="primary.main">
+            Turnos en tus canchas
+          </Typography>
           </Box>
-          <TableContainer>
+          <Accordion expanded={expanded} onChange={handleAccordionChange} sx={{backgroundColor:'background.default'}}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+              <Typography variant="h6" color="secondary.main">
+                Ver turnos cargados
+              </Typography>
+          </AccordionSummary>
+          <AccordionDetails >
+          <Paper sx={PaperSXX}>
+          <TableContainer >
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Cancha</TableCell>
-                  <TableCell>Conjunto de Días</TableCell>
+                <TableRow sx={{backgroundColor:'background.default'}} >  
+                  <TableCell sx={{borderRadius: '10px 0 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Cancha</Typography></TableCell>
+                  <TableCell sx={{borderRadius: '0 10px 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Conjunto de Días</Typography></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -328,64 +350,80 @@ const Slot = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box p={2}>
-            <Typography variant="h5">---------------------------------</Typography>
-          </Box>
+          </Paper>
+          </AccordionDetails>
+        </Accordion>
+
+
+
+
           <FormContainer>
-            <Typography variant="h5">Agregar Franja Horaria</Typography>
-            <FormControlStyled component="fieldset">
-              <FormLabel component="legend">Días</FormLabel>
-              <FormGroup>
+            <Grid>
+            <Typography variant="h6" color={'secondary.main'} >Agregar Franja Horaria</Typography>
+            </Grid>
+            <Grid>
+
+            <FormControlStyled fullWidth>
+              <InputLabel>Días</InputLabel>
+              <Select
+                multiple
+                value={selectedDays}
+                onChange={handleDaySelection}
+                renderValue={(selected) => selected.join(', ')}
+              >
                 {days.map((day) => (
-                  <FormControlLabel
-                    key={day.id}
-                    control={<Checkbox checked={selectedDays.includes(day.id.toString())} onChange={handleDaySelection} value={day.id.toString()} />}
-                    label={day.name}
-                  />
-                ))}
-              </FormGroup>
-            </FormControlStyled>
-            <FormControlStyled>
-              <InputLabel>Cancha</InputLabel>
-              <Select value={selectedCourt} onChange={handleCourtSelection}>
-                {canchas.map((cancha) => (
-                  <MenuItem key={cancha.id} value={cancha.id}>
-                    {cancha.cancha}
+                  <MenuItem key={day.id} value={day.id}>
+                    <Checkbox checked={selectedDays.includes(day.id.toString())} />
+                    <ListItemText primary={day.name} />
                   </MenuItem>
                 ))}
               </Select>
             </FormControlStyled>
-            <TextField
-              label="Horario de Inicio"
-              type="time"
-              value={startTime}
-              onChange={handleStartTimeChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // Intervalo de 5 minutos
-              }}
-              sx={{ margin: '8px' }}
-            />
-            <TextField
-              label="Horario de Fin"
-              type="time"
-              value={endTime}
-              onChange={handleEndTimeChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // Intervalo de 5 minutos
-              }}
-              sx={{ margin: '8px' }}
-            />
-            <ButtonStyled variant="contained" color="primary" onClick={handleAddSlot}>
-              Agregar
-            </ButtonStyled>
+              <FormControlStyled fullWidth>
+                <InputLabel>Cancha</InputLabel>
+                <Select value={selectedCourt} onChange={handleCourtSelection}>
+                  {canchas.map((cancha) => (
+                    <MenuItem key={cancha.id} value={cancha.id}>
+                      {cancha.cancha}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControlStyled >
+              <TextField
+                label="Horario de Inicio"
+                type="time"
+                value={startTime}
+                onChange={handleStartTimeChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 300, // Intervalo de 5 minutos
+                }}
+                sx={{ margin: '8px' }}
+              />
+              <TextField
+                label="Horario de Fin"
+                type="time"
+                value={endTime}
+                onChange={handleEndTimeChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 300, // Intervalo de 5 minutos
+                }}
+                sx={{ margin: '8px' }}
+              />
+              <ButtonStyled variant="contained" color="primary" onClick={handleAddSlot}>
+                Agregar
+              </ButtonStyled>
+            </Grid>
           </FormContainer>
+
+
         </Paper>
+        
       )}
       <><div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <IconButton onClick={handleGoBack} variant="contained" color="primary">
