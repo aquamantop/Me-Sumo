@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../hooks/userContext';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
+import { useParams } from 'react-router';
 import {
   Container,
   Paper,
   Typography,
   Box,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -26,11 +28,18 @@ import {
   FormControlLabel,
   InputLabel,
   Select,
+  ListItemText,
   MenuItem
 } from '@mui/material';
 import { styled } from '@mui/system'
 import DeleteIcon from '@mui/icons-material/Delete';
+import { PaperSXX, BoxSX, ButtonSX,CustomButton } from "../components/customMui/CustomMui";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import axiosInstance from "../hooks/api/axiosConfig";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CustomLoader from "../components/CustomLoader";
 
 const FormContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -66,11 +75,7 @@ const days = [
 ];
 
 const Slot = () => {
-  const { id } = useParams();
-  const { user } = useUserContext();
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  const {id} = useParams();
   const [clubId, setClubId] = useState('');
   const [canchas, setCanchas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -80,103 +85,117 @@ const Slot = () => {
   const [selectedCourt, setSelectedCourt] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [slotsAllowed, setSlotsAllowed] = useState(false);
+  const { user } = useUserContext();
+  const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
-  const [overlapError, setOverlapError] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      axiosInstance.get(`/user/search-email?email=${user.email}`)
-        .then((response) => {
-          setUserInfo(response.data);
-          if (response.data.role === 'ROLE_CLUB') {
-            const name = response.data.firstName;
-            axiosInstance.get(`/club/by-name/${name}`)
-              .then((response) => {
-                setClubId(response.data.id);
-                if (response.data.id !== parseInt(id)) {
-                  alert("No tiene permiso para acceder a esta página.");
-                  navigate('/');
-                } else {
-                  setSlotsAllowed(true);
-                  setIsLoading(false);
-                }
-              })
-          } else {
-            alert("No tiene permiso para acceder a esta página.");
-            navigate('/');
-          }
-        })
-        .catch((error) => setError(error));
-    } else {
-      alert("No tiene permiso para acceder a esta página.");
-      navigate('/');
-    }
-  }, []);
+  const [expanded, setExpanded] = useState(false);
 
-  useEffect(() => {
-    if (!isLoading && user && slotsAllowed) {
-      fetchData();
-    }
-  }, [isLoading, user, slotsAllowed]);
-
-  const fetchData = async () => {
-    try {
-      const response = await axiosInstance.get(`/club/${clubId}`);
-      const club = response.data;
-      const activities = club.activities;
-      const canchasData = [];
-
-      activities.forEach((activity) => {
-        activity.courts.forEach((court) => {
-          const canchaData = {
-            cancha: court.name,
-            id: court.id,
-            conjuntosDias: [],
-          };
-
-          court.slots.forEach((slot) => {
-            const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
-              const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
-              const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
-              return dayA.id - dayB.id;
-            }).join(", ");
-
-            const horario = `${slot.startTime} - ${slot.endTime}`;
-
-            const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
-            if (conjuntoExistente) {
-              conjuntoExistente.horarios.push({ id: slot.id, horario });
-            } else {
-              canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
-            }
-          });
-
-          canchasData.push(canchaData);
-        });
-      });
-
-      setCanchas(canchasData);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
-    }
+  const handleAccordionChange = () => {
+    setExpanded(!expanded);
   };
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(`/user/search-email?email=${user.email}`);
+        setUserInfo(response.data);
+        
+        if (response.data.role !== 'ROLE_CLUB' ){
+                       
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+        }
+        axiosInstance.get(`/club/by-name/${response.data.firstName}`)
+        .then((response) => {
+          
+          setClubId(response.data.id);
+          if(response.data.id !== parseInt(id)){
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+          }
+          axiosInstance.get(`/club/${response.data.id}`)
+        .then((response) => {
+        
+        const club = response.data;
+
+      
+        const activities = club.activities;
+        const canchasData = [];
+
+        activities.forEach((activity) => {
+          activity.courts.forEach((court) => {
+            const canchaData = {
+              cancha: court.name,
+              id: court.id,
+              conjuntosDias: [],
+            };
+
+            court.slots.forEach((slot) => {
+              const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
+                const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
+                const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
+                return dayA.id - dayB.id;
+              }).join(", ");
+              const horario = `${slot.startTime} - ${slot.endTime}`;
+
+              // Verificar si el conjunto de días ya existe en el arreglo
+              const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
+              if (conjuntoExistente) {
+                conjuntoExistente.horarios.push({ id: slot.id, horario });
+              } else {
+                canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
+              }
+            });
+
+            canchasData.push(canchaData);
+          });
+        });
+
+        setCanchas(canchasData);
+        setLoading(false);
+      })
+      .catch((error) => console.error(error));
+          
+        })
+        
+        
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (user) {
+      fetchData();
+    } else {
+        alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
+    }
+  }, [user]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGoBack = () => {
-    if (location.pathname === '/booking/' + id) {
-      navigate(-1);
-    } else {
-      navigate('/booking/' + id, { replace: true });
-    }
+    
+  if (location.pathname === '/') {
+    navigate(-1);
+  } else {
+    navigate('/');
+  }
   };
 
+  useEffect(() => {
+    
+  }, [clubId]);
+
   const handleDeleteSlot = () => {
+    // Enviar petición DELETE al endpoint '/delete/{id}'
     axiosInstance
       .delete(`/slot/delete/${selectedSlot}`)
       .then((response) => {
+        // Actualizar la lista de canchas después de eliminar el slot
         const updatedCanchas = canchas.map((cancha) => {
           const updatedConjuntosDias = cancha.conjuntosDias.map((conjunto) => {
             const updatedHorarios = conjunto.horarios.filter((horario) => horario.id !== selectedSlot);
@@ -204,7 +223,6 @@ const Slot = () => {
   };
 
   const handleAddSlot = () => {
-    setOverlapError(false);
     const daysToAdd = selectedDays.map((day) => ({ id: day }));
     const slotData = {
       court: { id: selectedCourt },
@@ -213,14 +231,11 @@ const Slot = () => {
       startTime: startTime,
       endTime: endTime,
     };
-
+  
     axiosInstance
       .post('/slot/add', slotData)
       .then((response) => {
-      if(!response.data){
-     setOverlapError(true);
-        }
-      else{
+        // Actualizar la lista de canchas después de agregar el slot
         const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
             const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort((a, b) => {
@@ -228,9 +243,7 @@ const Slot = () => {
               const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
               return dayA.id - dayB.id;
             }).join(", ");
-
             const horario = `${startTime} - ${endTime}`;
-
             const conjuntoExistente = cancha.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
             if (conjuntoExistente) {
               conjuntoExistente.horarios.push({ id: response.data.id, horario });
@@ -240,27 +253,29 @@ const Slot = () => {
           }
           return cancha;
         });
-
-    setCanchas(updatedCanchas);
-            
-        }
+        setCanchas(updatedCanchas);
       })
       .catch((error) => console.error(error));
-
+  
     setSelectedDays([]);
     setSelectedCourt('');
     setStartTime('');
     setEndTime('');
   };
 
+  // const handleDaySelection = (event) => {
+  //   const { value, checked } = event.target;
+  //   if (checked) {
+  //     setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
+  //   } else {
+  //     setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
+  //   }
+  // };
+
   const handleDaySelection = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
-    } else {
-      setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
-    }
+    setSelectedDays(event.target.value);
   };
+  
 
   const handleCourtSelection = (event) => {
     const selected = event.target.value;
@@ -277,21 +292,40 @@ const Slot = () => {
     setEndTime(value);
   };
 
+
+  if (loading) {
+    return <CustomLoader />;
+  }
+
+
   return (
     <Container>
       {loading ? (
         <p>Loading...</p>
-      ) : (
-        <Paper>
-          <Box p={2}>
-            <Typography variant="h5">Horarios de turnos</Typography>
+      ) : 
+      
+      (
+        
+        <Paper sx={PaperSXX}>
+        <Box sx={BoxSX}>
+          <Typography variant="h5" color="primary.main">
+            Turnos en tus canchas
+          </Typography>
           </Box>
-          <TableContainer>
+          <Accordion expanded={expanded} onChange={handleAccordionChange} sx={{backgroundColor:'background.default'}}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon style={{ fontSize: 32 }}/>} aria-controls="panel1a-content" id="panel1a-header" sx={{height:'80px'}}>
+              <Typography variant="h6" color="secondary.main">
+                Ver turnos cargados
+              </Typography>
+          </AccordionSummary>
+          <AccordionDetails >
+          <Paper sx={PaperSXX}>
+          <TableContainer >
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Cancha</TableCell>
-                  <TableCell>Conjunto de Días</TableCell>
+                <TableRow sx={{backgroundColor:'background.default'}} >  
+                  <TableCell sx={{borderRadius: '10px 0 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Cancha</Typography></TableCell>
+                  <TableCell sx={{borderRadius: '0 10px 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Conjunto de Días</Typography></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -328,84 +362,91 @@ const Slot = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box p={2} display="flex" justifyContent="center">
-            <Typography variant="h5">---------------------------------</Typography>
-          </Box>
-          <Typography variant="h5" display="flex" justifyContent="center" alignItems="center" marginBottom="2em">Agregar Franja Horaria</Typography>
-          <FormContainer display="flex" justifyContent="center" alignItems="center">
-              <FormControlStyled component="fieldset">
-              <FormLabel component="legend">Días</FormLabel>
-              <FormGroup>
+          </Paper>
+          </AccordionDetails>
+        </Accordion>
+
+
+
+
+          <FormContainer>
+              <Typography  color="white" sx={{fontSize:'16px'}}>
+                Agregar Franja Horaria
+              </Typography>
+          
+            <Grid container>
+            <FormControlStyled fullWidth>
+              <InputLabel>Días</InputLabel>
+              <Select
+                multiple
+                value={selectedDays}
+                onChange={handleDaySelection}
+                renderValue={(selected) => selected.join(', ')}
+              >
                 {days.map((day) => (
-                  <FormControlLabel
-                    key={day.id}
-                    control={<Checkbox checked={selectedDays.includes(day.id.toString())} onChange={handleDaySelection} value={day.id.toString()} />}
-                    label={day.name}
-                  />
-                ))}
-              </FormGroup>
-            </FormControlStyled>
-            <FormControlStyled >
-              <InputLabel>Cancha</InputLabel>
-              <Select value={selectedCourt} onChange={handleCourtSelection}>
-                {canchas.map((cancha) => (
-                  <MenuItem key={cancha.id} value={cancha.id}>
-                    {cancha.cancha}
+                  <MenuItem key={day.id} value={day.id}>
+                    <Checkbox checked={selectedDays.includes(day.id.toString())} />
+                    <ListItemText primary={day.name} />
                   </MenuItem>
                 ))}
               </Select>
-              
-              </FormControlStyled>
-           
-            <TextField
-              label="Inicio"
-              type="time"
-              value={startTime}
-              onChange={handleStartTimeChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // Intervalo de 5 minutos
-              }}
-              sx={{ margin: '8px' }}
-            />
-            <TextField
-              label="Fin"
-              type="time"
-              value={endTime}
-              onChange={handleEndTimeChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // Intervalo de 5 minutos
-              }}
-              sx={{ margin: '8px' }}
-            />
-         
+            </FormControlStyled>
+              <FormControlStyled fullWidth>
+                <InputLabel>Cancha</InputLabel>
+                <Select value={selectedCourt} onChange={handleCourtSelection}>
+                  {canchas.map((cancha) => (
+                    <MenuItem key={cancha.id} value={cancha.id}>
+                      {cancha.cancha}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControlStyled >
+              <Grid container spacing={2} m={0}>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Horario de Inicio"
+                    type="time"
+                    value={startTime}
+                    onChange={handleStartTimeChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // Intervalo de 5 minutos
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Horario de Fin"
+                    type="time"
+                    value={endTime}
+                    onChange={handleEndTimeChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // Intervalo de 5 minutos
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <Grid container m={4} justifyContent="space-between" alignItems="center" >
+                <Button onClick={handleAddSlot} sx={{...ButtonSX}} >
+                  Agregar
+                </Button>
+                <Button onClick={handleGoBack} sx={{...ButtonSX}}>
+                  Volver a reservas
+                </Button>
+              </Grid>
+            </Grid>
           </FormContainer>
-          <FormContainer display="flex" justifyContent="center">
-            <FormControlStyled>
-            <ButtonStyled variant="contained" color="primary" onClick={handleAddSlot}>
-              Agregar
-            </ButtonStyled>
-             
-          {overlapError && (
-            <Typography variant="body2" color="error" sx={{ marginTop: '8px' }}>
-              ¡Superposición de horarios!
-            </Typography>
-          )}
-          </FormControlStyled>
-        </FormContainer>
-        </Paper>
+        </Paper>        
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <IconButton onClick={handleGoBack} variant="contained" color="primary">
-          Volver a reservas
-        </IconButton>
-      </div>
     </Container>
+    
   );
 };
 
