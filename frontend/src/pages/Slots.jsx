@@ -33,12 +33,13 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system'
 import DeleteIcon from '@mui/icons-material/Delete';
-import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
+import { PaperSXX, BoxSX, ButtonSX,CustomButton } from "../components/customMui/CustomMui";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import axiosInstance from "../hooks/api/axiosConfig";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CustomLoader from "../components/CustomLoader";
 
 const FormContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -262,15 +263,18 @@ const Slot = () => {
     setEndTime('');
   };
 
-  const handleDaySelection = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
-    } else {
-      setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
-    }
-  };
+  // const handleDaySelection = (event) => {
+  //   const { value, checked } = event.target;
+  //   if (checked) {
+  //     setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
+  //   } else {
+  //     setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
+  //   }
+  // };
 
+  const handleDaySelection = (event) => {
+    setSelectedDays(event.target.value);
+  };
   
 
   const handleCourtSelection = (event) => {
@@ -288,11 +292,19 @@ const Slot = () => {
     setEndTime(value);
   };
 
+
+  if (loading) {
+    return <CustomLoader />;
+  }
+
+
   return (
     <Container>
       {loading ? (
         <p>Loading...</p>
-      ) : (
+      ) : 
+      
+      (
         
         <Paper sx={PaperSXX}>
         <Box sx={BoxSX}>
@@ -301,7 +313,7 @@ const Slot = () => {
           </Typography>
           </Box>
           <Accordion expanded={expanded} onChange={handleAccordionChange} sx={{backgroundColor:'background.default'}}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+          <AccordionSummary expandIcon={<ExpandMoreIcon style={{ fontSize: 32 }}/>} aria-controls="panel1a-content" id="panel1a-header" sx={{height:'80px'}}>
               <Typography variant="h6" color="secondary.main">
                 Ver turnos cargados
               </Typography>
@@ -358,11 +370,11 @@ const Slot = () => {
 
 
           <FormContainer>
-            <Grid>
-            <Typography variant="h6" color={'secondary.main'} >Agregar Franja Horaria</Typography>
-            </Grid>
-            <Grid>
-
+              <Typography  color="white" sx={{fontSize:'16px'}}>
+                Agregar Franja Horaria
+              </Typography>
+          
+            <Grid container>
             <FormControlStyled fullWidth>
               <InputLabel>Días</InputLabel>
               <Select
@@ -389,48 +401,59 @@ const Slot = () => {
                   ))}
                 </Select>
               </FormControlStyled >
-              <TextField
-                label="Horario de Inicio"
-                type="time"
-                value={startTime}
-                onChange={handleStartTimeChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // Intervalo de 5 minutos
-                }}
-                sx={{ margin: '8px' }}
-              />
-              <TextField
-                label="Horario de Fin"
-                type="time"
-                value={endTime}
-                onChange={handleEndTimeChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // Intervalo de 5 minutos
-                }}
-                sx={{ margin: '8px' }}
-              />
-              <ButtonStyled variant="contained" color="primary" onClick={handleAddSlot}>
-                Agregar
-              </ButtonStyled>
+              <Grid container spacing={2} m={0}>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Horario de Inicio"
+                    type="time"
+                    value={startTime}
+                    onChange={handleStartTimeChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // Intervalo de 5 minutos
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    label="Horario de Fin"
+                    type="time"
+                    value={endTime}
+                    onChange={handleEndTimeChange}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // Intervalo de 5 minutos
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <Grid container m={4} justifyContent="space-between" alignItems="center" >
+                <Button onClick={handleAddSlot} sx={{...ButtonSX}} >
+                  Agregar
+                </Button>
+                <Button onClick={handleGoBack} sx={{...ButtonSX}}>
+                  Volver a reservas
+                </Button>
+              </Grid>
             </Grid>
           </FormContainer>
+
+
+
+
 
 
         </Paper>
         
       )}
-      <><div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <IconButton onClick={handleGoBack} variant="contained" color="primary">
-            Volver a reservas
-          </IconButton>
-        </div>
-      </>
+
+
     </Container>
     
   );
