@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/booking")
@@ -45,7 +44,7 @@ public class BookingController {
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
         ResponseEntity response = null;
-        Set<Booking> list = service.findAll();
+        List<Booking> list = service.findAll();
 
         if(list != null){
             response = new ResponseEntity<>(list, HttpStatus.OK);
@@ -287,4 +286,5 @@ public class BookingController {
 
         return response;
     }
+
 }

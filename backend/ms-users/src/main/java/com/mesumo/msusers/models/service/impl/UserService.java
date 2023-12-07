@@ -32,9 +32,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Set<UserDTO> findAll() {
+    public List<UserDTO> findAll() {
         List<User> users = userRepository.findAll();
-        Set<UserDTO> list = new TreeSet<>(Comparator.comparingLong(UserDTO::getUserId));
+        List<UserDTO> list = new ArrayList<>();
         users.forEach(user -> {
             list.add(userMapper.convertToDto(user));
         });

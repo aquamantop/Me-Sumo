@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,9 +29,9 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<UserDTO>> getAll() {
-        Set<UserDTO> set = userService.findAll();
-        return new ResponseEntity<>(set, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAll() {
+        List<UserDTO> list = userService.findAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -49,6 +49,5 @@ public class UserController {
         userService.deleteById(id);
         return new ResponseEntity<>("User deleted with id: " + id, HttpStatus.OK);
     }
-
 
 }

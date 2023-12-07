@@ -148,9 +148,8 @@ public class BookingService implements IBookingService {
     }
 
     @Override
-    public Set<Booking> findAll() {
-        List<Booking> bookings = bookingRepository.findAll();
-        return new HashSet<>(bookings);
+    public List<Booking> findAll() {
+        return bookingRepository.findAll();
     }
 
     @Override
