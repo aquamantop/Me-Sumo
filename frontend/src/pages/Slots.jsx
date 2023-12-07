@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useUserContext } from '../hooks/userContext';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
+import { useParams } from 'react-router';
 import {
   Container,
   Paper,
   Typography,
   Box,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -73,11 +75,7 @@ const days = [
 ];
 
 const Slot = () => {
-  const { id } = useParams();
-  const { user } = useUserContext();
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  const {id} = useParams();
   const [clubId, setClubId] = useState('');
   const [canchas, setCanchas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,8 +85,8 @@ const Slot = () => {
   const [selectedCourt, setSelectedCourt] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [slotsAllowed, setSlotsAllowed] = useState(false);
+  const { user } = useUserContext();
+  const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState(null);
 
   const [expanded, setExpanded] = useState(false);
@@ -99,96 +97,105 @@ const Slot = () => {
 
 
   useEffect(() => {
-    if (user) {
-      axiosInstance.get(`/user/search-email?email=${user.email}`)
-        .then((response) => {
-          setUserInfo(response.data);
-          if (response.data.role === 'ROLE_CLUB') {
-            const name = response.data.firstName;
-            axiosInstance.get(`/club/by-name/${name}`)
-              .then((response) => {
-                setClubId(response.data.id);
-                if (response.data.id !== parseInt(id)) {
-                  alert("No tiene permiso para acceder a esta página.");
-                  navigate('/');
-                } else {
-                  setSlotsAllowed(true);
-                  setIsLoading(false);
-                }
-              })
-          } else {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(`/user/search-email?email=${user.email}`);
+        setUserInfo(response.data);
+        
+        if (response.data.role !== 'ROLE_CLUB' ){
+                       
             alert("No tiene permiso para acceder a esta página.");
-            navigate('/');
+            window.location.href = "/";
+        }
+        axiosInstance.get(`/club/by-name/${response.data.firstName}`)
+        .then((response) => {
+          
+          setClubId(response.data.id);
+          if(response.data.id !== parseInt(id)){
+            alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
           }
-        })
-        .catch((error) => setError(error));
-    } else {
-      alert("No tiene permiso para acceder a esta página.");
-      navigate('/');
-    }
-  }, []);
+          axiosInstance.get(`/club/${response.data.id}`)
+        .then((response) => {
+        
+        const club = response.data;
 
-  useEffect(() => {
-    if (!isLoading && user && slotsAllowed) {
-      fetchData();
-    }
-  }, [isLoading, user, slotsAllowed]);
+      
+        const activities = club.activities;
+        const canchasData = [];
 
-  const fetchData = async () => {
-    try {
-      const response = await axiosInstance.get(`/club/${clubId}`);
-      const club = response.data;
-      const activities = club.activities;
-      const canchasData = [];
+        activities.forEach((activity) => {
+          activity.courts.forEach((court) => {
+            const canchaData = {
+              cancha: court.name,
+              id: court.id,
+              conjuntosDias: [],
+            };
 
-      activities.forEach((activity) => {
-        activity.courts.forEach((court) => {
-          const canchaData = {
-            cancha: court.name,
-            id: court.id,
-            conjuntosDias: [],
-          };
+            court.slots.forEach((slot) => {
+              const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
+                const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
+                const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
+                return dayA.id - dayB.id;
+              }).join(", ");
+              const horario = `${slot.startTime} - ${slot.endTime}`;
 
-          court.slots.forEach((slot) => {
-            const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
-              const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
-              const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
-              return dayA.id - dayB.id;
-            }).join(", ");
+              // Verificar si el conjunto de días ya existe en el arreglo
+              const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
+              if (conjuntoExistente) {
+                conjuntoExistente.horarios.push({ id: slot.id, horario });
+              } else {
+                canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
+              }
+            });
 
-            const horario = `${slot.startTime} - ${slot.endTime}`;
-
-            const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
-            if (conjuntoExistente) {
-              conjuntoExistente.horarios.push({ id: slot.id, horario });
-            } else {
-              canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
-            }
+            canchasData.push(canchaData);
           });
-
-          canchasData.push(canchaData);
         });
-      });
 
-      setCanchas(canchasData);
-      setLoading(false);
-    } catch (error) {
-      setError(error);
+        setCanchas(canchasData);
+        setLoading(false);
+      })
+      .catch((error) => console.error(error));
+          
+        })
+        
+        
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (user) {
+      fetchData();
+    } else {
+        alert("No tiene permiso para acceder a esta página.");
+            window.location.href = "/";
     }
-  };
+  }, [user]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGoBack = () => {
-    if (location.pathname === '/booking/' + id) {
-      navigate(-1);
-    } else {
-      navigate('/booking/' + id, { replace: true });
-    }
+    
+  if (location.pathname === '/') {
+    navigate(-1);
+  } else {
+    navigate('/');
+  }
   };
 
+  useEffect(() => {
+    
+  }, [clubId]);
+
   const handleDeleteSlot = () => {
+    // Enviar petición DELETE al endpoint '/delete/{id}'
     axiosInstance
       .delete(`/slot/delete/${selectedSlot}`)
       .then((response) => {
+        // Actualizar la lista de canchas después de eliminar el slot
         const updatedCanchas = canchas.map((cancha) => {
           const updatedConjuntosDias = cancha.conjuntosDias.map((conjunto) => {
             const updatedHorarios = conjunto.horarios.filter((horario) => horario.id !== selectedSlot);
@@ -216,7 +223,6 @@ const Slot = () => {
   };
 
   const handleAddSlot = () => {
-    setOverlapError(false);
     const daysToAdd = selectedDays.map((day) => ({ id: day }));
     const slotData = {
       court: { id: selectedCourt },
@@ -225,14 +231,11 @@ const Slot = () => {
       startTime: startTime,
       endTime: endTime,
     };
-
+  
     axiosInstance
       .post('/slot/add', slotData)
       .then((response) => {
-      if(!response.data){
-     setOverlapError(true);
-        }
-      else{
+        // Actualizar la lista de canchas después de agregar el slot
         const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
             const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort((a, b) => {
@@ -240,9 +243,7 @@ const Slot = () => {
               const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
               return dayA.id - dayB.id;
             }).join(", ");
-
             const horario = `${startTime} - ${endTime}`;
-
             const conjuntoExistente = cancha.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
             if (conjuntoExistente) {
               conjuntoExistente.horarios.push({ id: response.data.id, horario });
@@ -252,13 +253,10 @@ const Slot = () => {
           }
           return cancha;
         });
-
-    setCanchas(updatedCanchas);
-            
-        }
+        setCanchas(updatedCanchas);
       })
       .catch((error) => console.error(error));
-
+  
     setSelectedDays([]);
     setSelectedCourt('');
     setStartTime('');
@@ -457,6 +455,7 @@ const Slot = () => {
 
 
     </Container>
+    
   );
 };
 
