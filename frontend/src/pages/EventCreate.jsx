@@ -44,11 +44,17 @@ const EventCreate = () => {
   const slotCapacity = activityType * 2
   
     const [boxOpen, setBoxOpen] = useState(false)
+    const [boxTitle, setBoxTitle] = useState('')
     const [boxMessage, setBoxMessage] = useState('')
     
+    const okMessage = {
+      message: '¡Evento creado con éxito!'
+    };
 
-    const okMessage = '¡Evento creado con éxito!';
-    const noOkMessage = '¡Hola!\nTenés que estar logueado para crear un evento!';
+    const noOkMessage = {
+        title: '¡Hola!',
+        message: 'Tenés que estar logueado para crear un evento!'
+    };
 
     
     const handleBoxClose = (_, reason) => {
@@ -58,9 +64,10 @@ const EventCreate = () => {
         setBoxOpen(false);
     };
 
-    const showMessage = (message) => {
-        setBoxMessage(message);
-        setBoxOpen(true);
+    const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
     };
   
     const {
@@ -259,6 +266,7 @@ const EventCreate = () => {
         </Paper>
         <BoxMessage
               open={boxOpen}
+              title={boxTitle}
               message={boxMessage}
               onClose={handleBoxClose}
           />

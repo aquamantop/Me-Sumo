@@ -1,15 +1,16 @@
-import LockSharpIcon from "@mui/icons-material/LockSharp"
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { delay } from "../helpers/delay"
+import { useForm } from "react-hook-form"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useState } from "react"
+import axiosInstance from "../hooks/api/axiosConfig";
 import Box from "@mui/material/Box"
+import BoxMessage from '../components/BoxMessage'
 import Button from "@mui/material/Button"
+import CustomInput from "../components/customInput/CustomInput"
+import LockSharpIcon from "@mui/icons-material/LockSharp"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import CustomInput from "../components/customInput/CustomInput"
-import { useNavigate, useLocation } from "react-router-dom"
-import Swal from "sweetalert2"
-import { ButtonSX } from '../components/customMui/CustomMui'
-import axiosInstance from "../hooks/api/axiosConfig";
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -18,42 +19,70 @@ export default function ResetPassword() {
   const navigate = useNavigate();
 
   const {
+    watch,
     handleSubmit,
     control,
     formState: { errors }
   } = useForm({
     defaultValues: {
-      password: "",
-      confirmPassword: ""
+      password: '',
+      confirmPassword: ''
     }
   })
 
   const [error, setError] = useState("")
+  const [boxOpen, setBoxOpen] = useState(false);
+  const [boxTitle, setBoxTitle] = useState('');
+  const [boxMessage, setBoxMessage] = useState('');
+
+  const okMessage = {
+    title: '¡OK!',
+    message: 'Cambio de constraseña exitoso'
+  };
+
+  const handleBoxClose = (_, reason) => {
+      if (reason === 'clickaway') {
+          return;
+      }
+      setBoxOpen(false);
+  };
+
+  const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
+  };
+
+  const goLogin = async () => {
+    await delay(2000)
+    navigate("/login")
+  }
 
   const onSubmit = handleSubmit(async (userData) => {
 
-    const response = await new Promise((resolve) => {
-      axiosInstance.post("/auth/reset-password", userData, {
-        headers: {
-          'Authorization': `Bearer ${token}`
+    try {
+      const response = await axiosInstance.post(
+        "/auth/reset-password",
+        userData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
         }
-      })
-      .then((response) => resolve(response))
-      .catch((error) => setError(error))
-    })
-
-    if (!error) {
-      setError("")
-      Swal.fire({
-        title: "Cambio de contraseña exitoso!",
-        icon: "success",
-        timer: 1500
-      })
-      navigate("/login")
-    } else {
-      setError("Algo salió mal!")
+      );
+      if (response) {
+        setError("");
+        showMessage(okMessage)
+        goLogin()
+      }
+    } catch (error) {
+      setError("Algo salió mal. Por favor, volvé a intentarlo.");
     }
   })
+
+  const handleInputChange = () => {
+    setError("");
+  };
 
   return (
     <>
@@ -92,41 +121,45 @@ export default function ResetPassword() {
           onSubmit={onSubmit}
         >
           <CustomInput
-            name="password"
+            name='password'
             control={control}
-            placeholder="Nueva contraseña"
+            type='password'
+            placeholder='Contraseña *'
             error={!!errors.password}
             helperText={errors?.password?.message}
-            type="password"
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
-                message: "La contraseña es requerida"
+                message: 'La contraseña es requerida',
               },
               pattern: {
                 value: /^.{6,}$/,
-                message: "La contraseña debe tener al menos 6 caracteres"
-              }
+                message: 'La contraseña debe tener al menos 6 caracteres',
+              },
             }}
             icon={<LockSharpIcon />}
           />
 
           <CustomInput
-            name="confirmPassword"
+            name='confirmPassword'
             control={control}
-            type="password"
-            placeholder="Confirmar contraseña"
+            type='password'
+            placeholder='Repetir Contraseña *'
             error={!!errors.confirmPassword}
             helperText={errors?.confirmPassword?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
-                message: "La contraseña es requerida"
+                message: 'La contraseña es requerida',
               },
-              pattern: {
-                value: /^.{6,}$/,
-                message: "La contraseña debe tener al menos 6 caracteres"
-              }
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  const { password } = watch()
+                  return password === value || 'Las contraseñas no coinciden'
+                },
+              },
             }}
             icon={<LockSharpIcon />}
           />
@@ -141,10 +174,16 @@ export default function ResetPassword() {
 
           {error && (
             <Typography variant="body2" color="error.main">
-              Algo salió mal. Por favor, vuelva a intentarlo
+              { error }
             </Typography>
           )}
         </Stack>
+        <BoxMessage
+            open={boxOpen}
+            title={boxTitle}
+            message={boxMessage}
+            onClose={handleBoxClose}
+        />
       </Box>
     </>
   )
