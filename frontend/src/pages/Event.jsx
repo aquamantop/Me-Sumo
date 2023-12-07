@@ -15,11 +15,12 @@ const Booking = () => {
     const { user } = useUserContext();
     const [userInfo, setUserInfo] = useState({});
     const [isParticipant, setIsParticipant] = useState(false);
+    const [isCreator, setIsCreator] = useState(false);
 
     const [cardInfo, setCardInfo] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const initialLoading = false
+    const initialLoading = true
     
     const [boxOpen, setBoxOpen] = useState(false);
     const [boxTitle, setBoxTitle] = useState('');
@@ -52,8 +53,8 @@ const Booking = () => {
         setBoxOpen(true);
     };
   
-    const handleButtonClick = () => {
-        if (user && isParticipant==false) {
+    const handleAddParticipant = () => {
+        if (user && !isParticipant) {
             axiosInstance.post(`/booking/participant/${id}`, userInfo)
             .then(response => {
                 showMessage(okMessage);
@@ -69,14 +70,47 @@ const Booking = () => {
                         setCardInfo((prevCardInfo) => ({
                             ...prevCardInfo,
                             bookingAvailability: availability,
-                    }));
+                }));
                 });
+                setIsParticipant(true)
             })})
             .catch(error => {
-                console.error('Error al realizar la solicitud POST:', error);
-                showMessage('Error al procesar la solicitud.');
+                showMessage({message: 'Error al procesar la solicitud.'});
             });
         
+        } else {
+          showMessage(noOkMessage);
+        }
+    };
+
+    const handleDeleteParticipant = () => {
+        const participant = cardInfo.bookingParticipants.find(participant => participant.userId === userInfo.userId);
+        if (user && isParticipant) {
+            axiosInstance.delete(`/booking/participant/${id}`, {
+                data: { id: participant.id }
+            })
+            .then(response => {
+                showMessage({message: 'Lamentamos no contar con vos'});
+                axiosInstance.get(`/booking/${id}`)
+                .then(response => {
+                    setCardInfo(prevCardInfo => ({
+                        ...prevCardInfo,
+                        bookingParticipants: response.data.participants, 
+                    }))  
+
+                    axiosInstance.get(`/slot/getWithCourt/${response.data.slotId}`).then((response) => {
+                        const availability = response.data.capacity - cardInfo.bookingParticipants.length + 1;
+                        setCardInfo((prevCardInfo) => ({
+                            ...prevCardInfo,
+                            bookingAvailability: availability,
+                    }));
+                    })
+                })
+            setIsParticipant(false)
+            })
+            .catch(error => {
+                showMessage({message: 'Error al procesar la solicitud.'});
+            });
         } else {
           showMessage(noOkMessage);
         }
@@ -98,11 +132,14 @@ const Booking = () => {
         axiosInstance.get(`/booking/${id}`)
         .then((response) =>{
             const booking = response.data;
+            const { creatorId } = response.data
+            const isUserCreator = creatorId == userInfo.userId
+            setIsCreator(isUserCreator)
             axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
             .then((response) => {
                 const { name, url } = response.data.court.club;
                 const availability = response.data.capacity - booking.participants.length;
-                const category = response.data.court.activity.name +" " + response.data.court.activity.type;
+                const category = response.data.court.activity.name + " " + response.data.court.activity.type;
                 const cardData = {
                     "clubName": name,
                     "bookingName":booking.name,
@@ -115,7 +152,6 @@ const Booking = () => {
                     "bookingParticipants": booking.participants
                 }
                 setCardInfo(cardData);
-
                 const isUserParticipant = cardData.bookingParticipants.some(participant => participant.userId === userInfo.userId);
                 setIsParticipant(isUserParticipant);
                 setLoading(false);
@@ -123,7 +159,7 @@ const Booking = () => {
             })
         })
         .catch((error) => setError(error)) 
-    }, [loading])
+    }, [loading, isParticipant])
 
 
 
@@ -215,17 +251,30 @@ const Booking = () => {
                     </TableContainer>
                 </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
-                <Button 
-                variant="contained"
-                color="background"
-                fullWidth
-                onClick={handleButtonClick}
-                sx={{ ...ButtonSX }}
-                disabled={initialLoading || isParticipant}
-                >
-                ¡Me Sumo!
-                </Button>
+                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
+                    {
+                        isParticipant ?  
+                        <Button 
+                        variant="contained"
+                        color="background"
+                        fullWidth
+                        onClick={handleDeleteParticipant}
+                        sx={{ ...ButtonSX }}
+                        disabled={isCreator}
+                        >
+                        Me Bajo
+                        </Button>  :          
+                        <Button 
+                        variant="contained"
+                        color="background"
+                        fullWidth
+                        onClick={handleAddParticipant}
+                        sx={{ ...ButtonSX }}
+                        disabled={isCreator}
+                        >
+                        ¡Me Sumo!
+                        </Button>
+                    }    
                 <BoxMessage
                     open={boxOpen}
                     title={boxTitle}
