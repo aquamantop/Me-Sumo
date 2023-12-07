@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -11,14 +11,15 @@ import {
   Menu,
   MenuItem,
   Paper,
-} from '@mui/material'
-import { useMediaQuery } from '@mui/material'
-import logoDesktop from '../../assets/logoDesktop2.svg'
-import logoMobile from '../../assets/logoMobile2.svg'
-import { Link } from 'react-router-dom'
-import { useUserContext } from '../../hooks/userContext'
-import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui'
-import { useLocation } from 'react-router-dom'
+} from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import logoDesktop from '../../assets/logoDesktop2.svg';
+import logoMobile from '../../assets/logoMobile2.svg';
+import { Link } from 'react-router-dom';
+import { useUserContext } from '../../hooks/userContext';
+import { BoxSX, MenuListSX, PaperSXX } from '../customMui/CustomMui';
+import { useLocation } from 'react-router-dom';
+import axiosInstance from '../../hooks/api/axiosConfig';
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -28,6 +29,24 @@ const Header = () => {
   const [menuOptions, setMenuOptions] = useState(["", "Cerrar Sesión"])
   const [link, setLink] = useState('')
   const location = useLocation();
+  const [userInfo, setUserInfo] = useState({});
+
+  const fetchAndSetUserInfo = async (email) => {
+    try {
+      const userResponse = await axiosInstance.get(`/user/search-email?email=${email}`);
+      const { firstName } = userResponse.data;
+      setUserInfo({ firstName });
+    } catch (error) {
+      console.error('Error fetching user information:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.email) {
+      fetchAndSetUserInfo(user.email);
+    }
+  }, [user]);
+
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -97,13 +116,15 @@ const Header = () => {
                 m: 0,
                 height: '35px',
                 display: 'flex',
+                minWidth: '200px',
                 gap:'8px',
                 flexDirection: 'row',
                 alignItems: 'flex-end',
+                justifyContent:'flex-end' 
               }}
               >
                 <Typography variant='body1' color='primary.main' align='inherit'>
-                {user.email.split("@")[0]}
+                ¡Hola {userInfo.firstName}!
                 </Typography>
                 <Avatar onClick={handleMenuOpen} sx={{cursor: 'pointer',}}></Avatar>
               </Box>

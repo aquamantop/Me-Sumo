@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Container, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Collapse, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Box, Container, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, Collapse, List, ListItem, ListItemText, IconButton, Button, Grid } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon, ExpandLess as ExpandLessIcon } from '@mui/icons-material';
-import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
+import { PaperSXX, BoxSX, ButtonSX } from "../components/customMui/CustomMui";
 import axiosInstance from "../hooks/api/axiosConfig";
 import { useUserContext } from '../hooks/userContext';
 import { useNavigate } from 'react-router-dom';
-
+import CustomLoader from "../components/CustomLoader";
 
 const Bookings = () => {
   const { id } = useParams();
@@ -81,6 +81,11 @@ useEffect(() => {
     setExpandedBookingId(bookingId === expandedBookingId ? null : bookingId);
   };
 
+  if (isLoading) {
+    return <CustomLoader />;
+  }
+
+
   return (
     <Container sx={{ mb: 2 }}>
       <Paper sx={PaperSXX}>
@@ -141,11 +146,11 @@ useEffect(() => {
           </TableBody>
         </Table>
       </Paper>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <IconButton onClick={handleClick} variant="contained" color="primary">
-            Horarios de turnos
-          </IconButton>
-      </div>
+      <Grid container m={4} justifyContent="center" alignItems="center" >
+        <Button onClick={handleClick} sx={{...ButtonSX}} >
+          Horarios de turnos
+        </Button>
+      </Grid>
     </Container>
     
   );
