@@ -75,7 +75,11 @@ const days = [
 ];
 
 const Slot = () => {
-  const {id} = useParams();
+  const { id } = useParams();
+  const { user } = useUserContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [clubId, setClubId] = useState('');
   const [canchas, setCanchas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,9 +89,11 @@ const Slot = () => {
   const [selectedCourt, setSelectedCourt] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const { user } = useUserContext();
-  const [userInfo, setUserInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [slotsAllowed, setSlotsAllowed] = useState(false);
   const [error, setError] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const [overlapError, setOverlapError] = useState(false);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -95,107 +101,118 @@ const Slot = () => {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    if (user) {
+      axiosInstance.get(`/user/search-email?email=${user.email}`)
+        .then((response) => {
+          setUserInfo(response.data);
+          if (response.data.role === 'ROLE_CLUB') {
+            const name = response.data.firstName;
+            axiosInstance.get(`/club/by-name/${name}`)
+              .then((response) => {
+                setClubId(response.data.id);
+                if (response.data.id !== parseInt(id)) {
+                  alert("No tiene permiso para acceder a esta página.");
+                  navigate('/');
+                } else {
+                  setSlotsAllowed(true);
+                  setIsLoading(false);
+                }
+              })
+          } else {
+            alert("No tiene permiso para acceder a esta página.");
+            navigate('/');
+          }
+        })
+        .catch((error) => setError(error));
+    } else {
+      alert("No tiene permiso para acceder a esta página.");
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.get(`/user/search-email?email=${user.email}`);
-        setUserInfo(response.data);
-        
-        if (response.data.role !== 'ROLE_CLUB' ){
-                       
-            alert("No tiene permiso para acceder a esta página.");
-            window.location.href = "/";
-        }
-        axiosInstance.get(`/club/by-name/${response.data.firstName}`)
-        .then((response) => {
-          
-          setClubId(response.data.id);
-          if(response.data.id !== parseInt(id)){
-            alert("No tiene permiso para acceder a esta página.");
-            window.location.href = "/";
-          }
-          axiosInstance.get(`/club/${response.data.id}`)
-        .then((response) => {
-        
-        const club = response.data;
-
-      
-        const activities = club.activities;
-        const canchasData = [];
-
-        activities.forEach((activity) => {
-          activity.courts.forEach((court) => {
-            const canchaData = {
-              cancha: court.name,
-              id: court.id,
-              conjuntosDias: [],
-            };
-
-            court.slots.forEach((slot) => {
-              const conjuntoDias = slot.days.map((day) => days[day.id - 1].name).sort((a, b) => {
-                const dayA = days.find((day) => normalizeString(day.name) === normalizeString(a));
-                const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
-                return dayA.id - dayB.id;
-              }).join(", ");
-              const horario = `${slot.startTime} - ${slot.endTime}`;
-
-              // Verificar si el conjunto de días ya existe en el arreglo
-              const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
-              if (conjuntoExistente) {
-                conjuntoExistente.horarios.push({ id: slot.id, horario });
-              } else {
-                canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
-              }
-            });
-
-            canchasData.push(canchaData);
-          });
-        });
-
-        setCanchas(canchasData);
-        setLoading(false);
-      })
-      .catch((error) => console.error(error));
-          
-        })
-        
-        
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    if (user) {
+    if (!isLoading && user && slotsAllowed) {
       fetchData();
-    } else {
-        alert("No tiene permiso para acceder a esta página.");
-            window.location.href = "/";
     }
-  }, [user]);
+  }, [isLoading, user, slotsAllowed]);
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const fetchData = async () => {
+    try {
+      const response = await axiosInstance.get(`/club/${clubId}`);
+      const club = response.data;
+      const activities = club.activities;
+      const canchasData = [];
+  
+      // Función de comparación personalizada para ordenar los días de la semana
+      const compareDays = (a, b) => {
+        const daysOrder = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        return daysOrder.indexOf(a) - daysOrder.indexOf(b);
+      };
+  
+      activities.forEach((activity) => {
+        activity.courts.forEach((court) => {
+          const canchaData = {
+            cancha: court.name,
+            id: court.id,
+            conjuntosDias: [],
+          };
+  
+          court.slots.forEach((slot) => {
+            const conjuntoDias = slot.days
+              .map((day) => days[day.id - 1].name)
+              .sort(compareDays) // Ordenar los días utilizando la función de comparación personalizada
+              .join(", ");
+            const horario = `${slot.startTime.substring(0, 5)} - ${slot.endTime.substring(0, 5)}`;
+  
+            const conjuntoExistente = canchaData.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
+            if (conjuntoExistente) {
+              conjuntoExistente.horarios.push({ id: slot.id, horario });
+            } else {
+              canchaData.conjuntosDias.push({ dias: conjuntoDias, horarios: [{ id: slot.id, horario }] });
+            }
+          });
 
-  const handleGoBack = () => {
-    
-  if (location.pathname === '/') {
-    navigate(-1);
-  } else {
-    navigate('/');
-  }
+          
+  
+          canchasData.push(canchaData);
+        });
+      });
+  
+      // Ordenar los conjuntos de días en base al primer día de cada conjunto
+      canchasData.forEach((canchaData) => {
+        canchaData.conjuntosDias.sort((a, b) => {
+          const firstDayA = a.dias.split(", ")[0];
+          const firstDayB = b.dias.split(", ")[0];
+          return compareDays(firstDayA, firstDayB);
+        });
+      });
+
+      // Ordenar las canchas alfabéticamente
+      canchasData.sort((a, b) => a.cancha.localeCompare(b.cancha));
+
+
+      setCanchas(canchasData);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+    }
   };
 
-  useEffect(() => {
-    
-  }, [clubId]);
+
+  const handleGoBack = () => {
+    if (location.pathname === '/booking/' + id) {
+      navigate(-1);
+    } else {
+      navigate('/booking/' + id, { replace: true });
+    }
+  };
+
 
   const handleDeleteSlot = () => {
-    // Enviar petición DELETE al endpoint '/delete/{id}'
     axiosInstance
       .delete(`/slot/delete/${selectedSlot}`)
       .then((response) => {
-        // Actualizar la lista de canchas después de eliminar el slot
         const updatedCanchas = canchas.map((cancha) => {
           const updatedConjuntosDias = cancha.conjuntosDias.map((conjunto) => {
             const updatedHorarios = conjunto.horarios.filter((horario) => horario.id !== selectedSlot);
@@ -223,6 +240,7 @@ const Slot = () => {
   };
 
   const handleAddSlot = () => {
+    setOverlapError(false);
     const daysToAdd = selectedDays.map((day) => ({ id: day }));
     const slotData = {
       court: { id: selectedCourt },
@@ -231,11 +249,14 @@ const Slot = () => {
       startTime: startTime,
       endTime: endTime,
     };
-  
+
     axiosInstance
       .post('/slot/add', slotData)
       .then((response) => {
-        // Actualizar la lista de canchas después de agregar el slot
+      if(!response.data){
+     setOverlapError(true);
+        }
+      else{
         const updatedCanchas = canchas.map((cancha) => {
           if (cancha.id === selectedCourt) {
             const conjuntoDias = daysToAdd.map((day) => days[day.id - 1].name).sort((a, b) => {
@@ -243,7 +264,9 @@ const Slot = () => {
               const dayB = days.find((day) => normalizeString(day.name) === normalizeString(b));
               return dayA.id - dayB.id;
             }).join(", ");
+
             const horario = `${startTime} - ${endTime}`;
+
             const conjuntoExistente = cancha.conjuntosDias.find((conjunto) => conjunto.dias === conjuntoDias);
             if (conjuntoExistente) {
               conjuntoExistente.horarios.push({ id: response.data.id, horario });
@@ -253,28 +276,31 @@ const Slot = () => {
           }
           return cancha;
         });
-        setCanchas(updatedCanchas);
+
+    setCanchas(updatedCanchas);
+            
+        }
       })
       .catch((error) => console.error(error));
-  
+
     setSelectedDays([]);
     setSelectedCourt('');
     setStartTime('');
     setEndTime('');
   };
 
-  // const handleDaySelection = (event) => {
-  //   const { value, checked } = event.target;
-  //   if (checked) {
-  //     setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
-  //   } else {
-  //     setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
-  //   }
-  // };
+   const handleDaySelection = (event) => {
+     const { value, checked } = event.target;
+     if (checked) {
+       setSelectedDays((prevSelectedDays) => [...prevSelectedDays, value]);
+     } else {
+       setSelectedDays((prevSelectedDays) => prevSelectedDays.filter((day) => day !== value));
+     }
+   };
 
-  const handleDaySelection = (event) => {
+ /*  const handleDaySelection = (event) => {
     setSelectedDays(event.target.value);
-  };
+  }; */
   
 
   const handleCourtSelection = (event) => {
@@ -325,7 +351,7 @@ const Slot = () => {
               <TableHead>
                 <TableRow sx={{backgroundColor:'background.default'}} >  
                   <TableCell sx={{borderRadius: '10px 0 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Cancha</Typography></TableCell>
-                  <TableCell sx={{borderRadius: '0 10px 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Conjunto de Días</Typography></TableCell>
+                  <TableCell sx={{borderRadius: '0 10px 0 0'}}><Typography variant="h5" color="secondary.main" sx={{fontSize:'16px'}}>Turnos</Typography></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -381,11 +407,13 @@ const Slot = () => {
                 multiple
                 value={selectedDays}
                 onChange={handleDaySelection}
-                renderValue={(selected) => selected.join(', ')}
+                renderValue={(selected) => selected.map((dayId) =>
+                  days.find((day) => day.id.toString() === dayId)?.name
+                ).join(", ")}
               >
                 {days.map((day) => (
                   <MenuItem key={day.id} value={day.id}>
-                    <Checkbox checked={selectedDays.includes(day.id.toString())} />
+                    <Checkbox checked={selectedDays.includes(day.id.toString())} onChange={handleDaySelection} value={day.id.toString()}/>
                     <ListItemText primary={day.name} />
                   </MenuItem>
                 ))}
@@ -437,6 +465,11 @@ const Slot = () => {
                 <Button onClick={handleAddSlot} sx={{...ButtonSX}} >
                   Agregar
                 </Button>
+                {overlapError && (
+                <Typography variant="body2" color="error" sx={{ marginTop: '8px' }}>
+                  ¡Superposición de horarios!
+                </Typography>
+                )}
                 <Button onClick={handleGoBack} sx={{...ButtonSX}}>
                   Volver a reservas
                 </Button>
