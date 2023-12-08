@@ -8,7 +8,6 @@ import com.mesumo.msusers.models.entities.User;
 import com.mesumo.msusers.models.repository.IUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.getToken(user);
         
         return AuthResponse.builder()
@@ -60,7 +59,7 @@ public class AuthService {
     }
 
     public AuthResponse generateResetPasswordToken(PasswordRequest request) throws ResourceNotFoundException {
-        UserDetails user = userRepository.findByEmail(request.getEmail())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         String token = jwtService.getToken(user);
         return AuthResponse.builder()

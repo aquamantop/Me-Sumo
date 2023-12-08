@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,26 +29,25 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<UserDTO>> getAll() {
-        Set<UserDTO> set = userService.findAll();
-        return new ResponseEntity<>(set, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAll() {
+        List<UserDTO> list = userService.findAll();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody User user) throws ResourceAlreadyExistsException {
+    public ResponseEntity<User> add(@RequestBody User user) throws ResourceAlreadyExistsException {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity update (@RequestBody User user) throws ResourceNotFoundException {
+    public ResponseEntity<User> update (@RequestBody User user) throws ResourceNotFoundException {
         return new ResponseEntity<>(userService.update(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete (@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> delete (@PathVariable Long id) throws ResourceNotFoundException {
         userService.deleteById(id);
         return new ResponseEntity<>("User deleted with id: " + id, HttpStatus.OK);
     }
-
 
 }

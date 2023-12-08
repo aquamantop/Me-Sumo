@@ -5,7 +5,6 @@ import com.mesumo.msbookings.exceptions.ResourceNotFoundException;
 import org.springframework.data.jpa.domain.Specification;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 public interface IBookingService {
 
@@ -15,7 +14,7 @@ public interface IBookingService {
     void deleteById(Long id) throws ResourceNotFoundException;
     Booking update(Booking booking) throws ResourceNotFoundException;
 
-    Set<Booking> findAll();
+    List<Booking> findAll();
 
     List<Booking> filterBooking(Specification spec);
     List<Booking> filterByDate(LocalDate startDate);

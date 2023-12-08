@@ -1,37 +1,34 @@
-package com.mesumo.msusers.jwt;
+package com.mesumo.msclubs.config.jwt;
 
-import java.security.Key;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import com.mesumo.msusers.models.entities.User;
-import io.jsonwebtoken.JwtException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import java.security.Key;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
-public class JwtService {
+public class JwtServiceClub {
 
     private static final String SECRET_KEY = "586E3272357538782F413F4428472B4B6250655368566B597033733676397924";
 
-    public String getToken(User user) {
+    public String getToken(UserDetails user) {
         Set<String> roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", roles);
-        claims.put("userId", user.getUserId());
 
         return getToken(claims, user);
     }
-
 
     private String getToken(Map<String,Object> extraClaims, UserDetails user) {
         return Jwts
@@ -53,17 +50,14 @@ public class JwtService {
         return getClaim(token, Claims::getSubject);
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = getEmailFromToken(token);
-        Set<String> rolesFromToken = new HashSet<>(getClaim(token, claims -> claims.get("roles", ArrayList.class)));
+    public boolean isTokenValid(String token) {
+        final String email = getEmailFromToken(token);
 
-        return (username.equals(userDetails.getUsername()) &&
-                !isTokenExpired(token) &&
-                rolesFromToken.equals(userDetails.getAuthorities()));
+        return (email != null) &&
+                !isTokenExpired(token);
     }
 
-    private Claims getAllClaims(String token)
-    {
+    private Claims getAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getKey())
@@ -72,8 +66,7 @@ public class JwtService {
                 .getBody();
     }
 
-    public <T> T getClaim(String token, Function<Claims,T> claimsResolver)
-    {
+    public <T> T getClaim(String token, Function<Claims,T> claimsResolver) {
         final Claims claims=getAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -97,5 +90,6 @@ public class JwtService {
             return false;
         }
     }
+
 
 }

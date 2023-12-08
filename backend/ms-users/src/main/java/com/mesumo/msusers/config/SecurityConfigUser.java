@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfigUser {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final AuthenticationProvider authProvider;
 
     @Bean
