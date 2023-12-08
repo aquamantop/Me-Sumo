@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Tooltip,
 } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import logoDesktop from '../../assets/logoDesktop2.svg';
@@ -89,21 +90,25 @@ const Header = () => {
         sx={{ mx: 2, p: 0, display: 'flex', justifyContent: 'space-between' }}
       >
         {isMobile ? (
-          <Link to='/'>
-            <img
-              src={logoMobile}
-              alt='Mobile Logo'
-              style={{ maxWidth: '100px' }}
-            />
-          </Link>
+          <Tooltip title='Inicio' placement='bottom-end'>
+            <Link to='/'>
+              <img
+                src={logoMobile}
+                alt='Mobile Logo'
+                style={{ maxWidth: '100px' }}
+              />
+            </Link>
+          </Tooltip>
         ) : (
-          <Link to='/'>
-            <img
-              src={logoDesktop}
-              alt='Desktop Logo'
-              style={{ maxWidth: '100px' }}
-            />
-          </Link>
+          <Tooltip title='Inicio'  placement='bottom-end'>
+            <Link to='/'>
+              <img
+                src={logoDesktop}
+                alt='Desktop Logo'
+                style={{ maxWidth: '100px' }}
+              />
+            </Link>
+          </Tooltip>
         )}
         <Box>
           { user ? (
