@@ -27,7 +27,7 @@ public class SecurityConfigBooking {
                 .csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers(HttpMethod.POST,"booking/participant/**").hasAnyRole("ADMIN", "USER", "CLUB")
+                        .requestMatchers(HttpMethod.POST,"/booking/participant/**").hasAnyRole("ADMIN", "USER", "CLUB")
                         .requestMatchers(HttpMethod.POST,"/booking/add").hasAnyRole("ADMIN", "USER", "CLUB")
                         .requestMatchers(HttpMethod.PUT,"/booking/update").hasAnyRole("ADMIN", "USER", "CLUB")
                         .requestMatchers(HttpMethod.DELETE,"/booking/delete/**").hasAnyRole("ADMIN", "USER", "CLUB")
