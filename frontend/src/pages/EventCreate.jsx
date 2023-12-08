@@ -16,7 +16,7 @@ import {
 } from "../components/customMui/CustomMui";
 import { useBookingContext } from "../hooks/bookingContext";
 import CustomInput from "../components/customInput/CustomInput"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import BoxMessage from '../components/BoxMessage'
 import { useUserContext } from "../hooks/userContext"
@@ -48,6 +48,8 @@ const EventCreate = () => {
     const [boxOpen, setBoxOpen] = useState(false)
     const [boxTitle, setBoxTitle] = useState('')
     const [boxMessage, setBoxMessage] = useState('')
+  
+    const [userId, setUserId] = useState(null)
     
     const okMessage = {
       message: '¡Evento creado con éxito!'
@@ -91,7 +93,7 @@ const EventCreate = () => {
       slotId,
       activityId,
       activityName: activityName + " " + activityType,
-      creatorId: 17,
+      creatorId: userId,
       clubId,
       clubName,
       neighborhoodName,
@@ -127,6 +129,16 @@ const EventCreate = () => {
       setError("Algo salió mal!")
     }
   })
+
+  useEffect(() => {
+    user && 
+    axiosInstance.get(`/user/search-email?email=${user.email}`)
+    .then((response) => {
+        const { userId } = response.data;
+        setUserId(userId);
+    })
+    .catch((error) => setError(error)) 
+  }, [])
 
   return (
     <>
