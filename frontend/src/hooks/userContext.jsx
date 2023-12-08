@@ -16,7 +16,6 @@ export const UserProvider = ({children}) => {
   const loginUser = async (userData) => {
     console.log(userData)
     const userInfo = await getUserByEmail(userData.email)
-    console.log(userInfo)
     let clubId = null
 
     if (userInfo.role == 'ROLE_CLUB') {
