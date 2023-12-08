@@ -94,6 +94,7 @@ const Slot = () => {
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [overlapError, setOverlapError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [expanded, setExpanded] = useState(false);
 
@@ -240,6 +241,12 @@ const Slot = () => {
   };
 
   const handleAddSlot = () => {
+    if(endTime <= startTime){
+      setErrorMessage('La hora de finalización debe ser mayor que la hora de inicio');
+      setOverlapError(true);
+      return null
+    }
+    setErrorMessage('');
     setOverlapError(false);
     const daysToAdd = selectedDays.map((day) => ({ id: day }));
     const slotData = {
@@ -254,7 +261,8 @@ const Slot = () => {
       .post('/slot/add', slotData)
       .then((response) => {
       if(!response.data){
-     setOverlapError(true);
+        setErrorMessage('¡Superposición de horarios!');
+        setOverlapError(true);
         }
       else{
         const updatedCanchas = canchas.map((cancha) => {
@@ -432,7 +440,7 @@ const Slot = () => {
               <Grid container spacing={2} m={0}>
                 <Grid item xs={3}>
                   <TextField
-                    label="Horario de Inicio"
+                    label="Hora de Inicio"
                     type="time"
                     value={startTime}
                     onChange={handleStartTimeChange}
@@ -447,7 +455,7 @@ const Slot = () => {
                 </Grid>
                 <Grid item xs={3}>
                   <TextField
-                    label="Horario de Fin"
+                    label="Hora de Fin"
                     type="time"
                     value={endTime}
                     onChange={handleEndTimeChange}
@@ -467,7 +475,7 @@ const Slot = () => {
                 </Button>
                 {overlapError && (
                 <Typography variant="body2" color="error" sx={{ marginTop: '8px' }}>
-                  ¡Superposición de horarios!
+                  {errorMessage}
                 </Typography>
                 )}
                 <Button onClick={handleGoBack} sx={{...ButtonSX}}>
