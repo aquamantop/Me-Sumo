@@ -3,6 +3,7 @@ package com.mesumo.msusers.config;
 import com.mesumo.msusers.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,8 +29,10 @@ public class SecurityConfigUser {
                 .csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/user/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/forgot-password").hasAnyRole("ADMIN", "USER", "CLUB")
+                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").hasAnyRole("ADMIN", "USER", "CLUB")
+                        .requestMatchers(HttpMethod.PUT, "/user/update").hasAnyRole("ADMIN", "USER", "CLUB")
+                        .requestMatchers("/user/delete/**").hasRole("ADMIN")
                         .requestMatchers("/user/add").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 );
