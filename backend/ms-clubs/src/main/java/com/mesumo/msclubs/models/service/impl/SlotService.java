@@ -2,14 +2,19 @@ package com.mesumo.msclubs.models.service.impl;
 
 import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.SlotDTO;
+import com.mesumo.msclubs.models.entities.DayEntity;
 import com.mesumo.msclubs.models.entities.Slot;
 import com.mesumo.msclubs.models.mappers.SlotMapper;
 import com.mesumo.msclubs.models.repository.ISlotRepository;
 import com.mesumo.msclubs.models.service.ISlotService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.mesumo.msclubs.models.searchs.SlotSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +40,18 @@ public class SlotService implements ISlotService {
 
     @Override
     public Slot create(Slot slot) {
-        return repository.save(slot);
+        List<Long> dayIds = slot.getDays().stream()
+                .map(DayEntity::getId)
+                .toList();
+
+        Specification<Slot> spec = Specification.where(byUniqueDaysAndTime(slot.getCourt(), slot.getStartTime(), slot.getEndTime(), dayIds));
+
+        Optional<Slot> existingSlot = repository.findOne(spec);
+        if (existingSlot.isPresent()) {
+            return null;
+        } else {
+            return repository.save(slot);
+        }
     }
 
     @Override
