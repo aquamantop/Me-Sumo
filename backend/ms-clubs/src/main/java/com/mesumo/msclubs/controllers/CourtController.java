@@ -4,6 +4,7 @@ import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.CourtDTO;
 import com.mesumo.msclubs.models.entities.Court;
 import com.mesumo.msclubs.models.service.ICourtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -42,10 +43,11 @@ public class CourtController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody Court court){
+    public ResponseEntity<Court> add(@RequestBody Court court){
         ResponseEntity response = null;
+
         if(court != null){
-            response = ResponseEntity.ok(courtService.create(court));
+            response = new ResponseEntity<>(courtService.create(court), HttpStatus.OK);
         } else {
             response = ResponseEntity.badRequest().build();
         }
@@ -55,8 +57,9 @@ public class CourtController {
     @PutMapping("/update")
     public ResponseEntity update(@RequestBody Court court) throws ResourceNotFoundException {
         ResponseEntity response = null;
+
         if(court != null){
-            response = ResponseEntity.ok(courtService.update(court));
+            response = new ResponseEntity<>(courtService.update(court), HttpStatus.OK);
         } else {
             response = ResponseEntity.badRequest().build();
         }
@@ -81,7 +84,7 @@ public class CourtController {
 
         List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
         if(courts != null){
-            response = ResponseEntity.ok(courts);
+            response = new ResponseEntity<>(courts, HttpStatus.OK);
         } else {
             response = ResponseEntity.notFound().build();
         }
