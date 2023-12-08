@@ -1,6 +1,7 @@
 package com.mesumo.msclubs.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
@@ -20,18 +21,36 @@ public class Court {
 
     private String name;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "club_id")
     private Club club;
 
     @JsonIgnore
+    public Club getClub() {
+        return club;
+    }
+
+    @JsonProperty("club")
+    public void setClub(Club club) {
+        this.club = club;
+    }
+
     @ManyToOne
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
+    @JsonIgnore
+    public Activity getActivity() {
+        return activity;
+    }
+
+    @JsonProperty("activity")
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
     @Enumerated(EnumType.STRING)
-    @Column(name="court_type")
+    @Column(name = "court_type")
     private CourtType court_type;
 
     private boolean inside;
