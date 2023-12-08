@@ -43,27 +43,37 @@ const Header = () => {
     }
   };
 
+  const getInitialMenuInfo = (role) => {
+    if (role === 'ROLE_CLUB') {
+      return [
+        { label: 'Reservas', link: '/booking/' + user.clubId },
+        { label: 'Cargar Cancha', link: '/new-court' },
+        { label: 'Cerrar Sesión', link: '/' },
+      ];
+    } else if (role === 'ROLE_ADMIN') {
+      return [
+        { label: 'Reporte', link: '/reports' },
+        { label: 'Cerrar Sesión', link: '/' },
+      ];
+    } else if (role === 'ROLE_USER') {
+      return [
+        { label: 'Mi Perfil', link: '/profile' },
+        { label: 'Cerrar Sesión', link: '/' },
+      ];
+    } else {
+      return [];
+    }
+  };
+
   useEffect(() => {
     if (user && user.email) {
       fetchAndSetUserInfo(user.email);
-      if (user.role === 'ROLE_CLUB' || user.role === 'ROLE_ADMIN') {
-        const info =
-          user.role === 'ROLE_CLUB'
-            ? [
-                { label: 'Reservas', link: '/booking/'+user.clubId },
-                { label: 'Cargar Cancha', link: '/new-court' },
-                { label: 'Cerrar Sesión', link: '/' },
-              ]
-            : user.role === 'ROLE_ADMIN'
-            ? [
-                { label: 'Reporte', link: '/reports' },
-                { label: 'Cerrar Sesión', link: '/' },
-              ]
-            : [];
-        setMenuInfo(info);
-      }
+      const roleBasedMenu = getInitialMenuInfo(user.role);
+      setMenuInfo(roleBasedMenu);
     }
   }, [user]);
+
+
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
