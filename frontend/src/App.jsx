@@ -20,6 +20,8 @@ import Register from "./pages/Register";
 import Reports from "./pages/Reports";
 import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
+import CourtCreate from "./pages/CourtCreate"
+
 
 
 function App() {
@@ -82,6 +84,7 @@ function App() {
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path='/booking/:id' element={<Bookings />} />
+                    <Route path="/new-court/" element={<CourtCreate/>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
