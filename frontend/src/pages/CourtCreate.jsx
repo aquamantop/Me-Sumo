@@ -46,15 +46,13 @@ const CreateCourt = () => {
     const { user } = useUserContext();
     const [isButtonEnabled, setButtonEnabled] = useState(false);
     const [clubData, setClubData] = useState(null);
-
-
-
     const [courtInfo, setCourtInfo] = useState({
         name: null,
         activity:null,
         court: null,
         inside: null,
     });
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,7 +65,8 @@ const CreateCourt = () => {
         };
     
         fetchData();
-      }, []);
+    }, []);
+    
     
     const groupCourtsByActivity = () => {
         if (!clubData) return {};
@@ -85,9 +84,22 @@ const CreateCourt = () => {
         }, {});
     };
     
+
     const groupedCourts = groupCourtsByActivity();
-
-
+    
+    const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
+        const [nameA, typeA] = a.split(' ');
+        const [nameB, typeB] = b.split(' ');
+    
+        // Personaliza la comparación según tus criterios
+        if (nameA === nameB) {
+          // Si los nombres son iguales, ordena por tipo
+          return parseInt(typeA) - parseInt(typeB);
+        } else {
+          // Si los nombres son diferentes, ordena por nombre
+          return nameA.localeCompare(nameB);
+        }
+    });
 
     const handleCreateCourt = async () => {
         try {
@@ -116,6 +128,7 @@ const CreateCourt = () => {
         }
     };
 
+
     const handleInputChange = (fieldName) => (event, value) => {
         let fieldValue = value || event.target.value;
     
@@ -131,8 +144,6 @@ const CreateCourt = () => {
         }
         
 
-
-    
         setCourtInfo((prevCourtInfo) => {
           const updatedCourtInfo = {
             ...prevCourtInfo,
@@ -151,7 +162,7 @@ const CreateCourt = () => {
           (field) => field !== null && field !== undefined && field !== ''
         );
         setButtonEnabled(allFieldsFilled);
-      }, [courtInfo]);
+    }, [courtInfo]);
 
 
     return (
@@ -300,21 +311,23 @@ const CreateCourt = () => {
                         Tus canchas
                         </Typography>
                         <Divider sx={{ mt: 1, mb: 2 }} />
-                        {Object.entries(groupedCourts).map(([activityKey, courts]) => (
-                        <Accordion key={activityKey}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography variant="h6" color={"secondary.main"}>{activityKey}</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                            <List>
-                                {courts.map((court) => (
-                                <Typography key={court.id} variant="body1">
-                                    {court.name}
-                                </Typography>
-                                ))}
-                            </List>
-                            </AccordionDetails>
-                        </Accordion>
+                        {sortedActivityKeys.map((activityKey) => (
+                            <Accordion key={activityKey}>
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                    <Typography variant="h6" color={"secondary.main"}>
+                                    {activityKey}
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <List>
+                                    {groupedCourts[activityKey].map((court) => (
+                                        <Typography key={court.id} variant="body1">
+                                        {court.name}
+                                        </Typography>
+                                    ))}
+                                    </List>
+                                </AccordionDetails>
+                            </Accordion>
                         ))}
                         <Button
                             variant="contained"
