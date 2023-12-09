@@ -8,6 +8,7 @@ import java.util.List;
 @Repository
 public interface ICourtRepository extends JpaRepository<Court, Long> {
 
-    List<Court> findByClubIdAndActivityId(Long clubId, Long activityId);
+
+    List<Court> findByClubId(Long clubId);
 
 }
