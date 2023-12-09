@@ -109,6 +109,8 @@ const CreateCourt = () => {
             
             );        
             console.log(response.data);
+            const updatedResponse = await axiosInstance.get(`/court/club/${user.clubId}`);
+            setClubData(updatedResponse.data);
         } catch (error) {
             console.error('Error al crear la cancha:', error);
         }
@@ -201,7 +203,7 @@ const CreateCourt = () => {
                             />
                         </Grid>
                         
-                                
+
                         <Grid item xs={6}>
                             <Autocomplete
                                 id="activity"
