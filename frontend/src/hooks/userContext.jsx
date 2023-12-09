@@ -13,7 +13,8 @@ export const UserProvider = ({children}) => {
   const storedUser = localStorage.getItem("user");
   const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
   
-  const loginUser = async (userData) => {
+  const loginUser = async (userData, token) => {
+    console.log("a verrr") 
     console.log(userData)
     const userInfo = await getUserByEmail(userData.email)
     let clubId = null
@@ -29,9 +30,13 @@ export const UserProvider = ({children}) => {
 
     const data = {
       ...userData,
-      role: userInfo.role,
-      clubId: clubId 
+      role: userInfo.role, 
+      clubId: clubId,
+      token: token
     };
+
+  
+
 
     setUser(data);
     localStorage.setItem("user", JSON.stringify(data));
