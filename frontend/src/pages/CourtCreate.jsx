@@ -14,9 +14,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
-    Alert,
     List,
-    ListItem,
   } from "@mui/material";
 import { PaperSXX, BoxSX, ButtonSX } from "../components/customMui/CustomMui";
 import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
@@ -27,7 +25,7 @@ import GrassOutlinedIcon from '@mui/icons-material/GrassOutlined';
 import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
 import { useUserContext } from "../hooks/userContext";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import BoxMessage from '../components/BoxMessage';
 
 const options = [];
 const courtType = ["CESPED_SINTETICO", "CESPED_NATURAL", "CEMENTO", "PARQUET_MADERA", "RESINA", "TIERRA"]
@@ -46,6 +44,8 @@ const CreateCourt = () => {
     const { user } = useUserContext();
     const [isButtonEnabled, setButtonEnabled] = useState(false);
     const [clubData, setClubData] = useState(null);
+    const [showMessage, setShowMessage] = useState(false);
+    const [resetForm, setResetForm] = useState(false);
     const [courtInfo, setCourtInfo] = useState({
         name: null,
         activity:null,
@@ -62,15 +62,14 @@ const CreateCourt = () => {
           } catch (error) {
             console.error('Error fetching club data:', error);
           }
-        };
-    
+        };    
         fetchData();
     }, []);
     
     
     const groupCourtsByActivity = () => {
         if (!clubData) return {};
-    
+   
         return clubData.reduce((groupedCourts, court) => {
           const key = `${court.activity.name} ${court.activity.type}`;
     
@@ -84,19 +83,17 @@ const CreateCourt = () => {
         }, {});
     };
     
-
+    
     const groupedCourts = groupCourtsByActivity();
+    
     
     const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
         const [nameA, typeA] = a.split(' ');
         const [nameB, typeB] = b.split(' ');
     
-        // Personaliza la comparación según tus criterios
         if (nameA === nameB) {
-          // Si los nombres son iguales, ordena por tipo
           return parseInt(typeA) - parseInt(typeB);
         } else {
-          // Si los nombres son diferentes, ordena por nombre
           return nameA.localeCompare(nameB);
         }
     });
@@ -116,13 +113,15 @@ const CreateCourt = () => {
             const response = await axiosInstance.post('/court/add', body,
              {headers: {
                  "Authorization": `Bearer ${user.token}`
-              }}
-            
-            
+              }}        
             );        
+            
             console.log(response.data);
             const updatedResponse = await axiosInstance.get(`/court/club/${user.clubId}`);
             setClubData(updatedResponse.data);
+            setShowMessage(true);
+            setResetForm(true);  
+        
         } catch (error) {
             console.error('Error al crear la cancha:', error);
         }
@@ -130,6 +129,7 @@ const CreateCourt = () => {
 
 
     const handleInputChange = (fieldName) => (event, value) => {
+        
         let fieldValue = value || event.target.value;
     
         if (fieldName === 'activity') {
@@ -165,11 +165,21 @@ const CreateCourt = () => {
     }, [courtInfo]);
 
 
+    const resetFormValues = () => {
+        setResetForm(false);
+        setCourtInfo({
+            name: null,
+            activity: null,
+            court: null,
+            inside: null,
+        });
+    };
+
     return (
         <>
         {true ? (
         false ? (<CustomLoader />) : (
-            <Container sx={{ mb: 2 }}>
+            <Container sx={{ mb: 2 }} key={resetForm}>
             <Paper sx={PaperSXX}>
                 <Box sx={{ ...BoxSX }}>
                 <Typography variant="h5" color="primary.main">
@@ -183,34 +193,35 @@ const CreateCourt = () => {
                         Datos de la cancha a crear
                     </Typography>
                     <Divider sx={{ mt: 1, mb: 2 }} />
+
                     <Grid container spacing={2}>
 
                         <Grid item xs={6}>
-                        <Autocomplete
-                            id="name"
-                            disablePortal
-                            fullWidth
-                            freeSolo
-                            options={options}
-                            onInputChange={(event, value) => handleInputChange("name")(event, value)}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                label="Crear Nombre"
-                                id="custom-css-outlined-input"
-                                sx={{ mt: 2 }}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                    <InputAdornment position="start">
-                                        <IconButton>
-                                        <StadiumOutlinedIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                    ),
-                                }}
-                                />
-                            )}
+                            <Autocomplete
+                                id="name"
+                                disablePortal
+                                fullWidth
+                                freeSolo
+                                options={options}
+                                onInputChange={(event, value) => handleInputChange("name")(event, value)}
+                                renderInput={(params) => (
+                                    <TextField
+                                    {...params}
+                                    label="Crear Nombre"
+                                    id="custom-css-outlined-input"
+                                    sx={{ mt: 2 }}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        startAdornment: (
+                                        <InputAdornment position="start">
+                                            <IconButton>
+                                            <StadiumOutlinedIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                        ),
+                                    }}
+                                    />
+                                )}
                             />
                         </Grid>
                         
@@ -245,7 +256,7 @@ const CreateCourt = () => {
                         </Grid>
 
                         <Grid item xs={12} >
-                        <Autocomplete
+                            <Autocomplete
                                 id="court"
                                 disablePortal
                                 fullWidth
@@ -253,17 +264,17 @@ const CreateCourt = () => {
                                 getOptionLabel={(option) => option || ''}
                                 onChange={(event, value) => handleInputChange("court")(event, value)}
                                 renderInput={(params) => (
-                                    <TextField
+                                <TextField
                                     {...params}
                                     label="Elegir Suelo"
-                                    id="custom-css-outlined-input"
+                                        id="custom-css-outlined-input"
                                     sx={{ mt: 2 }}
                                     InputProps={{
                                         ...params.InputProps,
                                         startAdornment: (
                                         <InputAdornment position="start">
                                             <IconButton>
-                                            <GrassOutlinedIcon />
+                                                <GrassOutlinedIcon />
                                             </IconButton>
                                         </InputAdornment>
                                         ),
@@ -275,7 +286,7 @@ const CreateCourt = () => {
 
 
                         <Grid item xs={6} sx={{ marginBottom: 2 }}>
-                        <Autocomplete
+                            <Autocomplete
                                 id="inside"
                                 disablePortal
                                 fullWidth
@@ -305,6 +316,9 @@ const CreateCourt = () => {
                     </Grid>
                     </Container>
                 </Grid>
+                
+
+                
                 <Grid item xs={12} md={6}>
                     <Container>
                         <Typography variant="h6" mt={2} color="primary.main">
@@ -342,6 +356,16 @@ const CreateCourt = () => {
                 </Grid>
                 </Grid>
             </Paper>
+
+            <BoxMessage
+                open={showMessage}
+                title="Cancha Creada"
+                message="¡La cancha se ha creado con éxito!"
+                onClose={() => {
+                    setShowMessage(false);
+                    resetFormValues();
+                }}
+            />
             </Container>
         )
 
