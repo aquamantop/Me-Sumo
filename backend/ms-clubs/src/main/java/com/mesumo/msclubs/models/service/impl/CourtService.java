@@ -55,8 +55,8 @@ public class CourtService implements ICourtService {
     }
 
     @Override
-    public List<CourtDTO> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException {
-        List<Court> courts = repository.findByClubIdAndActivityId(clubId, activityId);
+    public List<CourtDTO> findByClubId(Long clubId) throws ResourceNotFoundException {
+        List<Court> courts = repository.findByClubId(clubId);
 
         if(courts.isEmpty()) throw new ResourceNotFoundException("Courts not found");
 

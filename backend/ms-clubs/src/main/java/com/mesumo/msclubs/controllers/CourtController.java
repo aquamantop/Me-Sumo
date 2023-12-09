@@ -42,6 +42,18 @@ public class CourtController {
         return response;
     }
 
+    @GetMapping("/club/{id}")
+    public ResponseEntity getByClubId(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity response = null;
+        List<CourtDTO> courts = courtService.findByClubId(id);
+        if(courts != null){
+            response = ResponseEntity.ok(courts);
+        } else {
+            response = ResponseEntity.notFound().build();
+        }
+        return response;
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Court> add(@RequestBody Court court){
         ResponseEntity response = null;
@@ -78,18 +90,18 @@ public class CourtController {
         return response;
     }
 
-    @GetMapping("/club-activity")
-    public ResponseEntity getByClubId(@RequestParam Long clubId, @RequestParam Long activityId ) throws ResourceNotFoundException {
-        ResponseEntity response = null;
-
-        List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
-        if(courts != null){
-            response = new ResponseEntity<>(courts, HttpStatus.OK);
-        } else {
-            response = ResponseEntity.notFound().build();
-        }
-        return response;
-    }
+//    @GetMapping("/club-activity")
+//    public ResponseEntity getByClubId(@RequestParam Long clubId, @RequestParam Long activityId ) throws ResourceNotFoundException {
+//        ResponseEntity response = null;
+//
+//        List<CourtDTO> courts = courtService.findByClubIdAndActivityId(clubId, activityId);
+//        if(courts != null){
+//            response = new ResponseEntity<>(courts, HttpStatus.OK);
+//        } else {
+//            response = ResponseEntity.notFound().build();
+//        }
+//        return response;
+//    }
 
 
 }
