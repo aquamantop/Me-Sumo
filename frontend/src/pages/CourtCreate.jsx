@@ -11,7 +11,12 @@ import {
     Button,
     InputAdornment,
     IconButton,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Alert,
+    List,
+    ListItem,
   } from "@mui/material";
 import { PaperSXX, BoxSX, ButtonSX } from "../components/customMui/CustomMui";
 import AccessibilityNewOutlinedIcon from '@mui/icons-material/AccessibilityNewOutlined';
@@ -21,6 +26,7 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import GrassOutlinedIcon from '@mui/icons-material/GrassOutlined';
 import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
 import { useUserContext } from "../hooks/userContext";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const options = [];
@@ -39,6 +45,10 @@ const CreateCourt = () => {
   
     const { user } = useUserContext();
     const [isButtonEnabled, setButtonEnabled] = useState(false);
+    const [clubData, setClubData] = useState(null);
+
+
+
     const [courtInfo, setCourtInfo] = useState({
         name: null,
         activity:null,
@@ -46,8 +56,40 @@ const CreateCourt = () => {
         inside: null,
     });
 
-    const handleCreateCourt = async () => {
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await axiosInstance.get(`/court/club/${user.clubId}`);
+            setClubData(response.data);
+          } catch (error) {
+            console.error('Error fetching club data:', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
+    
+    const groupCourtsByActivity = () => {
+        if (!clubData) return {};
+    
+        return clubData.reduce((groupedCourts, court) => {
+          const key = `${court.activity.name} ${court.activity.type}`;
+    
+          if (!groupedCourts[key]) {
+            groupedCourts[key] = [];
+          }
+    
+          groupedCourts[key].push(court);
+    
+          return groupedCourts;
+        }, {});
+    };
+    
+    const groupedCourts = groupCourtsByActivity();
 
+
+
+    const handleCreateCourt = async () => {
         try {
             console.log(courtInfo)
             const body = {
@@ -59,14 +101,18 @@ const CreateCourt = () => {
                 slots: [{}]
             }
             console.log(body)
-            const response = await axiosInstance.post('/court/add', body);        
+            const response = await axiosInstance.post('/court/add', body,
+             {headers: {
+                 "Authorization": `Bearer ${user.token}`
+              }}
+            
+            
+            );        
             console.log(response.data);
         } catch (error) {
             console.error('Error al crear la cancha:', error);
         }
     };
-
-
 
     const handleInputChange = (fieldName) => (event, value) => {
         let fieldValue = value || event.target.value;
@@ -121,7 +167,7 @@ const CreateCourt = () => {
                 <Grid item xs={12} md={6}>
                     <Container>
                     <Typography variant="h6" mt={2} color="primary.main">
-                        Datos de la cancha
+                        Datos de la cancha a crear
                     </Typography>
                     <Divider sx={{ mt: 1, mb: 2 }} />
                     <Grid container spacing={2}>
@@ -155,7 +201,7 @@ const CreateCourt = () => {
                             />
                         </Grid>
                         
-
+                                
                         <Grid item xs={6}>
                             <Autocomplete
                                 id="activity"
@@ -248,21 +294,35 @@ const CreateCourt = () => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Container>
-                    <Typography variant="h6" mt={2} color="primary.main">
+                        <Typography variant="h6" mt={2} color="primary.main">
                         Tus canchas
-                    </Typography>
-                    <Divider sx={{ mt: 1, mb: 2 }} />
-                    <Typography variant="body1">¡Ups! parece que no has creado ninguna cancha aún</Typography>
-                    {/* <Link href='/disponibility'> */}
-                    <Button
-                        variant="contained"
-                        fullWidth
-                        disabled={!isButtonEnabled}
-                        onClick={handleCreateCourt}
-                        sx={{ ...ButtonSX, my: 2 }}>
-                        Crear cancha
-                    </Button>
-                    {/* </Link> */}
+                        </Typography>
+                        <Divider sx={{ mt: 1, mb: 2 }} />
+                        {Object.entries(groupedCourts).map(([activityKey, courts]) => (
+                        <Accordion key={activityKey}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6" color={"secondary.main"}>{activityKey}</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                            <List>
+                                {courts.map((court) => (
+                                <Typography key={court.id} variant="body1">
+                                    {court.name}
+                                </Typography>
+                                ))}
+                            </List>
+                            </AccordionDetails>
+                        </Accordion>
+                        ))}
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            disabled={!isButtonEnabled}
+                            onClick={handleCreateCourt}
+                            sx={{ ...ButtonSX, my: 2 }}
+                        >
+                            Crear cancha
+                        </Button>
                     </Container>
                 </Grid>
                 </Grid>

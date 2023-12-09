@@ -64,7 +64,7 @@ export default function Login() {
     try {
       const response = await axiosInstance.post("/auth/login", userData);
       if (response) {
-        loginUser(userData);
+        loginUser(userData, response.data.token);
         setError("");
         showMessage(okMessage)
         goHome()
