@@ -28,6 +28,4 @@ public class CourtDTO {
 
     private boolean inside;
 
-    private Set<Slot> slots;
-
 }

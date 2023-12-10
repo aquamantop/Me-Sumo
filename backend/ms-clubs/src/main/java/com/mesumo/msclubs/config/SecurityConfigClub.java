@@ -26,9 +26,18 @@ public class SecurityConfigClub {
                 .csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(authRequest -> authRequest
+                        // CLUB ENDPOINTS
                         .requestMatchers(HttpMethod.POST,"/club/add").hasAnyRole("ADMIN", "CLUB")
                         .requestMatchers(HttpMethod.DELETE,"/club/delete/**").hasAnyRole("ADMIN", "CLUB")
                         .requestMatchers(HttpMethod.PUT, "/club/update").hasAnyRole("ADMIN", "CLUB")
+                        // SLOT ENDPOINTS
+                        .requestMatchers(HttpMethod.POST, "/slot/add").hasAnyRole( "ADMIN", "CLUB")
+                        .requestMatchers(HttpMethod.PUT,"/slot/update").hasAnyRole("ADMIN", "CLUB")
+                        .requestMatchers(HttpMethod.DELETE,"/slot/delete/**").hasAnyRole( "ADMIN", "CLUB")
+                        // COURT ENDPOINTS
+                        .requestMatchers(HttpMethod.POST, "/court/add").hasAnyRole("ADMIN", "CLUB")
+                        .requestMatchers(HttpMethod.PUT,"/court/update").hasAnyRole("ADMIN", "CLUB")
+                        .requestMatchers(HttpMethod.DELETE,"/court/delete/**").hasAnyRole("ADMIN", "CLUB")
                         .anyRequest().permitAll()
                 );
         http
