@@ -1,7 +1,6 @@
 package com.mesumo.msclubs.config.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -78,18 +77,5 @@ public class JwtServiceClub {
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
     }
-
-    public boolean isResetTokenValid(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(getKey())
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
 
 }
