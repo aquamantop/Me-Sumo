@@ -55,11 +55,12 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getEmailFromToken(token);
-        Set<String> rolesFromToken = new HashSet<>(getClaim(token, claims -> claims.get("roles", ArrayList.class)));
+        List<String> rolesFromToken = new ArrayList<>(getClaim(token, claims -> claims.get("roles", ArrayList.class)));
+        List<String> authorities = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         return (username.equals(userDetails.getUsername()) &&
                 !isTokenExpired(token) &&
-                rolesFromToken.equals(userDetails.getAuthorities()));
+                authorities.equals(rolesFromToken));
     }
 
     private Claims getAllClaims(String token)

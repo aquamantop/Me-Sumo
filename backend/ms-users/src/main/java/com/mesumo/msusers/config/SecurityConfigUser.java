@@ -29,8 +29,8 @@ public class SecurityConfigUser {
                 .csrf(AbstractHttpConfigurer::disable);
         http
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers(HttpMethod.POST,"/user/add").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/user/delete/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/user/add").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/user/delete/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/user/update").hasAnyRole("ADMIN", "USER", "CLUB")
                         .anyRequest().permitAll()
                 );
