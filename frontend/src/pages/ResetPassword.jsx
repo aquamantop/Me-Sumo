@@ -65,9 +65,7 @@ export default function ResetPassword() {
         "/auth/reset-password",
         userData,
         {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: {'Authorization': `Bearer ${token}` }
         }
       );
       if (response) {

@@ -212,7 +212,11 @@ const Slot = () => {
 
   const handleDeleteSlot = () => {
     axiosInstance
-      .delete(`/slot/delete/${selectedSlot}`)
+      .delete(`/slot/delete/${selectedSlot}`,
+        {
+          headers: { "Authorization": `Bearer ${user.token}` }
+        }   
+      )
       .then((response) => {
         const updatedCanchas = canchas.map((cancha) => {
           const updatedConjuntosDias = cancha.conjuntosDias.map((conjunto) => {
@@ -258,7 +262,11 @@ const Slot = () => {
     };
 
     axiosInstance
-      .post('/slot/add', slotData)
+      .post('/slot/add', slotData,
+          {
+            headers: { "Authorization": `Bearer ${user.token}` }
+          }  
+      )
       .then((response) => {
       if(!response.data){
         setErrorMessage('¡Superposición de horarios!');
