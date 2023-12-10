@@ -1,5 +1,6 @@
 package com.mesumo.msusers.auth;
 
+import com.mesumo.msusers.exceptions.PasswordException;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.service.impl.EmailService;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ResourceAlreadyExistsException {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) throws ResourceAlreadyExistsException, PasswordException {
         AuthResponse response = authService.register(request);
 
         if (!response.getToken().isEmpty()) {

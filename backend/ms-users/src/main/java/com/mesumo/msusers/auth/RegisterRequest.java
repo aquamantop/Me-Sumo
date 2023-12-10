@@ -1,5 +1,6 @@
 package com.mesumo.msusers.auth;
 
+import com.mesumo.msusers.models.entities.Neighborhood;
 import com.mesumo.msusers.models.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class RegisterRequest {
     private String email;
 
     private String password;
+
+    private Neighborhood neighborhood;
 
     private Role role;
 

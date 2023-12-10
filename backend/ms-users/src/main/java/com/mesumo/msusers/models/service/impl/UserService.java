@@ -1,8 +1,10 @@
 package com.mesumo.msusers.models.service.impl;
 
+import com.mesumo.msusers.exceptions.PasswordException;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.entities.User;
+import com.mesumo.msusers.models.entities.dto.UserChangePassword;
 import com.mesumo.msusers.models.entities.dto.UserDTO;
 import com.mesumo.msusers.models.mappers.UserMapper;
 import com.mesumo.msusers.models.repository.IUserRepository;
@@ -17,7 +19,6 @@ import java.util.*;
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository ;
-
     private final PasswordEncoder passwordEncoder;
 
     private final UserMapper userMapper = new UserMapper();
@@ -68,12 +69,27 @@ public class UserService implements IUserService {
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
 
-        if (user.getPassword() != null) userExists.setPassword((passwordEncoder.encode(user.getPassword())));
         if (user.getNameUser() != null) userExists.setUserName(user.getNameUser());
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
         if (user.getEmail() != null) userExists.setEmail(user.getEmail());
         if (user.getNeighborhood() != null) userExists.setNeighborhood(user.getNeighborhood());
+
+        return userRepository.save(userExists);
+    }
+
+    @Override
+    public User changePassword(UserChangePassword user) throws ResourceNotFoundException, PasswordException {
+        User userExists = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + " not found"));
+
+        String oldPassword = userExists.getPassword();
+        String newPassword = passwordEncoder.encode(user.getPassword());
+
+        if (user.getPassword().length() < 6) throw new PasswordException("Password must be at least 6 characters long");
+        if (user.getPassword().length() > 18) throw new PasswordException("Password must be at most 18 characters long");
+        if (passwordEncoder.matches(user.getPassword(), oldPassword)) throw new PasswordException("New password must be different from old password");
+        else userExists.setPassword(newPassword);
 
         return userRepository.save(userExists);
     }
