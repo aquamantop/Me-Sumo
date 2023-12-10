@@ -32,8 +32,6 @@ public class SecurityConfigUser {
                         .requestMatchers(HttpMethod.POST,"/user/add").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/user/delete/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/user/update").hasAnyRole("ADMIN", "USER", "CLUB")
-                        .requestMatchers(HttpMethod.POST, "/auth/forgot-password").hasAnyRole("ADMIN", "USER", "CLUB")
-                        .requestMatchers(HttpMethod.POST, "/auth/reset-password").hasAnyRole("ADMIN", "USER", "CLUB")
                         .anyRequest().permitAll()
                 );
         http
