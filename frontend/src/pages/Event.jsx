@@ -55,7 +55,11 @@ const Booking = () => {
   
     const handleAddParticipant = () => {
         if (user && !isParticipant) {
-            axiosInstance.post(`/booking/participant/${id}`, userInfo)
+            axiosInstance.post(`/booking/participant/${id}`, userInfo,
+            {headers: {
+                "Authorization": `Bearer ${user.token}`
+            }}  
+            )
             .then(response => {
                 showMessage(okMessage);
                 axiosInstance.get(`/booking/${id}`)
@@ -86,9 +90,14 @@ const Booking = () => {
     const handleDeleteParticipant = () => {
         const participant = cardInfo.bookingParticipants.find(participant => participant.userId === userInfo.userId);
         if (user && isParticipant) {
-            axiosInstance.delete(`/booking/participant/${id}`, {
-                data: { id: participant.id }
-            })
+            axiosInstance.delete(`/booking/participant/${id}`, 
+                {
+                    data: { id: participant.id }
+                },
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }  
+            )
             .then(response => {
                 showMessage({message: 'Lamentamos no contar con vos'});
                 axiosInstance.get(`/booking/${id}`)

@@ -116,7 +116,11 @@ const EventCreate = () => {
     } else if (user && !error) {
       const response = await new Promise((resolve) => {
         axiosInstance
-          .post("/booking/add", booking)
+          .post("/booking/add", booking,
+            {
+              headers: { "Authorization": `Bearer ${user.token}` }
+            } 
+          )
           .then((response) => {
             resolve(response)
             showMessage(okMessage)
