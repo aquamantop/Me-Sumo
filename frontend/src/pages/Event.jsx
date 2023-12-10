@@ -56,9 +56,9 @@ const Booking = () => {
     const handleAddParticipant = () => {
         if (user && !isParticipant) {
             axiosInstance.post(`/booking/participant/${id}`, userInfo,
-            {headers: {
-                "Authorization": `Bearer ${user.token}`
-            }}  
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }  
             )
             .then(response => {
                 showMessage(okMessage);

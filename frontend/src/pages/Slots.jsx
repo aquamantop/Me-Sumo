@@ -263,9 +263,9 @@ const Slot = () => {
 
     axiosInstance
       .post('/slot/add', slotData,
-          {headers: {
-              "Authorization": `Bearer ${user.token}`
-          }}  
+          {
+            headers: { "Authorization": `Bearer ${user.token}` }
+          }  
       )
       .then((response) => {
       if(!response.data){

@@ -111,9 +111,9 @@ const CreateCourt = () => {
             }
             console.log(body)
             const response = await axiosInstance.post('/court/add', body,
-                {headers: {
-                    "Authorization": `Bearer ${user.token}`
-                }}        
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }        
             );        
             
             console.log(response.data);
