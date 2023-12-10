@@ -1,5 +1,6 @@
 package com.mesumo.msusers.auth;
 
+import com.mesumo.msusers.exceptions.PasswordException;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.jwt.JwtService;
@@ -35,7 +36,11 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponse register(RegisterRequest request) throws ResourceAlreadyExistsException {
+    public AuthResponse register(RegisterRequest request) throws ResourceAlreadyExistsException, PasswordException {
+
+        if (request.getPassword().length() < 6 && request.getPassword().length() > 18) {
+            throw new PasswordException("Password must be between 6 and 18 characters");
+        }
 
         User user = User.builder()
                 .userName(request.getUserName())
@@ -43,6 +48,7 @@ public class AuthService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .neighborhood(request.getNeighborhood())
                 .role(Role.ROLE_USER)
                 .build();
 

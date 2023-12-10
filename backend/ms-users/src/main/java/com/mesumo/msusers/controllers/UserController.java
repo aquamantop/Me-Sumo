@@ -1,8 +1,10 @@
 package com.mesumo.msusers.controllers;
 
+import com.mesumo.msusers.exceptions.PasswordException;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.entities.User;
+import com.mesumo.msusers.models.entities.dto.UserChangePassword;
 import com.mesumo.msusers.models.entities.dto.UserDTO;
 import com.mesumo.msusers.models.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,11 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<User> update (@RequestBody User user) throws ResourceNotFoundException {
         return new ResponseEntity<>(userService.update(user), HttpStatus.OK);
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword (@RequestBody UserChangePassword user) throws ResourceNotFoundException, PasswordException {
+        return new ResponseEntity<>(userService.changePassword(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
