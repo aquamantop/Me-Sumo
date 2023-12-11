@@ -21,7 +21,8 @@ import Reports from "./pages/Reports";
 import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
 import CourtCreate from "./pages/CourtCreate"
-
+//import AddImages from "./components/admin/newClub/AddImage";
+import ClubCreate from "./pages/ClubCreate"
 
 
 function App() {
@@ -84,7 +85,8 @@ function App() {
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path='/booking/:id' element={<Bookings />} />
-                    <Route path="/new-court/" element={<CourtCreate/>} />
+                    <Route path="/new-court" element={<CourtCreate/>} />
+                    <Route path="/new-club" element={<ClubCreate/>} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
