@@ -1,9 +1,10 @@
 import { ButtonSX } from '../components/customMui/CustomMui'
 import { delay } from "../helpers/delay"
-import { Link } from '@mui/material'
+import { Link, Autocomplete, TextField, InputAdornment, IconButton } from '@mui/material'
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axiosInstance from "../hooks/api/axiosConfig";
 import Box from '@mui/material/Box'
 import BoxMessage from '../components/BoxMessage'
@@ -30,6 +31,7 @@ export default function Register() {
       lastName: '',
       userName: '',
       email: '',
+      neighborhood: '',
       password: '',
       confirmPassword: '',
     },
@@ -39,7 +41,8 @@ export default function Register() {
   const [boxOpen, setBoxOpen] = useState(false);
   const [boxTitle, setBoxTitle] = useState('');
   const [boxMessage, setBoxMessage] = useState('');
-  
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
 
   const okMessage = {
       title: '¡OK!',
@@ -64,9 +67,30 @@ export default function Register() {
     navigate("/login")
   }
 
-  const onSubmit = handleSubmit(async (userData) => {
+  useEffect(() => {
+    const fetchNeighborhoods = async () => {
+      try {
+        const response = await axiosInstance.get('/neighborhood/');
+        setNeighborhoods(response.data);
+      } catch (error) {
+        console.error('Error al obtener vecindarios:', error);
+      }
+    };
+
+    fetchNeighborhoods();
+  }, []);
+
+  console.log(selectedNeighborhood);
+
+  const onSubmit = handleSubmit(async (userData) => { 
     try {
-      const response = await axiosInstance.post("/auth/register", userData);
+      const modifiedUserData = {
+        ...userData,
+        neighborhood: {
+          id: selectedNeighborhood || null,
+        }
+      }
+      const response = await axiosInstance.post("/auth/register", modifiedUserData);
       if (response) {
         setError("");
         showMessage(okMessage)
@@ -188,6 +212,33 @@ export default function Register() {
             icon={<EmailSharpIcon />}
           />
 
+          <Autocomplete
+              id="nhood"
+              disablePortal
+              fullWidth
+              options={neighborhoods}
+              getOptionLabel={(option) => option.name || ''}
+              onChange={(event, value) => setSelectedNeighborhood(value.id)}
+              renderInput={(params) => (
+              <TextField
+                  {...params}
+                  label="Opcional: Elegi tu Barrio"
+                      id="custom-css-outlined-input"
+                  sx={{ mt: 2 }}
+                  InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                      <InputAdornment position="start">
+                          <IconButton>
+                              <MapOutlinedIcon />
+                          </IconButton>
+                      </InputAdornment>
+                      ),
+                  }}
+                  />
+              )}
+          />
+
           <CustomInput
             name='password'
             control={control}
@@ -202,8 +253,8 @@ export default function Register() {
                 message: 'La contraseña es requerida',
               },
               pattern: {
-                value: /^.{6,}$/,
-                message: 'La contraseña debe tener al menos 6 caracteres',
+                value: /^.{6,18}$/,
+                message: 'La contraseña debe estar entre 6 y 18 caracteres',
               },
             }}
             icon={<LockSharpIcon />}

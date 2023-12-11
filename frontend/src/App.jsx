@@ -21,9 +21,8 @@ import Reports from "./pages/Reports";
 import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
 import CourtCreate from "./pages/CourtCreate"
-//import AddImages from "./components/admin/newClub/AddImage";
+import ChangePassword from "./pages/ChangePassword";
 import ClubCreate from "./pages/ClubCreate"
-
 
 function App() {
   const theme = createTheme({
@@ -57,6 +56,12 @@ function App() {
             "& label": {
               color: "white",
             },
+            input: {
+              '&:-webkit-autofill': {
+                WebkitBoxShadow: 'none',
+                WebkitTextFillColor: '#fff',
+              },
+            },
           },
         },
       },
@@ -83,6 +88,7 @@ function App() {
                     <Route path="/new-slot/:id" element={<Slots />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/change-password" element={<ChangePassword />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path='/booking/:id' element={<Bookings />} />
                     <Route path="/new-court" element={<CourtCreate/>} />

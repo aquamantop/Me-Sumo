@@ -100,7 +100,6 @@ const CreateCourt = () => {
 
     const handleCreateCourt = async () => {
         try {
-            console.log(courtInfo)
             const body = {
                 name: courtInfo.name,
                 club: {id: user.clubId},
@@ -109,11 +108,10 @@ const CreateCourt = () => {
                 inside: courtInfo.inside,
                 slots: [{}]
             }
-            console.log(body)
             const response = await axiosInstance.post('/court/add', body,
-             {headers: {
-                 "Authorization": `Bearer ${user.token}`
-              }}        
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }        
             );        
             
             console.log(response.data);
