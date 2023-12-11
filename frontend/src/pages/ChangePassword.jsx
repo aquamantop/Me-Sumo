@@ -14,7 +14,7 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 
 export default function ChangePassword() {
-  const { user } = useUserContext();
+  const { user, logoutUser } = useUserContext();
   const navigate = useNavigate();
 
   const {
@@ -53,11 +53,6 @@ export default function ChangePassword() {
       setBoxOpen(true);
   };
 
-  const goLogin = async () => {
-    await delay(2000)
-    navigate("/login")
-  }
-
   const onSubmit = handleSubmit(async (userData) => {
     try {
       const body = {
@@ -75,8 +70,7 @@ export default function ChangePassword() {
       );
       if (response) {
         setError("");
-        showMessage(okMessage)
-        goLogin()
+        logoutUser();
       }
     } catch (error) {
       setError("Algo salió mal. Por favor, volvé a intentarlo.");
