@@ -18,10 +18,13 @@ export const getUserByEmail = async (email) => {
     return null;
   }
 };
-export const updateUser = async (updatedInfo) => {
+export const updateUser = async (updatedInfo, token) => {
   try {
     // Realizar la llamada PUT para actualizar la información del usuario
-    const response = await axiosInstance.put('/user/update', updatedInfo);
+    const response = await axiosInstance.put('/user/update', updatedInfo, 
+    {
+      headers: { Authorization: `Bearer ${token}`}
+    });
     console.log('Respuesta del servidor:', response.data);
   } catch (error) {
     // Manejar errores aquí

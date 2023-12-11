@@ -88,7 +88,7 @@ const validateFields = () => {
 const handleSaveClick = async () => {
   try {
     if(validateFields()){
-      await updateUser(updatedInfo);
+      await updateUser(updatedInfo, user.token);
       console.log(updatedInfo);
       setAlertSuccess(true)
     } else {
@@ -174,7 +174,7 @@ const handleSaveClick = async () => {
                           endAdornment: (
                             <InputAdornment position="end">
                               <Tooltip title='Cambiar contraseña'>
-                                <IconButton href='/forgot-password' edge="end">
+                                <IconButton href='/change-password' edge="end">
                                   <CallMade />
                                 </IconButton>
                               </Tooltip>
