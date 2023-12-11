@@ -44,7 +44,7 @@ export const UserProvider = ({children}) => {
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem("user");
-    window.location.reload();
+    window.location.assign("/");
   };
 
   useEffect(() => {
