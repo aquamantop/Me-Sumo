@@ -80,6 +80,7 @@ function EventSearch({ onUpdateFilters }) {
 
     const handleDateChange = (date) => {
         if (!date || !dayjs(date).isValid()) {
+            setSelectedDate(null);
             return true;
         }
         const formattedDate = dayjs(date).format('YYYY-MM-DD');  
