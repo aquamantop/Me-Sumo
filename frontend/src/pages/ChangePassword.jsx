@@ -64,7 +64,7 @@ export default function ChangePassword() {
         email: user.email,
         oldPassword: userData.oldPassword,
         newPassword: userData.newPassword,
-        repeatPassword: userData.confirmPassword
+        confirmPassword: userData.confirmPassword
       }
       const response = await axiosInstance.put(
         "/user/change-password",
