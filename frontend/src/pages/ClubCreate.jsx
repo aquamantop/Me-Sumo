@@ -18,7 +18,7 @@ import StadiumOutlinedIcon from '@mui/icons-material/StadiumOutlined';
 import CustomLoader from "../components/CustomLoader";
 import { useUserContext } from "../hooks/userContext";
 import BoxMessage from '../components/BoxMessage';
-import AddImages from '../components/admin/newClub/AddImage';
+// import AddImages from '../components/admin/newClub/AddImage';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -233,6 +233,11 @@ const CreateClub = () => {
             setName(event.target.value);
         }
 
+        if (fieldName === 'url') {
+            setUrlImagen(event.target.value);
+        }
+
+
         if (fieldName === 'description') {
             setDescription(event.target.value);
         }
@@ -291,11 +296,11 @@ const CreateClub = () => {
          });
      };
 
-     const handleImageSelected = (imageUrl) => {
-        // Lógica para manejar la URL seleccionada
-        console.log('URL seleccionada:', imageUrl);
-        setUrlImagen(imageUrl);
-      };
+    //  const handleImageSelected = (imageUrl) => {
+    //     // Lógica para manejar la URL seleccionada
+    //     console.log('URL seleccionada:', imageUrl);
+    //     setUrlImagen(imageUrl);
+    //   };
 
     return (
         <>
@@ -517,10 +522,40 @@ const CreateClub = () => {
                                 </Grid>
 
 
+                                <Grid item xs={6}>
+                                    <Autocomplete
+                                        id="url"
+                                        disablePortal
+                                        fullWidth
+                                        freeSolo
+                                        options={options}
+                                        onInputChange={(event, value) => handleInputChange("url")(event, value)}
+                                        renderInput={(params) => (
+                                            <TextField
+                                            {...params}
+                                            label="Cargar URL de la imagen"
+                                            id="custom-css-outlined-input"
+                                            sx={{ mt: 2 }}
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <IconButton>
+                                                    <StadiumOutlinedIcon />
+                                                    </IconButton>
+                                                </InputAdornment>
+                                                ),
+                                            }}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
 
+
+{/* 
                                 <Grid item xs={6} m={3}>
                                     <AddImages onImageSelected={handleImageSelected} />
-                                </Grid>
+                                </Grid> */}
 
 
                                 {/* <Grid item xs={6} sx={{ marginBottom: 2 }}>
