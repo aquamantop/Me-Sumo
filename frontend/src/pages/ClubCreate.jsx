@@ -26,12 +26,10 @@ import axiosInstance from '../hooks/api/axiosConfig';
 import { Margin } from '@mui/icons-material';
 
 
-const REGION = 'us-east-1' 
-const ACCESS_KEY_ID = 'AKIAUNATVL73PJ4TL6FF' //${{ secrets.AWS_ACCESS_KEY_ID }}
-const SECRET_ACCESS_KEY = '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' //${{ secrets.AWS_SECRET_ACCESS_KEY }}
-const S3_BUCKET= 'me-sumo-img'
+
 
 const options = [];
+
 
 const amenities  = {
     1:"Wi-Fi",
@@ -70,13 +68,22 @@ const CreateClub = () => {
     const [clubData, setClubData] = useState(null);
     const [neighborhoods, setNeighborhoods] = useState([]);
     const [neighborhoodsMap, setNeighborhoodsMap] = useState({});
+    const [neighborhoodsMap, setNeighborhoodsMap] = useState({});
     const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
     const [selectedActivities, setSelectedActivities] = useState([]);
     const [selectedAmenities, setSelectedAmenities] = useState([]);
     const [idsActivities, setIdsActivities] = useState([]);
     const [idsAmenities, setIdsAmenities] = useState([]);
+    const [selectedAmenities, setSelectedAmenities] = useState([]);
+    const [idsActivities, setIdsActivities] = useState([]);
+    const [idsAmenities, setIdsAmenities] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
     const [resetForm, setResetForm] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [address, setAddress] = useState('');
+    const [urlImagen, setUrlImagen] = useState('');
+    const [clubInfo, setClubInfo] = useState({
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [address, setAddress] = useState('');
@@ -88,12 +95,19 @@ const CreateClub = () => {
         address: null,
         amenities: [],
         activities: [],
+        neighborhood: [],
+        description: null, 
+        address: null,
+        amenities: [],
+        activities: [],
     });
 
     useEffect(() => {
         const fetchNeighborhoods = async () => {
           try {
             const response = await axiosInstance.get('/neighborhood/');
+            setNeighborhoodsMap(response.data);
+            
             setNeighborhoodsMap(response.data);
             
             const neighborhoodNames = response.data.map((neighborhood) => neighborhood.name);
@@ -109,10 +123,12 @@ const CreateClub = () => {
     
 
    /*  const handleSelectChange = (event) => {
+   /*  const handleSelectChange = (event) => {
         setSelectedNeighborhood(event.target.value);
     };
     
 
+     const handleInputChange = (name) => (event, value) => {
      const handleInputChange = (name) => (event, value) => {
         console.log("Selected Values:", value);
         setSelectedActivities(value);
@@ -132,28 +148,92 @@ const CreateClub = () => {
          };    
          fetchData();
      }, []); */
+ */
+ 
+
+/*      useEffect(() => {
+         const fetchData = async () => {
+           try {
+            
+             const response = await axiosInstance.get(`/court/club/${user.clubId}`);
+             setClubData(response.data);
+           } catch (error) {
+             console.error('Error fetching club data:', error);
+           }
+         };    
+         fetchData();
+     }, []); */
     
     
      /*const groupCourtsByActivity = () => {
          if (!clubData) return {};
+     /*const groupCourtsByActivity = () => {
+         if (!clubData) return {};
    
+         return clubData.reduce((groupedCourts, court) => {
+           const key = `${court.activity.name} ${court.activity.type}`;
          return clubData.reduce((groupedCourts, court) => {
            const key = `${court.activity.name} ${court.activity.type}`;
     
            if (!groupedCourts[key]) {
              groupedCourts[key] = [];
            }
+           if (!groupedCourts[key]) {
+             groupedCourts[key] = [];
+           }
     
            groupedCourts[key].push(court);
+           groupedCourts[key].push(court);
     
+           return groupedCourts;
+         }, {});
+     };
            return groupedCourts;
          }, {});
      };
     
     
      const groupedCourts = groupCourtsByActivity();*/
+     const groupedCourts = groupCourtsByActivity();*/
     
     
+     /*const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
+         const [nameA, typeA] = a.split(' ');
+         const [nameB, typeB] = b.split(' ');
+            if (nameA === nameB) {
+           return parseInt(typeA) - parseInt(typeB);
+         } else {
+           return nameA.localeCompare(nameB);
+         }
+     });*/
+
+
+     const handleCreateClub = async () => {
+         try {
+
+            const body = {
+                name: clubInfo.name,
+                neighborhood: { id: clubInfo.neighborhood },
+                address: clubInfo.address,
+                activities: idsActivities,
+                description: clubInfo.description, 
+                url: urlImagen,
+                amenities: idsAmenities
+                
+            }
+       
+             console.log(body)
+             const response = await axiosInstance.post('/club/add', body,
+              {headers: {
+                  "Authorization": `Bearer ${user.token}`
+               }}        
+             );        
+           
+             console.log(response.data);
+             /* const updatedResponse = await axiosInstance.get(`/court/club/${user.clubId}`);
+             setClubData(updatedResponse.data); */
+             setShowMessage(true);
+             setResetForm(true);  
      /*const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
          const [nameA, typeA] = a.split(' ');
          const [nameB, typeB] = b.split(' ');
@@ -201,6 +281,10 @@ const CreateClub = () => {
              setShowMessage(true);
              setResetForm(true);  
         
+         } catch (error) {
+             console.error('Error al crear el club:', error);
+         }
+     };
          } catch (error) {
              console.error('Error al crear el club:', error);
          }
@@ -268,7 +352,13 @@ const CreateClub = () => {
            };
     
            console.log(updatedClubInfo);
+           console.log(updatedClubInfo);
     
+           return updatedClubInfo;
+         });
+        
+        }
+     }; 
            return updatedClubInfo;
          });
         
@@ -282,8 +372,31 @@ const CreateClub = () => {
          );
          setButtonEnabled(allFieldsFilled);
      }, [clubInfo]);
+     useEffect(() => {
+         const allFieldsFilled = Object.values(clubInfo).every(
+           (field) => field !== null && field !== undefined && field !== ''
+         );
+         setButtonEnabled(allFieldsFilled);
+     }, [clubInfo]);
 
 
+     const resetFormValues = () => {
+         setResetForm(false);
+         setClubInfo({
+            name: null,
+            neighborhood: [],
+            description: null, 
+            address: null,
+            amenities: [],
+            activities: [],
+         });
+     };
+
+     const handleImageSelected = (imageUrl) => {
+        // Lógica para manejar la URL seleccionada
+        console.log('URL seleccionada:', imageUrl);
+        setUrlImagen(imageUrl);
+      };
      const resetFormValues = () => {
          setResetForm(false);
          setClubInfo({
@@ -332,6 +445,7 @@ const CreateClub = () => {
                                         freeSolo
                                         options={options}
                                         onInputChange={(event, value) => handleInputChange("name")(event, value)}
+                                        onInputChange={(event, value) => handleInputChange("name")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
                                             {...params}
@@ -360,6 +474,7 @@ const CreateClub = () => {
                                         fullWidth
                                         options={neighborhoods}
                                         getOptionLabel={(option) => option || ''}
+                                        onChange={(event, value) => handleInputChange("neighborhood")(event, value)}
                                         onChange={(event, value) => handleInputChange("neighborhood")(event, value)}
                                         renderInput={(params) => (
                                         <TextField
@@ -390,6 +505,7 @@ const CreateClub = () => {
                                         fullWidth
                                         freeSolo
                                         options={options}
+                                        onInputChange={(event, value) => handleInputChange("description")(event, value)}
                                         onInputChange={(event, value) => handleInputChange("description")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
@@ -422,6 +538,7 @@ const CreateClub = () => {
                                         freeSolo
                                         options={options}
                                         onInputChange={(event, value) => handleInputChange("address")(event, value)}
+                                        onInputChange={(event, value) => handleInputChange("address")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
                                             {...params}
@@ -451,6 +568,9 @@ const CreateClub = () => {
                                         fullWidth
                                         options={Object.values(amenities)}
                                         getOptionLabel={(option) => option || ''}
+                                        onChange={(event, value ) => handleInputChange("amenity")(event, value)} 
+                                        value={selectedAmenities}
+                                        multiple
                                         onChange={(event, value ) => handleInputChange("amenity")(event, value)} 
                                         value={selectedAmenities}
                                         multiple
@@ -486,10 +606,12 @@ const CreateClub = () => {
                                 <Grid item xs={6}>
                                 <Autocomplete
                                     id="activities"
+                                    id="activities"
                                     disablePortal
                                     fullWidth
                                     options={Object.values(activities)}
                                     getOptionLabel={(option) => option || ''}
+                                    onChange={(event, value) => handleInputChange("activities")(event, value)}
                                     onChange={(event, value) => handleInputChange("activities")(event, value)}
                                     value={selectedActivities}
                                     multiple
@@ -524,6 +646,7 @@ const CreateClub = () => {
 
 
                                 <Grid item xs={6} m={3}>
+                                    <AddImages onImageSelected={handleImageSelected} />
                                     <AddImages onImageSelected={handleImageSelected} />
                                 </Grid>
 
@@ -563,6 +686,7 @@ const CreateClub = () => {
                                 variant="contained"
                                 fullWidth
                                 disabled={!isButtonEnabled}
+                                onClick={handleCreateClub}
                                 onClick={handleCreateClub}
                                 sx={{ ...ButtonSX, my: 2 }}
                             >

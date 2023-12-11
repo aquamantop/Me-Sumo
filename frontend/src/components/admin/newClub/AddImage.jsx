@@ -39,7 +39,7 @@ const config = {
   };
   
 
-const AddImages = ( {onImageSelected} ) => {
+const AddImages = ({ onImageSelected }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
 
@@ -66,6 +66,7 @@ const AddImages = ( {onImageSelected} ) => {
       onImageSelected(data.location);
 
       alert('Archivo cargado con éxito en el bucket: ' + config.bucketName);
+      onImageSelected(data.url);
     } catch (error) {
       console.error('Error al cargar el archivo:', error);
       alert('Error al cargar el archivo');
