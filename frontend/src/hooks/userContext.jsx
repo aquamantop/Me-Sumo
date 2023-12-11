@@ -28,9 +28,13 @@ export const UserProvider = ({children}) => {
 
     const data = {
       ...userData,
-      role: userInfo.role,
-      clubId: clubId 
+      role: userInfo.role, 
+      clubId: clubId,
+      token: token
     };
+
+  
+
 
     setUser(data);
     localStorage.setItem("user", JSON.stringify(data));
