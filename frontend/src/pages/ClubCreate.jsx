@@ -25,9 +25,13 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import axiosInstance from '../hooks/api/axiosConfig';
 
 
-
+const REGION = 'us-east-1' 
+const ACCESS_KEY_ID = 'AKIAUNATVL73PJ4TL6FF' //${{ secrets.AWS_ACCESS_KEY_ID }}
+const SECRET_ACCESS_KEY = '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' //${{ secrets.AWS_SECRET_ACCESS_KEY }}
+const S3_BUCKET= 'me-sumo-img'
 
 const options = [];
+
 const amenities  = {
     1:"Wi-Fi",
     2:"Vestuario",
@@ -64,21 +68,33 @@ const CreateClub = () => {
     const [isButtonEnabled, setButtonEnabled] = useState(false);
     const [clubData, setClubData] = useState(null);
     const [neighborhoods, setNeighborhoods] = useState([]);
+    const [neighborhoodsMap, setNeighborhoodsMap] = useState({});
     const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
     const [selectedActivities, setSelectedActivities] = useState([]);
+    const [selectedAmenities, setSelectedAmenities] = useState([]);
+    const [idsActivities, setIdsActivities] = useState([]);
+    const [idsAmenities, setIdsAmenities] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
     const [resetForm, setResetForm] = useState(false);
-    const [courtInfo, setCourtInfo] = useState({
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [address, setAddress] = useState('');
+    const [urlImagen, setUrlImagen] = useState('');
+    const [clubInfo, setClubInfo] = useState({
         name: null,
-        activity:null,
-        court: null,
-        inside: null,
+        neighborhood: [],
+        description: null, 
+        address: null,
+        amenities: [],
+        activities: [],
     });
 
     useEffect(() => {
         const fetchNeighborhoods = async () => {
           try {
             const response = await axiosInstance.get('/neighborhood/');
+            setNeighborhoodsMap(response.data);
+            
             const neighborhoodNames = response.data.map((neighborhood) => neighborhood.name);
             setNeighborhoods(neighborhoodNames);
           } catch (error) {
@@ -91,138 +107,194 @@ const CreateClub = () => {
     
     
 
-    const handleSelectChange = (event) => {
+   /*  const handleSelectChange = (event) => {
         setSelectedNeighborhood(event.target.value);
     };
     
 
-    const handleInputChange = (name) => (event, value) => {
+     const handleInputChange = (name) => (event, value) => {
         console.log("Selected Values:", value);
         setSelectedActivities(value);
     };
+ */
+ 
 
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //       try {
-    //         const response = await axiosInstance.get(`/court/club/${user.clubId}`);
-    //         setClubData(response.data);
-    //       } catch (error) {
-    //         console.error('Error fetching club data:', error);
-    //       }
-    //     };    
-    //     fetchData();
-    // }, []);
-    
-    
-    // const groupCourtsByActivity = () => {
-    //     if (!clubData) return {};
-   
-    //     return clubData.reduce((groupedCourts, court) => {
-    //       const key = `${court.activity.name} ${court.activity.type}`;
-    
-    //       if (!groupedCourts[key]) {
-    //         groupedCourts[key] = [];
-    //       }
-    
-    //       groupedCourts[key].push(court);
-    
-    //       return groupedCourts;
-    //     }, {});
-    // };
-    
-    
-    // const groupedCourts = groupCourtsByActivity();
-    
-    
-    // const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
-    //     const [nameA, typeA] = a.split(' ');
-    //     const [nameB, typeB] = b.split(' ');
-    
-    //     if (nameA === nameB) {
-    //       return parseInt(typeA) - parseInt(typeB);
-    //     } else {
-    //       return nameA.localeCompare(nameB);
-    //     }
-    // });
-
-
-    // const handleCreateCourt = async () => {
-    //     try {
-    //         console.log(courtInfo)
-    //         const body = {
-    //             name: courtInfo.name,
-    //             club: {id: user.clubId},
-    //             activity: {id: courtInfo.activity},
-    //             court_type : courtInfo.court,
-    //             inside: courtInfo.inside,
-    //             slots: [{}]
-    //         }
-    //         console.log(body)
-    //         const response = await axiosInstance.post('/court/add', body,
-    //          {headers: {
-    //              "Authorization": `Bearer ${user.token}`
-    //           }}        
-    //         );        
+/*      useEffect(() => {
+         const fetchData = async () => {
+           try {
             
-    //         console.log(response.data);
-    //         const updatedResponse = await axiosInstance.get(`/court/club/${user.clubId}`);
-    //         setClubData(updatedResponse.data);
-    //         setShowMessage(true);
-    //         setResetForm(true);  
+             const response = await axiosInstance.get(`/court/club/${user.clubId}`);
+             setClubData(response.data);
+           } catch (error) {
+             console.error('Error fetching club data:', error);
+           }
+         };    
+         fetchData();
+     }, []); */
+    
+    
+     /*const groupCourtsByActivity = () => {
+         if (!clubData) return {};
+   
+         return clubData.reduce((groupedCourts, court) => {
+           const key = `${court.activity.name} ${court.activity.type}`;
+    
+           if (!groupedCourts[key]) {
+             groupedCourts[key] = [];
+           }
+    
+           groupedCourts[key].push(court);
+    
+           return groupedCourts;
+         }, {});
+     };
+    
+    
+     const groupedCourts = groupCourtsByActivity();*/
+    
+    
+     /*const sortedActivityKeys = Object.keys(groupedCourts).sort((a, b) => {
+         const [nameA, typeA] = a.split(' ');
+         const [nameB, typeB] = b.split(' ');
+            if (nameA === nameB) {
+           return parseInt(typeA) - parseInt(typeB);
+         } else {
+           return nameA.localeCompare(nameB);
+         }
+     });*/
+
+
+     const handleCreateClub = async () => {
+         try {
+
+            const body = {
+                name: clubInfo.name,
+                neighborhood: { id: clubInfo.neighborhood },
+                address: clubInfo.address,
+                activities: idsActivities,
+                description: clubInfo.description, 
+                url: urlImagen,
+                amenities: idsAmenities
+                
+            }
+       
+             console.log(body)
+             const response = await axiosInstance.post('/club/add', body,
+              {headers: {
+                  "Authorization": `Bearer ${user.token}`
+               }}        
+             );        
+           
+             console.log(response.data);
+             /* const updatedResponse = await axiosInstance.get(`/court/club/${user.clubId}`);
+             setClubData(updatedResponse.data); */
+             setShowMessage(true);
+             setResetForm(true);  
         
-    //     } catch (error) {
-    //         console.error('Error al crear la cancha:', error);
-    //     }
-    // };
+         } catch (error) {
+             console.error('Error al crear el club:', error);
+         }
+     };
 
-
-    // const handleInputChange = (fieldName) => (event, value) => {
+ 
+     const handleInputChange = (fieldName) => (event, value) => {
         
-    //     let fieldValue = value || event.target.value;
+         let fieldValue = value || event.target.value;
     
-    //     if (fieldName === 'activity') {
-    //       const selectedActivityKey = Object.keys(activities).find(
-    //         (key) => activities[key] === fieldValue
-    //       );
-    //       fieldValue = selectedActivityKey ? Number(selectedActivityKey) : null;
-    //     }
-    
-    //     if (fieldName === 'inside') {
-    //         fieldValue = fieldValue === 'SÍ' ? 1 : fieldValue === 'NO' ? 0 : null;
-    //     }
+         if (fieldName === 'activities') {
+            const selectedActivityKey = Object.keys(activities).find(key => activities[key] === fieldValue[0]);
+            
+            if (selectedActivityKey) {
+                
+                setSelectedActivities(fieldValue);
+                
+                
+                setIdsActivities(prevActivities => [...prevActivities, selectedActivityKey]);
+
+              }
+           
+         }
+
+         if (fieldName === 'amenity') {
+            const selectedAmenityKey = Object.keys(amenities).find(key => amenities[key] === fieldValue[0]);
+
+            if (selectedAmenityKey) {
+                
+                setSelectedAmenities(fieldValue);
+                
+                
+                setIdsAmenities(prevAmenities => [...prevAmenities, selectedAmenityKey]);
+
+              }
+        }
+
+        if (fieldName === 'name') {
+            setName(event.target.value);
+        }
+
+        if (fieldName === 'description') {
+            setDescription(event.target.value);
+        }
+
+        if (fieldName === 'address') {
+            setAddress(event.target.value);
+        }
+
+        if (fieldName === 'neighborhood') {
+            
+            Object.keys(neighborhoodsMap).find(key => {
+                
+                if (neighborhoodsMap[key].name === value) {
+                    fieldValue = neighborhoodsMap[key].id;
+                                       
+                    setSelectedNeighborhood(fieldValue);
+                }
+            })
+
+        }                 
         
+        if(fieldName !== 'activities' && fieldName !== 'amenity') {
 
-    //     setCourtInfo((prevCourtInfo) => {
-    //       const updatedCourtInfo = {
-    //         ...prevCourtInfo,
-    //         [fieldName]: fieldValue,
-    //       };
+         setClubInfo((prevClubInfo) => {
+           const updatedClubInfo = {
+             ...prevClubInfo,
+             [fieldName]: fieldValue,
+           };
     
-    //       console.log(updatedCourtInfo);
+           console.log(updatedClubInfo);
     
-    //       return updatedCourtInfo;
-    //     });
-    // };
+           return updatedClubInfo;
+         });
+        
+        }
+     }; 
 
 
-    // useEffect(() => {
-    //     const allFieldsFilled = Object.values(courtInfo).every(
-    //       (field) => field !== null && field !== undefined && field !== ''
-    //     );
-    //     setButtonEnabled(allFieldsFilled);
-    // }, [courtInfo]);
+     useEffect(() => {
+         const allFieldsFilled = Object.values(clubInfo).every(
+           (field) => field !== null && field !== undefined && field !== ''
+         );
+         setButtonEnabled(allFieldsFilled);
+     }, [clubInfo]);
 
 
-    // const resetFormValues = () => {
-    //     setResetForm(false);
-    //     setCourtInfo({
-    //         name: null,
-    //         activity: null,
-    //         court: null,
-    //         inside: null,
-    //     });
-    // };
+     const resetFormValues = () => {
+         setResetForm(false);
+         setClubInfo({
+            name: null,
+            neighborhood: [],
+            description: null, 
+            address: null,
+            amenities: [],
+            activities: [],
+         });
+     };
+
+     const handleImageSelected = (imageUrl) => {
+        // Lógica para manejar la URL seleccionada
+        console.log('URL seleccionada:', imageUrl);
+        setUrlImagen(imageUrl);
+      };
 
     return (
         <>
@@ -253,7 +325,7 @@ const CreateClub = () => {
                                         fullWidth
                                         freeSolo
                                         options={options}
-                                        // onInputChange={(event, value) => handleInputChange("name")(event, value)}
+                                        onInputChange={(event, value) => handleInputChange("name")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
                                             {...params}
@@ -282,7 +354,7 @@ const CreateClub = () => {
                                         fullWidth
                                         options={neighborhoods}
                                         getOptionLabel={(option) => option || ''}
-                                        // onChange={(event, value) => handleInputChange("court")(event, value)}
+                                        onChange={(event, value) => handleInputChange("neighborhood")(event, value)}
                                         renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -312,7 +384,7 @@ const CreateClub = () => {
                                         fullWidth
                                         freeSolo
                                         options={options}
-                                        // onInputChange={(event, value) => handleInputChange("name")(event, value)}
+                                        onInputChange={(event, value) => handleInputChange("description")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
                                             {...params}
@@ -343,7 +415,7 @@ const CreateClub = () => {
                                         fullWidth
                                         freeSolo
                                         options={options}
-                                        // onInputChange={(event, value) => handleInputChange("name")(event, value)}
+                                        onInputChange={(event, value) => handleInputChange("address")(event, value)}
                                         renderInput={(params) => (
                                             <TextField
                                             {...params}
@@ -373,7 +445,9 @@ const CreateClub = () => {
                                         fullWidth
                                         options={Object.values(amenities)}
                                         getOptionLabel={(option) => option || ''}
-                                        // onChange={(event, value) => handleInputChange("activity")(event, value)}
+                                        onChange={(event, value ) => handleInputChange("amenity")(event, value)} 
+                                        value={selectedAmenities}
+                                        multiple
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -393,17 +467,20 @@ const CreateClub = () => {
                                             />
                                         )}
                                     />
+                                    {selectedAmenities.length > 0 && (
+                                        <><Typography variant="h6" mt={2} color="secondary.main" sx={{fontSize:'16px'}}> <span style={{ textDecoration: 'underline' }}>Amenities seleccionadas:</span>  {selectedAmenities.join(', ')}</Typography></>
+                                    )}
                                 </Grid>
 
 
                                 <Grid item xs={6}>
                                 <Autocomplete
-                                    id="activity"
+                                    id="activities"
                                     disablePortal
                                     fullWidth
                                     options={Object.values(activities)}
                                     getOptionLabel={(option) => option || ''}
-                                    onChange={handleInputChange("activity")}
+                                    onChange={(event, value) => handleInputChange("activities")(event, value)}
                                     value={selectedActivities}
                                     multiple
                                     renderInput={(params) => (
@@ -426,14 +503,14 @@ const CreateClub = () => {
                                     )}
                                     />
                                     {selectedActivities.length > 0 && (
-                                        <p><Typography variant="h6" mt={2} color="secondary.main" sx={{fontSize:'16px'}}> <span style={{ textDecoration: 'underline' }}>Actividades seleccionadas:</span>  {selectedActivities.join(', ')}</Typography></p>
+                                        <><Typography variant="h6" mt={2} color="secondary.main" sx={{fontSize:'16px'}}> <span style={{ textDecoration: 'underline' }}>Actividades seleccionadas:</span>  {selectedActivities.join(', ')}</Typography></>
                                     )}
                                 </Grid>
 
 
 
                                 <Grid item xs={6} m={3}>
-                                    <AddImages />
+                                    <AddImages onImageSelected={handleImageSelected} />
                                 </Grid>
 
 
@@ -472,7 +549,7 @@ const CreateClub = () => {
                                 variant="contained"
                                 fullWidth
                                 disabled={!isButtonEnabled}
-                                // onClick={handleCreateCourt}
+                                onClick={handleCreateClub}
                                 sx={{ ...ButtonSX, my: 2 }}
                             >
                                 Crear club
