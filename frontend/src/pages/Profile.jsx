@@ -88,7 +88,7 @@ const validateFields = () => {
 const handleSaveClick = async () => {
   try {
     if(validateFields()){
-      await updateUser(updatedInfo);
+      await updateUser(updatedInfo, user.token);
       console.log(updatedInfo);
       setAlertSuccess(true)
     } else {
