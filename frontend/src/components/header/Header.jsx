@@ -53,6 +53,7 @@ const Header = () => {
     } else if (role === 'ROLE_ADMIN') {
       return [
         { label: 'Reporte', link: '/reports' },
+        { label: 'Cargar Club', link: '/new-club' },
         { label: 'Cerrar Sesión', link: '/' },
       ];
     } else if (role === 'ROLE_USER') {
