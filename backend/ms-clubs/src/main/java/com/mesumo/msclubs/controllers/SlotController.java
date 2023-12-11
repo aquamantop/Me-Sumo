@@ -20,8 +20,8 @@ public class SlotController {
     }
 
     @GetMapping("/")
-    public ResponseEntity getAll() {
-        ResponseEntity response = null;
+    public ResponseEntity<List<Slot>> getAll() {
+        ResponseEntity<List<Slot>> response;
         List<Slot> slots = slotService.findAll();
 
         if(slots != null){
@@ -34,8 +34,8 @@ public class SlotController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getById(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<Slot> getById(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<Slot> response;
         Slot slot = slotService.findById(id);
 
         if(slot != null){
@@ -48,8 +48,8 @@ public class SlotController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody Slot slot){
-        ResponseEntity response = null;
+    public ResponseEntity<Slot> add(@RequestBody Slot slot){
+        ResponseEntity<Slot> response;
         if(slot != null){
             response = ResponseEntity.ok(slotService.create(slot));
         } else {
@@ -59,8 +59,8 @@ public class SlotController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity update(@RequestBody Slot slot) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<Slot> update(@RequestBody Slot slot) throws ResourceNotFoundException {
+        ResponseEntity<Slot> response;
         if(slot != null){
             response = ResponseEntity.ok(slotService.update(slot));
         } else {
@@ -70,8 +70,8 @@ public class SlotController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<?> delete(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<?> response;
         if(id != null){
             slotService.deleteById(id);
             response = ResponseEntity.ok().build();
@@ -83,7 +83,7 @@ public class SlotController {
 
     @GetMapping("/getWithCourt/{id}")
     public ResponseEntity<SlotDTO> getSlotWithCourtById (@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity<SlotDTO> response = null;
+        ResponseEntity<SlotDTO> response;
 
         if(id > 0){
             response = new ResponseEntity<>(slotService.getSlotWithCourtById(id), HttpStatus.OK);
