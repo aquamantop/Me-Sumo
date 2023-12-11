@@ -284,16 +284,13 @@ const Header = () => {
                   >
                     <Box
                       sx={{
-                        height:'103.5px',
+                        height:'71.5px',
                         display: 'flex',
                         alignItems: 'flex-end'
                       }}
                       p={2}
-                      
                     >
-                      
                       <Typography variant='h5' color='secondary' >Menú</Typography>
-
                     </Box>
                     <Divider sx={{ my: 1}} />
                       <Link
