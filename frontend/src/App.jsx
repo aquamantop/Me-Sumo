@@ -57,6 +57,12 @@ function App() {
             "& label": {
               color: "white",
             },
+            input: {
+              '&:-webkit-autofill': {
+                WebkitBoxShadow: 'none',
+                WebkitTextFillColor: '#fff',
+              },
+            },
           },
         },
       },

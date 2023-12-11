@@ -13,9 +13,7 @@ export const UserProvider = ({children}) => {
   const storedUser = localStorage.getItem("user");
   const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
   
-  const loginUser = async (userData, token) => {
-    console.log("a verrr") 
-    console.log(userData)
+  const loginUser = async (userData) => {
     const userInfo = await getUserByEmail(userData.email)
     let clubId = null
 
@@ -46,6 +44,7 @@ export const UserProvider = ({children}) => {
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem("user");
+    window.location.reload();
   };
 
   useEffect(() => {
