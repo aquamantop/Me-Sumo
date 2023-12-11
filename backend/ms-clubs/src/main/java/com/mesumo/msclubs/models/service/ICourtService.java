@@ -8,4 +8,7 @@ import java.util.List;
 public interface ICourtService extends ICRUDService<Court> {
 
     List<CourtDTO> findByClubId(Long clubId) throws ResourceNotFoundException;
+
+    List<CourtDTO> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException;
+
 }

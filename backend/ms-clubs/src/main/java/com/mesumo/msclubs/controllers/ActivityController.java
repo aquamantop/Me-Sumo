@@ -20,7 +20,7 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getById(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity<Activity> response = null;
+        ResponseEntity<Activity> response;
 
         response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 
@@ -29,7 +29,7 @@ public class ActivityController {
 
     @GetMapping("/")
     public ResponseEntity<List<Activity>> getAll() {
-        ResponseEntity<List<Activity>> response = null;
+        ResponseEntity<List<Activity>> response;
         List<Activity> list = service.findAll();
 
         if(list != null){
@@ -42,8 +42,8 @@ public class ActivityController {
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<ActivityDTO> getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<ActivityDTO> response;
 
         response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
@@ -51,8 +51,8 @@ public class ActivityController {
     }
 
     @GetMapping("/listDTO")
-    public ResponseEntity getAllDTO() {
-        ResponseEntity response = null;
+    public ResponseEntity<?> getAllDTO() {
+        ResponseEntity<?> response;
         List<ActivityDTO> list = service.findAllDTO();
 
         if(list != null){

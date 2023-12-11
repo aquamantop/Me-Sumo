@@ -80,16 +80,20 @@ public class UserService implements IUserService {
 
     @Override
     public User changePassword(UserChangePassword user) throws ResourceNotFoundException, PasswordException {
-        User userExists = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + " not found"));
+        User userExists = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User email: " + user.getEmail() + " not found"));
 
-        String oldPassword = userExists.getPassword();
-        String newPassword = passwordEncoder.encode(user.getPassword());
+        String currentPassword = userExists.getPassword();
+        String oldPassword = user.getOldPassword();
+        String newPassword = user.getNewPassword();
+        String confirmPassword = user.getConfirmPassword();
 
-        if (user.getPassword().length() < 6) throw new PasswordException("Password must be at least 6 characters long");
-        if (user.getPassword().length() > 18) throw new PasswordException("Password must be at most 18 characters long");
-        if (passwordEncoder.matches(user.getPassword(), oldPassword)) throw new PasswordException("New password must be different from old password");
-        else userExists.setPassword(newPassword);
+        if (!passwordEncoder.matches(oldPassword, currentPassword)) throw new PasswordException("Current password is incorrect");
+        if (newPassword.length() < 6) throw new PasswordException("Password must be at least 6 characters long");
+        if (newPassword.length() > 18) throw new PasswordException("Password must be at most 18 characters long");
+        if (newPassword.equals(oldPassword)) throw new PasswordException("New password must be different from old password");
+        if (!newPassword.equals(confirmPassword)) throw new PasswordException("New password and confirm password do not match");
+        else userExists.setPassword(passwordEncoder.encode(newPassword));
 
         return userRepository.save(userExists);
     }

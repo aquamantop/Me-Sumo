@@ -9,7 +9,11 @@ import lombok.*;
 @ToString
 public class UserChangePassword {
 
-    private Long userId;
+    private String email;
 
-    private String password;
+    private String oldPassword;
+
+    private String newPassword;
+
+    private String confirmPassword;
 }

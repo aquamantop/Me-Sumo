@@ -21,7 +21,7 @@ public class NeighborhoodController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Neighborhood> getById(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity<Neighborhood> response = null;
+        ResponseEntity<Neighborhood> response;
 
         response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 
@@ -30,7 +30,7 @@ public class NeighborhoodController {
 
     @GetMapping("/")
     public ResponseEntity<List<Neighborhood>> getAll() {
-        ResponseEntity<List<Neighborhood>> response = null;
+        ResponseEntity<List<Neighborhood>> response;
         List<Neighborhood> list = service.findAll();
 
         if (!list.isEmpty()) {
@@ -43,8 +43,8 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<NeighborhoodDTO> getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<NeighborhoodDTO> response;
 
         response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
@@ -52,8 +52,8 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/listDTO")
-    public ResponseEntity getAllDTO() {
-        ResponseEntity response = null;
+    public ResponseEntity<?> getAllDTO() {
+        ResponseEntity<?> response;
         List<NeighborhoodDTO> list = service.findAllDTO();
 
         if(list != null){
