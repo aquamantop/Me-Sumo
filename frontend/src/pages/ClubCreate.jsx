@@ -156,7 +156,7 @@ const CreateClub = () => {
            return parseInt(typeA) - parseInt(typeB);
          } else {
            return nameA.localeCompare(nameB);
-         }
+         }
      });*/
 
 
