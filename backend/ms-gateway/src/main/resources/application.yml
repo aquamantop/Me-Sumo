@@ -16,7 +16,7 @@ spring:
 #          uri: http://localhost:8080
           uri: http://ec2-34-229-118-35.compute-1.amazonaws.com:8080
           predicates:
-            - Path=/club/**, /neighborhood/**, /activity/**, /court/**, /slot/**
+            - Path=/club/**, /neighborhood/**, /activity/**, /court/**, /slot/**, /amenity/**
 #        MS USERS
         - id: ms-users
 #          uri: http://localhost:8081
