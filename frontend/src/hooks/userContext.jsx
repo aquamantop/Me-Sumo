@@ -1,4 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getUserByEmail } from "./api/userApi"
+import axiosInstance from "./api/axiosConfig";
+
 
 const UserContext = createContext();
 
@@ -10,14 +13,38 @@ export const UserProvider = ({children}) => {
   const storedUser = localStorage.getItem("user");
   const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
   
-  const loginUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  const loginUser = async (userData, token) => {
+    const userInfo = await getUserByEmail(userData.email)
+    let clubId = null
+
+    if (userInfo.role == 'ROLE_CLUB') {
+      await axiosInstance.get(`/club/by-name/${userInfo.firstName}`)
+      .then((response) => {
+          clubId = response.data.id;
+      })
+      .catch(console.log("Error id club"))
+      }
+    
+
+    const data = {
+      ...userData,
+      role: userInfo.role, 
+      clubId: clubId,
+      token: token
+    };
+
+  
+
+
+    setUser(data);
+    localStorage.setItem("user", JSON.stringify(data));
+
   };
 
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem("user");
+    window.location.reload();
   };
 
   useEffect(() => {

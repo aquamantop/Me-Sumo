@@ -11,11 +11,17 @@ import {
   InputAdornment,
   IconButton,
   Alert,
+  TableContainer,
+  Table,
+  TableHead,
+  TableCell,
+  TableBody,
+  TableRow,
+  Tooltip,
 } from "@mui/material";
 import { React, useEffect, useState } from "react";
-import { PaperSXX, BoxSX } from "../components/customMui/CustomMui";
+import { PaperSXX, BoxSX, ButtonSX } from "../components/customMui/CustomMui";
 import { useUserContext } from "../hooks/userContext";
-import { ButtonSX } from "../components/customMui/CustomMui";
 import axiosInstance from "../hooks/api/axiosConfig";
 import { Visibility, VisibilityOff, CallMade } from "@mui/icons-material";
 import CustomLoader from "../components/CustomLoader";
@@ -33,8 +39,12 @@ const Profile = () => {
   const [alertError, setAlertError] = useState(false);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [helperText, setHelperText] = useState(true);
+  const [bookingInfo, setBookingInfo] = useState([])
 
   useEffect(() => {
+    if(user.role !== 'ROLE_USER'){
+      window.location.href = "/";
+    }
     const fetchData = async () => {
       try {
         const userResponse = await axiosInstance.get(`/user/search-email?email=${user.email}`);
@@ -43,6 +53,9 @@ const Profile = () => {
         setSelectedNeighborhood(neighborhood);
         const neighborhoodsResponse = await axiosInstance.get('/neighborhood/');
         setNeighborhoods(neighborhoodsResponse.data);
+        const bookingResponse = await axiosInstance.get(`/booking/participant_bookings?userId=${userInfo.userId}&approved=false`);
+        setBookingInfo(bookingResponse.data);
+        // console.log('esto es bInfo',bookingInfo);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -75,7 +88,7 @@ const validateFields = () => {
 const handleSaveClick = async () => {
   try {
     if(validateFields()){
-      await updateUser(updatedInfo);
+      await updateUser(updatedInfo, user.token);
       console.log(updatedInfo);
       setAlertSuccess(true)
     } else {
@@ -156,12 +169,15 @@ const handleSaveClick = async () => {
                         defaultValue={'default'}
                         helperText={helperText ? '' : 'Puedes cambiar tu contraseña desde el icono'}
                         onClick={showHelperText}
+                        fullWidth
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
-                              <IconButton href='/forgot-password' edge="end">
-                                <CallMade />
-                              </IconButton>
+                              <Tooltip title='Cambiar contraseña'>
+                                <IconButton href='/change-password' edge="end">
+                                  <CallMade />
+                                </IconButton>
+                              </Tooltip>
                             </InputAdornment>
                           )
                         }}
@@ -218,7 +234,41 @@ const handleSaveClick = async () => {
                     Tus eventos
                   </Typography>
                   <Divider sx={{ mt: 1, mb: 2 }} />
-                  <Typography variant="body1">¡Ups! parece que no te has inscripto a ningun evento</Typography>
+                  {bookingInfo.length === 0 ? (
+                    <Typography variant="body1">¡Ups! parece que no te has inscripto a ningun evento</Typography>
+                  ) : (
+                    // <Typography variant="body1">aca hay cositas</Typography>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableCell>Nombre</TableCell>
+                          <TableCell>Fecha</TableCell>
+                          <TableCell>Club</TableCell>
+                          <TableCell>Barrio</TableCell>
+                          <TableCell>Participantes</TableCell>
+                          <TableCell></TableCell>
+                        </TableHead>
+                        <TableBody>
+                          {bookingInfo.map((booking)=>(
+                            <TableRow key={booking.id}>
+                              <TableCell>{booking.name}</TableCell>
+                              <TableCell>{booking.date}</TableCell>
+                              <TableCell>{booking.clubName}</TableCell>
+                              <TableCell>{booking.neighborhoodName}</TableCell>
+                              <TableCell>{booking.participants.length}</TableCell>
+                              <TableCell>
+                              <Tooltip title='Ir al evento'>
+                                <IconButton href={`/event/${booking.id}`} edge="end">
+                                  <CallMade />
+                                </IconButton>
+                              </Tooltip>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  )}
                   <Link href='/disponibility'>
                   <Button
                     variant="contained"

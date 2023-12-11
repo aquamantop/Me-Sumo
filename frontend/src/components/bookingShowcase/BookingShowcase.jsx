@@ -51,7 +51,7 @@ const BookingShowcase = ({ clubId, activityId }) => {
                       <Typography variant="h6" color="secondary.main" sx={{fontSize:'22px'}}>  {court.name} | {court.club.name} | {court.activity.name}-{court.activity.type} </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <CourtCard court={court} activityId={activityId} activityName={court.activity.name +" "+ court.activity.type} clubId={clubId} />
+                    <CourtCard court={court} activityId={activityId} activityName={court.activity.name} activityType={court.activity.type} clubId={clubId} />
                     </AccordionDetails>
                   </Accordion>
                 </Grid>

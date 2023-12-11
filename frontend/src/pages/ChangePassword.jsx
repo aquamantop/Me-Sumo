@@ -1,7 +1,8 @@
 import { ButtonSX } from '../components/customMui/CustomMui'
 import { delay } from "../helpers/delay"
 import { useForm } from "react-hook-form"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useUserContext } from "../hooks/userContext";
 import { useState } from "react"
 import axiosInstance from "../hooks/api/axiosConfig";
 import Box from "@mui/material/Box"
@@ -12,10 +13,8 @@ import LockSharpIcon from "@mui/icons-material/LockSharp"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 
-export default function ResetPassword() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const token = searchParams.get('token');
+export default function ChangePassword() {
+  const { user } = useUserContext();
   const navigate = useNavigate();
 
   const {
@@ -25,7 +24,8 @@ export default function ResetPassword() {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      password: '',
+      oldPassword: '',
+      newPassword: '',
       confirmPassword: ''
     }
   })
@@ -59,13 +59,18 @@ export default function ResetPassword() {
   }
 
   const onSubmit = handleSubmit(async (userData) => {
-
     try {
-      const response = await axiosInstance.post(
-        "/auth/reset-password",
-        userData,
+      const body = {
+        email: user.email,
+        oldPassword: userData.oldPassword,
+        newPassword: userData.newPassword,
+        confirmPassword: userData.confirmPassword
+      }
+      const response = await axiosInstance.put(
+        "/user/change-password",
+        body,
         {
-          headers: {'Authorization': `Bearer ${token}` }
+          headers: {'Authorization': `Bearer ${user.token}` }
         }
       );
       if (response) {
@@ -99,6 +104,7 @@ export default function ResetPassword() {
         >
           Nueva Contraseña
         </Typography>
+
         <Typography
           variant="h6"
           color="primary.main"
@@ -108,8 +114,9 @@ export default function ResetPassword() {
             marginBottom: "36px"
           }}
         >
-          Ingresa tu nueva contraseña para completar el restablecimiento.
+          Ingresa tu los datos para completar el cambio de tu contraseña.
         </Typography>
+
         <Stack
           sx={{ margin: "auto", px: 5 }}
           component="form"
@@ -119,12 +126,12 @@ export default function ResetPassword() {
           onSubmit={onSubmit}
         >
           <CustomInput
-            name='password'
+            name='oldPassword'
             control={control}
-            type='password'
-            placeholder='Contraseña *'
-            error={!!errors.password}
-            helperText={errors?.password?.message}
+            type='oldPassword'
+            placeholder='Contraseña actual *'
+            error={!!errors.oldPassword}
+            helperText={errors?.oldPassword?.message}
             onChange={handleInputChange}
             rules={{
               required: {
@@ -132,8 +139,29 @@ export default function ResetPassword() {
                 message: 'La contraseña es requerida',
               },
               pattern: {
-                value: /^.{6,}$/,
-                message: 'La contraseña debe tener al menos 6 caracteres',
+                value: /^.{6,18}$/,
+                message: 'La contraseña debe tener estar entre 6 y 18 caracteres',
+              },
+            }}
+            icon={<LockSharpIcon />}
+          />
+
+          <CustomInput
+            name='newPassword'
+            control={control}
+            type='newPassword'
+            placeholder='Nueva contraseña *'
+            error={!!errors.newPassword}
+            helperText={errors?.newPassword?.message}
+            onChange={handleInputChange}
+            rules={{
+              required: {
+                value: true,
+                message: 'La contraseña es requerida',
+              },
+              pattern: {
+                value: /^.{6,18}$/,
+                message: 'La contraseña debe tener estar entre 6 y 18 caracteres',
               },
             }}
             icon={<LockSharpIcon />}
@@ -143,7 +171,7 @@ export default function ResetPassword() {
             name='confirmPassword'
             control={control}
             type='password'
-            placeholder='Repetir Contraseña *'
+            placeholder='Repetir Nueva Contraseña *'
             error={!!errors.confirmPassword}
             helperText={errors?.confirmPassword?.message}
             onChange={handleInputChange}
@@ -154,8 +182,8 @@ export default function ResetPassword() {
               },
               validate: {
                 matchesPreviousPassword: (value) => {
-                  const { password } = watch()
-                  return password === value || 'Las contraseñas no coinciden'
+                  const { newPassword } = watch()
+                  return newPassword === value || 'Las contraseñas no coinciden'
                 },
               },
             }}

@@ -6,15 +6,17 @@ import {
   Grid,
   Button,
   Stack,
+  TextField
 } from "@mui/material";
 import {
   PaperSXX,
   ButtonSX,
-  CustomTextField
+  CustomTextField,
+  BoxSX,
 } from "../components/customMui/CustomMui";
 import { useBookingContext } from "../hooks/bookingContext";
 import CustomInput from "../components/customInput/CustomInput"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import BoxMessage from '../components/BoxMessage'
 import { useUserContext } from "../hooks/userContext"
@@ -44,11 +46,19 @@ const EventCreate = () => {
   const slotCapacity = activityType * 2
   
     const [boxOpen, setBoxOpen] = useState(false)
+    const [boxTitle, setBoxTitle] = useState('')
     const [boxMessage, setBoxMessage] = useState('')
+  
+    const [userId, setUserId] = useState(null)
     
+    const okMessage = {
+      message: '¡Evento creado con éxito!'
+    };
 
-    const okMessage = '¡Evento creado con éxito!';
-    const noOkMessage = '¡Hola!\nTenés que estar logueado para crear un evento!';
+    const noOkMessage = {
+        title: '¡Hola!',
+        message: 'Tenés que estar logueado para crear un evento!'
+    };
 
     
     const handleBoxClose = (_, reason) => {
@@ -58,9 +68,10 @@ const EventCreate = () => {
         setBoxOpen(false);
     };
 
-    const showMessage = (message) => {
-        setBoxMessage(message);
-        setBoxOpen(true);
+    const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
     };
   
     const {
@@ -82,7 +93,7 @@ const EventCreate = () => {
       slotId,
       activityId,
       activityName: activityName + " " + activityType,
-      creatorId: 17,
+      creatorId: userId,
       clubId,
       clubName,
       neighborhoodName,
@@ -105,7 +116,11 @@ const EventCreate = () => {
     } else if (user && !error) {
       const response = await new Promise((resolve) => {
         axiosInstance
-          .post("/booking/add", booking)
+          .post("/booking/add", booking,
+            {
+              headers: { "Authorization": `Bearer ${user.token}` }
+            } 
+          )
           .then((response) => {
             resolve(response)
             showMessage(okMessage)
@@ -119,9 +134,19 @@ const EventCreate = () => {
     }
   })
 
+  useEffect(() => {
+    user && 
+    axiosInstance.get(`/user/search-email?email=${user.email}`)
+    .then((response) => {
+        const { userId } = response.data;
+        setUserId(userId);
+    })
+    .catch((error) => setError(error)) 
+  }, [])
+
   return (
     <>
-      <Container className="content">
+      {/* <Container className="content">
         <Paper sx={{ ...PaperSXX, textAlign: "center" }}>
           <Box
             sx={{
@@ -138,9 +163,7 @@ const EventCreate = () => {
               Informacion del Evento
             </Typography>
           </Box>
-          <Grid container spacing={2} sx={{
-              m: 2
-            }}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Grid container spacing={2}>
                 <Grid item xs={12}> 
@@ -259,9 +282,122 @@ const EventCreate = () => {
         </Paper>
         <BoxMessage
               open={boxOpen}
+              title={boxTitle}
               message={boxMessage}
               onClose={handleBoxClose}
           />
+      </Container> */}
+      <Container>
+        <Paper sx={{...PaperSXX, textAlign: "center"}}>
+          <Box sx={{...BoxSX}}>
+            <Typography variant="h5" color="primary.main">
+                Informacion del Evento
+            </Typography>
+          </Box>
+          <Grid container spacing={2} my={2}>
+            <Grid item xs={12} md={6}>
+              <Container>
+                <Stack spacing={2}>
+                    <TextField
+                    name="clubName"
+                    label="Club"
+                    disabled={clubName}
+                    value={clubName ? clubName : ""}
+                    fullWidth
+                    />
+                    <TextField
+                    name="activityName"
+                    label="Actividad"
+                    disabled={activityName && activityType}
+                    value={activityName && activityType ? activityName +" " + activityType : ""}
+                    fullWidth
+                    />
+                    <TextField
+                    name="date"
+                    label="Fecha"
+                    disabled={date}
+                    value={date ? date : ""}
+                    fullWidth
+                    />
+                    <TextField
+                    name="startTime"
+                    label="Hora"
+                    disabled={startTime}
+                    value={startTime ? startTime : ""}
+                    fullWidth
+                    />
+                </Stack>
+              </Container>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Container>
+              <Stack
+                component="form"
+                onSubmit={onSubmit}
+                spacing={2}
+                >
+                  <TextField
+                    name="participants"
+                    label="Cupo"
+                    disabled={slotCapacity}
+                    value={slotCapacity ? slotCapacity : ""}
+                  />
+                  <CustomInput
+                    name="name"
+                    control={control}
+                    label="Nombre del evento"
+                    type="text"
+                    error={!!errors.name}
+                    helperText={errors?.name?.message}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "El nombre es requerido",
+                      },
+                      pattern: {
+                        value: /^.{6,}$/,
+                        message: "Debe tener al menos 6 caracteres",
+                      },
+                    }}
+                  />
+                  <CustomInput
+                    name="message"
+                    control={control}
+                    label="Mensaje del organizador"
+                    multiline
+                    rows={4}
+                    type="text"
+                    error={!!errors.message}
+                    helperText={errors?.message?.message}
+                    rules={{
+                      required: {
+                        value: true,
+                        message: "El mensaje es requerido",
+                      },
+                      pattern: {
+                        value: /^.{6,}$/,
+                        message: "Debe tener al menos 6 caracteres",
+                      },
+                    }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                    sx={{ ...ButtonSX}}
+                  >
+                    Crear evento
+                  </Button>
+                  {error && (
+                    <Typography variant="body2" color="error.main">
+                      { error }
+                    </Typography>
+                  )}
+              </Stack>
+              </Container>
+            </Grid>
+          </Grid>
+        </Paper>
       </Container>
     </>
   );

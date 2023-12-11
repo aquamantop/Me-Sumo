@@ -25,14 +25,14 @@ const Footer = () => {
           Tus ganas de jugar, ya no se postergan
         </Typography>
         <div>
-            <IconButton color="black">
-            <InstagramIcon />
+            <IconButton>
+            <InstagramIcon sx={{color:'black'}}/>
             </IconButton>
-            <IconButton color="black">
-            <TwitterIcon />
+            <IconButton>
+            <TwitterIcon sx={{color:'black'}}/>
             </IconButton>
-            <IconButton color="black">
-            <FacebookIcon />
+            <IconButton>
+            <FacebookIcon sx={{color:'black'}}/>
             </IconButton>
         </div>
       </Toolbar>

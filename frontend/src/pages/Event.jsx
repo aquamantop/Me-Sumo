@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router';
-import Header from '../components/header/Header'
-import Footer from '../components/footer/Footer'
-import { Container, Paper, Typography, Box, Button, Link, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { PaperSXX } from '../components/customMui/CustomMui'
-import axiosInstance from "../hooks/api/axiosConfig";
-import { useTheme } from '@mui/system';
 import { ButtonSX } from "../components/customMui/CustomMui";
-import { CenterFocusStrong } from '@mui/icons-material';
+import { Container, Paper, Typography, Box, Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { PaperSXX } from '../components/customMui/CustomMui'
+import { useParams } from 'react-router';
+import { useTheme } from '@mui/system';
 import { useUserContext } from '../hooks/userContext'
+import axiosInstance from "../hooks/api/axiosConfig";
 import BoxMessage from '../components/BoxMessage'
+import React, { useState, useEffect } from 'react'
 
 const Booking = () => {
     const { id } = useParams();
@@ -18,21 +15,30 @@ const Booking = () => {
     const { user } = useUserContext();
     const [userInfo, setUserInfo] = useState({});
     const [isParticipant, setIsParticipant] = useState(false);
+    const [isCreator, setIsCreator] = useState(false);
 
     const [cardInfo, setCardInfo] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [initialLoading, setInitialLoading] = useState(false);
+    const initialLoading = true
     
     const [boxOpen, setBoxOpen] = useState(false);
+    const [boxTitle, setBoxTitle] = useState('');
     const [boxMessage, setBoxMessage] = useState('');
     
 
-    const okMessage = '¡Sumado!\nYa estás participando ;D';
-    const noOkMessage = '¡Hola!\nTenés que estar logueado para sumarte al evento!';
+    const okMessage = {
+        title: '¡Sumado!',
+        message: 'Ya estás participando ;D'
+    };
+
+    const noOkMessage = {
+        title: '¡Hola!',
+        message: 'Tenés que estar logueado para sumarte al evento!'
+    };
 
     
-    const handleBoxClose = (event, reason) => {
+    const handleBoxClose = (_, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -41,14 +47,19 @@ const Booking = () => {
     };
 
     
-    const showMessage = (message) => {
-        setBoxMessage(message);
+    const showMessage = (data) => {
+        setBoxTitle(data.title)
+        setBoxMessage(data.message);
         setBoxOpen(true);
     };
   
-    const handleButtonClick = () => {
-        if (user && isParticipant==false) {
-            axiosInstance.post(`/booking/participant/${id}`, userInfo)
+    const handleAddParticipant = () => {
+        if (user && !isParticipant) {
+            axiosInstance.post(`/booking/participant/${id}`, userInfo,
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }  
+            )
             .then(response => {
                 showMessage(okMessage);
                 axiosInstance.get(`/booking/${id}`)
@@ -63,14 +74,52 @@ const Booking = () => {
                         setCardInfo((prevCardInfo) => ({
                             ...prevCardInfo,
                             bookingAvailability: availability,
-                    }));
+                }));
                 });
+                setIsParticipant(true)
             })})
             .catch(error => {
-                console.error('Error al realizar la solicitud POST:', error);
-                showMessage('Error al procesar la solicitud.');
+                showMessage({message: 'Error al procesar la solicitud.'});
             });
         
+        } else {
+          showMessage(noOkMessage);
+        }
+    };
+
+    const handleDeleteParticipant = () => {
+        const participant = cardInfo.bookingParticipants.find(participant => participant.userId === userInfo.userId);
+        if (user && isParticipant) {
+            axiosInstance.delete(`/booking/participant/${id}`, 
+                {
+                    data: { id: participant.id }
+                },
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }  
+            )
+            .then(response => {
+                showMessage({message: 'Lamentamos no contar con vos'});
+                axiosInstance.get(`/booking/${id}`)
+                .then(response => {
+                    setCardInfo(prevCardInfo => ({
+                        ...prevCardInfo,
+                        bookingParticipants: response.data.participants, 
+                    }))  
+
+                    axiosInstance.get(`/slot/getWithCourt/${response.data.slotId}`).then((response) => {
+                        const availability = response.data.capacity - cardInfo.bookingParticipants.length + 1;
+                        setCardInfo((prevCardInfo) => ({
+                            ...prevCardInfo,
+                            bookingAvailability: availability,
+                    }));
+                    })
+                })
+            setIsParticipant(false)
+            })
+            .catch(error => {
+                showMessage({message: 'Error al procesar la solicitud.'});
+            });
         } else {
           showMessage(noOkMessage);
         }
@@ -92,11 +141,14 @@ const Booking = () => {
         axiosInstance.get(`/booking/${id}`)
         .then((response) =>{
             const booking = response.data;
+            const { creatorId } = response.data
+            const isUserCreator = creatorId == userInfo.userId
+            setIsCreator(isUserCreator)
             axiosInstance.get(`/slot/getWithCourt/${booking.slotId}`)
             .then((response) => {
                 const { name, url } = response.data.court.club;
                 const availability = response.data.capacity - booking.participants.length;
-                const category = response.data.court.activity.name +" " + response.data.court.activity.type;
+                const category = response.data.court.activity.name + " " + response.data.court.activity.type;
                 const cardData = {
                     "clubName": name,
                     "bookingName":booking.name,
@@ -109,7 +161,6 @@ const Booking = () => {
                     "bookingParticipants": booking.participants
                 }
                 setCardInfo(cardData);
-
                 const isUserParticipant = cardData.bookingParticipants.some(participant => participant.userId === userInfo.userId);
                 setIsParticipant(isUserParticipant);
                 setLoading(false);
@@ -117,7 +168,7 @@ const Booking = () => {
             })
         })
         .catch((error) => setError(error)) 
-    }, [loading])
+    }, [loading, isParticipant])
 
 
 
@@ -209,19 +260,33 @@ const Booking = () => {
                     </TableContainer>
                 </Grid>
                 </Grid>
-                <Grid item xs={12} sm={12} sx={{textAlign: "center"}}>
-                <Button 
-                variant="contained"
-                color="background"
-                fullWidth
-                onClick={handleButtonClick}
-                sx={{ ...ButtonSX }}
-                disabled={initialLoading || isParticipant}
-                >
-                ¡Me Sumo!
-                </Button>
+                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
+                    {
+                        isParticipant ?  
+                        <Button 
+                        variant="contained"
+                        color="background"
+                        fullWidth
+                        onClick={handleDeleteParticipant}
+                        sx={{ ...ButtonSX }}
+                        disabled={isCreator}
+                        >
+                        Me Bajo
+                        </Button>  :          
+                        <Button 
+                        variant="contained"
+                        color="background"
+                        fullWidth
+                        onClick={handleAddParticipant}
+                        sx={{ ...ButtonSX }}
+                        disabled={isCreator}
+                        >
+                        ¡Me Sumo!
+                        </Button>
+                    }    
                 <BoxMessage
                     open={boxOpen}
+                    title={boxTitle}
                     message={boxMessage}
                     onClose={handleBoxClose}
                 />

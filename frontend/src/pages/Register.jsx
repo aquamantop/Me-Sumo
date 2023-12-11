@@ -1,22 +1,21 @@
-import PersonIcon from '@mui/icons-material/Person'
-import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp'
-import EmailSharpIcon from '@mui/icons-material/EmailSharp'
-import LockSharpIcon from '@mui/icons-material/LockSharp'
-import { Link } from '@mui/material'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import { useState } from 'react'
+import { ButtonSX } from '../components/customMui/CustomMui'
+import { delay } from "../helpers/delay"
+import { Link, Autocomplete, TextField, InputAdornment, IconButton } from '@mui/material'
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import CustomInput from '../components/customInput/CustomInput'
-import Header from '../components/header/Header'
-import Footer from '../components/footer/Footer'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { useState, useEffect } from 'react'
 import axiosInstance from "../hooks/api/axiosConfig";
-import { ButtonSX } from '../components/customMui/CustomMui'
+import Box from '@mui/material/Box'
+import BoxMessage from '../components/BoxMessage'
+import Button from '@mui/material/Button'
+import CustomInput from '../components/customInput/CustomInput'
+import EmailSharpIcon from '@mui/icons-material/EmailSharp'
+import EmojiEmotionsSharpIcon from '@mui/icons-material/EmojiEmotionsSharp'
+import LockSharpIcon from '@mui/icons-material/LockSharp'
+import PersonIcon from '@mui/icons-material/Person'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -32,32 +31,82 @@ export default function Register() {
       lastName: '',
       userName: '',
       email: '',
+      neighborhood: '',
       password: '',
       confirmPassword: '',
     },
   })
 
-  const [error, setError] = useState('')
+  const [error, setError] = useState("")
+  const [boxOpen, setBoxOpen] = useState(false);
+  const [boxTitle, setBoxTitle] = useState('');
+  const [boxMessage, setBoxMessage] = useState('');
+  const [neighborhoods, setNeighborhoods] = useState([]);
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState(null);
 
-  const onSubmit = handleSubmit(async (userData) => {
+  const okMessage = {
+      title: '¡OK!',
+      message: 'Registro exitoso'
+  };
+  
+  const handleBoxClose = (_, reason) => {
+      if (reason === 'clickaway') {
+          return;
+      }
+      setBoxOpen(false);
+  };
+  
+  const showMessage = (data) => {
+      setBoxTitle(data.title)
+      setBoxMessage(data.message);
+      setBoxOpen(true);
+  };
 
-    const response = await new Promise((resolve) => {
-        axiosInstance.post("/auth/register", userData)
-        .then((response) => resolve(response))
-        .catch((error) => resolve(error));
-    });
+  const goLogin = async () => {
+    await delay(2000)
+    navigate("/login")
+  }
 
-    if (!error) {
-      Swal.fire({
-        title: "Registro exitoso!",
-        icon: "success",
-        timer: 1500
-      });
-      navigate('/login')
-    } else {
-      setError(error)
+  useEffect(() => {
+    const fetchNeighborhoods = async () => {
+      try {
+        const response = await axiosInstance.get('/neighborhood/');
+        setNeighborhoods(response.data);
+      } catch (error) {
+        console.error('Error al obtener vecindarios:', error);
+      }
+    };
+
+    fetchNeighborhoods();
+  }, []);
+
+  console.log(selectedNeighborhood);
+
+  const onSubmit = handleSubmit(async (userData) => { 
+    try {
+      const modifiedUserData = {
+        ...userData,
+        neighborhood: {
+          id: selectedNeighborhood || null,
+        }
+      }
+      const response = await axiosInstance.post("/auth/register", modifiedUserData);
+      if (response) {
+        setError("");
+        showMessage(okMessage)
+        goLogin()
+      }
+    } catch (error) {
+      if(error.response.status == 403)
+        setError("Usuario ya registrado.");
+      else
+        setError("Algo salió mal. Por favor, volvé a intentarlo");
     }
-  })
+  });
+
+  const handleInputChange = () => {
+    setError("");
+  };
 
   return (
     <>
@@ -100,6 +149,7 @@ export default function Register() {
             placeholder='Nombre *'
             error={!!errors.firstName}
             helperText={errors?.firstName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -115,6 +165,7 @@ export default function Register() {
             placeholder='Apellido *'
             error={!!errors.lastName}
             helperText={errors?.lastName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -130,6 +181,7 @@ export default function Register() {
             placeholder='Apodo *'
             error={!!errors.userName}
             helperText={errors?.userName?.message}
+            onChange={handleInputChange}
             type=''
             rules={{
               required: {
@@ -145,6 +197,7 @@ export default function Register() {
             placeholder='Correo Electrónico *'
             error={!!errors.email}
             helperText={errors?.email?.message}
+            onChange={handleInputChange}
             type='email'
             rules={{
               required: {
@@ -159,6 +212,33 @@ export default function Register() {
             icon={<EmailSharpIcon />}
           />
 
+          <Autocomplete
+              id="nhood"
+              disablePortal
+              fullWidth
+              options={neighborhoods}
+              getOptionLabel={(option) => option.name || ''}
+              onChange={(event, value) => setSelectedNeighborhood(value.id)}
+              renderInput={(params) => (
+              <TextField
+                  {...params}
+                  label="Opcional: Elegi tu Barrio"
+                      id="custom-css-outlined-input"
+                  sx={{ mt: 2 }}
+                  InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                      <InputAdornment position="start">
+                          <IconButton>
+                              <MapOutlinedIcon />
+                          </IconButton>
+                      </InputAdornment>
+                      ),
+                  }}
+                  />
+              )}
+          />
+
           <CustomInput
             name='password'
             control={control}
@@ -166,14 +246,15 @@ export default function Register() {
             placeholder='Contraseña *'
             error={!!errors.password}
             helperText={errors?.password?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
                 message: 'La contraseña es requerida',
               },
               pattern: {
-                value: /^.{6,}$/,
-                message: 'La contraseña debe tener al menos 6 caracteres',
+                value: /^.{6,18}$/,
+                message: 'La contraseña debe estar entre 6 y 18 caracteres',
               },
             }}
             icon={<LockSharpIcon />}
@@ -185,6 +266,7 @@ export default function Register() {
             placeholder='Repetir Contraseña *'
             error={!!errors.confirmPassword}
             helperText={errors?.confirmPassword?.message}
+            onChange={handleInputChange}
             rules={{
               required: {
                 value: true,
@@ -210,7 +292,7 @@ export default function Register() {
 
           {error && (
             <Typography variant='body2' color='error.main'>
-              { error.message }
+              { error }
             </Typography>
           )}
         </Stack>
@@ -228,6 +310,12 @@ export default function Register() {
             Iniciar sesión
           </Link>
         </Typography>
+        <BoxMessage
+            open={boxOpen}
+            title={boxTitle}
+            message={boxMessage}
+            onClose={handleBoxClose}
+        />
       </Box>
       
     </>

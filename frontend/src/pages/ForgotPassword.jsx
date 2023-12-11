@@ -11,7 +11,6 @@ import axiosInstance from "../hooks/api/axiosConfig";
 import { ButtonSX } from '../components/customMui/CustomMui'
 
 export default function ForgotPassword() {
-  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -33,8 +32,10 @@ export default function ForgotPassword() {
         .then((response) => resolve(response))
         .catch((error) => setError(error))
     })
-    if (response)
+    if (response) {
+      setError("")
       setSuccess(true)
+    }
   })
 
   return (
