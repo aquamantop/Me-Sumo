@@ -398,6 +398,12 @@ const EventCreate = () => {
             </Grid>
           </Grid>
         </Paper>
+        <BoxMessage
+              open={boxOpen}
+              title={boxTitle}
+              message={boxMessage}
+              onClose={handleBoxClose}
+          />
       </Container>
     </>
   );
