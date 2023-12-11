@@ -26,8 +26,8 @@ import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 
 const REGION = 'us-east-1' 
-const ACCESS_KEY_ID = '***' //${{ secrets.AWS_ACCESS_KEY_ID }}
-const SECRET_ACCESS_KEY = '***' //${{ secrets.AWS_SECRET_ACCESS_KEY }}
+const ACCESS_KEY_ID = 'AKIAUNATVL73PJ4TL6FF' //${{ secrets.AWS_ACCESS_KEY_ID }}
+const SECRET_ACCESS_KEY = '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' //${{ secrets.AWS_SECRET_ACCESS_KEY }}
 const S3_BUCKET= 'me-sumo-img'
 
 
@@ -39,8 +39,9 @@ const config = {
   };
   
 
-const AddImages = () => {
+const AddImages = ( {onImageSelected} ) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
 
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
@@ -59,10 +60,11 @@ const AddImages = () => {
       }
   
         
-      const data = await uploadFile(selectedFile, config)
-      console.log("hola")
-      console.log(data)
+      const data = await uploadFile(selectedFile, config);
+      setFileUrl(data.location);
   
+      onImageSelected(data.location);
+
       alert('Archivo cargado con éxito en el bucket: ' + config.bucketName);
     } catch (error) {
       console.error('Error al cargar el archivo:', error);
