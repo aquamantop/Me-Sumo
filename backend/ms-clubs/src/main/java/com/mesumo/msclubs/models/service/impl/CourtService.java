@@ -66,4 +66,16 @@ public class CourtService implements ICourtService {
         return courtsDTO;
     }
 
+    @Override
+    public List<CourtDTO> findByClubIdAndActivityId(Long clubId, Long activityId) throws ResourceNotFoundException {
+        List<Court> courts = repository.findByClubIdAndActivityId(clubId, activityId);
+
+        if(courts.isEmpty()) throw new ResourceNotFoundException("Courts not found");
+
+        List<CourtDTO> courtsDTO = new ArrayList<>();
+        courts.forEach(c -> courtsDTO.add(courtMapper.convertToDto(c)));
+
+        return courtsDTO;
+    }
+
 }

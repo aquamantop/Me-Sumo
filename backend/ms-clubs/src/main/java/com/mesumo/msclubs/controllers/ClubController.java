@@ -4,6 +4,7 @@ import com.mesumo.msclubs.exceptions.ResourceNotFoundException;
 import com.mesumo.msclubs.models.dto.ClubDTO;
 import com.mesumo.msclubs.models.entities.Club;
 import com.mesumo.msclubs.models.service.impl.ClubService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +12,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/club")
+@RequiredArgsConstructor
 public class ClubController {
 
     private final ClubService service;
 
-    public ClubController(ClubService service) {
-        this.service = service;
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Club> getById(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+        ResponseEntity<Club> response;
 
         response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
 
@@ -30,7 +28,7 @@ public class ClubController {
 
     @GetMapping("/by-name/{name}")
     public ResponseEntity<Club> getByName(@PathVariable String name) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+        ResponseEntity<Club> response;
 
         response = new ResponseEntity<>(service.findByName(name), HttpStatus.OK);
 
@@ -38,8 +36,8 @@ public class ClubController {
     }
 
     @GetMapping("/")
-    public ResponseEntity getAll() {
-        ResponseEntity response = null;
+    public ResponseEntity<?> getAll() {
+        ResponseEntity<?> response;
         List<Club> list = service.findAll();
 
         if(list != null){
@@ -50,8 +48,8 @@ public class ClubController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody Club club){
-        ResponseEntity response = null;
+    public ResponseEntity<?> add(@RequestBody Club club){
+        ResponseEntity<?> response;
 
         if(club != null){
             response = new ResponseEntity<>(service.create(club), HttpStatus.CREATED);
@@ -61,8 +59,8 @@ public class ClubController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity update (@RequestBody Club club) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<?> update (@RequestBody Club club) throws ResourceNotFoundException {
+        ResponseEntity<?> response;
 
         if(club.getId() != null){
             response = new ResponseEntity<>(service.update(club), HttpStatus.OK);
@@ -72,8 +70,8 @@ public class ClubController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete (@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<?> delete (@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<?> response;
 
         service.deleteById(id);
         response = new ResponseEntity<>("Club deleted with id: " + id, HttpStatus.OK);
@@ -82,8 +80,8 @@ public class ClubController {
     }
 
     @GetMapping("/DTO/{id}")
-    public ResponseEntity getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
-        ResponseEntity response = null;
+    public ResponseEntity<ClubDTO> getByIdDTO(@PathVariable Long id) throws ResourceNotFoundException {
+        ResponseEntity<ClubDTO> response;
 
         response = new ResponseEntity<>(service.findByIdDTO(id), HttpStatus.OK);
 
@@ -91,8 +89,8 @@ public class ClubController {
     }
 
     @GetMapping("/listDTO")
-    public ResponseEntity getAllDTO() {
-        ResponseEntity response = null;
+    public ResponseEntity<?> getAllDTO() {
+        ResponseEntity<?> response;
         List<ClubDTO> list = service.findAllDTO();
 
         if(list != null){
