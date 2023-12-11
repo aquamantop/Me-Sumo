@@ -25,7 +25,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import axiosInstance from '../hooks/api/axiosConfig';
 import { Margin } from '@mui/icons-material';
 
-
 const options = [];
 
 const amenities  = {
@@ -54,9 +53,6 @@ const activities  = {
     5:"Fútbol 9",
     6:"Fútbol 11"
 }
-
-
-
 
 const CreateClub = () => {
   
@@ -159,7 +155,6 @@ const CreateClub = () => {
          }
      });*/
 
-
      const handleCreateClub = async () => {
          try {
 
@@ -185,9 +180,9 @@ const CreateClub = () => {
        
              console.log(JSON.stringify(body))
              const response = await axiosInstance.post('/club/add', body,
-              {headers: {
-                  "Authorization": `Bearer ${user.token}`
-               }}        
+                {
+                    headers: { "Authorization": `Bearer ${user.token}` }
+                }        
              );        
            
              console.log(response.data);
@@ -203,7 +198,6 @@ const CreateClub = () => {
 
  
      const handleInputChange = (fieldName) => (event, value) => {
-
         
         let fieldValue = value || event.target.value;
     
@@ -377,7 +371,6 @@ const CreateClub = () => {
                                     />
                                 </Grid>
 
-
                                 <Grid item xs={6}>
                                     <Autocomplete
                                         id="description"
@@ -407,8 +400,6 @@ const CreateClub = () => {
                                     />
                                 </Grid>
 
-
-
                                 <Grid item xs={6}>
                                     <Autocomplete
                                         id="address"
@@ -437,7 +428,6 @@ const CreateClub = () => {
                                         )}
                                     />
                                 </Grid>                                
-
 
                                 <Grid item xs={6}>
                                     <Autocomplete

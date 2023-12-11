@@ -21,11 +21,17 @@ import { ButtonSX } from "../../customMui/CustomMui";
 import { uploadFile } from 'react-s3';
 import { Buffer } from 'buffer';
 
-
-
 window.Buffer = Buffer;
 
+const REGION = 'us-east-1'
+const ACCESS_KEY_ID = import.meta.env.VITE_ACCESS_KEY_ID;
+const SECRET_ACCESS_KEY = import.meta.env.VITE_SECRET_ACCESS_KEY;
+const S3_BUCKET = 'me-sumo-img'
 
+console.log("REGION", REGION);
+console.log("ACCES", ACCESS_KEY_ID);
+console.log("SECRET", SECRET_ACCESS_KEY);
+console.log("BUCKET", S3_BUCKET);
 
 const config = {
     bucketName: S3_BUCKET,
