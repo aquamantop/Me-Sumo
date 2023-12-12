@@ -5,21 +5,34 @@ import CourtCard from '../clubShowcase/courtCard/CourtCard';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axiosInstance from "../../hooks/api/axiosConfig";
 import CustomLoader from "../CustomLoader";
-
+import { useBookingContext } from '../../hooks/bookingContext';
 
 const BookingShowcase = ({ clubId, activityId }) => {
 
+    const { bookingInfo, saveBookingInfo } = useBookingContext();
     const [courts, setCourts] = useState([])
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [clubName, setClubName] = useState('');
+    const [neighborhoodName, setNeighborhoodName] = useState('');
+
+    useEffect(() => {
+      saveBookingInfo({
+        ...bookingInfo,
+        clubName: clubName,
+        neighborhoodName: neighborhoodName
+      })
+    }, [clubName, neighborhoodName])
 
     useEffect(() => {
 
         if (activityId !== null && clubId !== null) {
             axiosInstance.get(`/court/club-activity?clubId=${clubId}&activityId=${activityId}`)
             .then((response) => {
-                setCourts(response.data)
-                setLoading(false)
+              setClubName(response.data[0].club.name)
+              setNeighborhoodName(response.data[0].club.neighborhood.name)
+              setCourts(response.data)
+              setLoading(false)
             })
         } else {
             setLoading(false);
