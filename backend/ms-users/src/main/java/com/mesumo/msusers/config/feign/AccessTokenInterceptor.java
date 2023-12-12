@@ -1,4 +1,4 @@
-package com.mesumo.msusers.feign;
+package com.mesumo.msusers.config.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -7,7 +7,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
-public class AccessTokenInterceptor implements RequestInterceptor{
+public class AccessTokenInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
