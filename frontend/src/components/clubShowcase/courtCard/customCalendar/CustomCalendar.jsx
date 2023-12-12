@@ -62,7 +62,7 @@ const CustomCalendar = ({ courtId, activityId, activityName, activityType, clubI
     const data = availableHoursForSelectedDate.find(element => element.id === selectedSlot);
 
     const { id: slotId, startTime, endTime } = data
-
+    
     if (data) {
       saveBookingInfo({
         ...bookingInfo,
