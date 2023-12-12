@@ -47,6 +47,7 @@ public class SlotSpecification implements Specification<Slot> {
                             )
 
                     )
+
             );
             Predicate dayCondition = join.get("id").in(dayIds);
 
