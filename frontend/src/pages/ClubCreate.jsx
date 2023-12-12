@@ -522,8 +522,8 @@ const CreateClub = () => {
 
             <BoxMessage
                 open={showMessage}
-                title="Cancha Creada"
-                message="¡La cancha se ha creado con éxito!"
+                title="Club Creado"
+                message="¡El club se ha creado con éxito!"
                 onClose={() => {
                     setShowMessage(false);
                     resetFormValues();
