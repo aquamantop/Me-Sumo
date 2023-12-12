@@ -42,11 +42,17 @@ public class SlotSpecification implements Specification<Slot> {
                     ),
                     criteriaBuilder.and(
                             criteriaBuilder.lessThan(root.get("endTime"), endTime),
-                            criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startTime)
+                            criteriaBuilder.greaterThan(root.get("startTime"), startTime)
                     ),
                     criteriaBuilder.and(
-                            criteriaBuilder.equal(root.get("endTime"), startTime),
-                            criteriaBuilder.equal(root.get("startTime"), endTime)
+                            criteriaBuilder.or(
+                                    criteriaBuilder.lessThan(root.get("endTime"), startTime),
+                                    criteriaBuilder.notEqual(root.get("startTime"), endTime)
+                            ),
+                            criteriaBuilder.or(
+                                    criteriaBuilder.notEqual(root.get("endTime"), startTime),
+                                    criteriaBuilder.lessThan(root.get("startTime"), endTime)
+                            )
                     )
             );
             Predicate dayCondition = join.get("id").in(dayIds);
