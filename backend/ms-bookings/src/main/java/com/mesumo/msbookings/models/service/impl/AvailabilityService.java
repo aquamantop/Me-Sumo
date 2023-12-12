@@ -64,11 +64,11 @@ public class AvailabilityService implements IAvailabilityService {
                             availabilityCalendar.put(dateSlot, new HashMap<>());
                         }
 
-                        if (bookings.isEmpty()) {
-                            availabilityCalendar.computeIfAbsent(dateSlot, k -> new HashMap<>())
-                                    .computeIfAbsent(court, k -> new ArrayList<>())
-                                    .add(slotWithoutDays);
-                        }
+//                        if (bookings.isEmpty()) {
+//                            availabilityCalendar.computeIfAbsent(dateSlot, k -> new HashMap<>())
+//                                    .computeIfAbsent(court, k -> new ArrayList<>())
+//                                    .add(slotWithoutDays);
+//                        }
 
                         dateSlot = dateSlot.plusWeeks(1);
                         bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
@@ -137,6 +137,9 @@ public class AvailabilityService implements IAvailabilityService {
                          availabilityCalendar.get(selectedCourt).put(dateSlot, new ArrayList<>());
                      }
 
+                     bookings = null;
+                     bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
+
                     if (bookings.isEmpty()) {
                         availabilityCalendar.computeIfAbsent(selectedCourt, k -> new HashMap<>())
                                 .computeIfAbsent(dateSlot, k -> new ArrayList<>())
@@ -144,9 +147,9 @@ public class AvailabilityService implements IAvailabilityService {
                     }
 
                     dateSlot = dateSlot.plusWeeks(1);
-                    bookings = bookingService.filterBySlotAndDate(slot.getId(), dateSlot);
+
                 }
-                bookings = null;
+
             }
         }
 
