@@ -34,12 +34,16 @@ public class SlotSpecification implements Specification<Slot> {
             Predicate timeCondition = criteriaBuilder.and(
                     criteriaBuilder.or(
                             criteriaBuilder.and(
-                                    criteriaBuilder.lessThanOrEqualTo(root.get("startTime"), startTime),
-                                    criteriaBuilder.greaterThanOrEqualTo(root.get("endTime"), startTime)
+                                    criteriaBuilder.lessThan(root.get("startTime"), startTime),
+                                    criteriaBuilder.greaterThan(root.get("endTime"), startTime)
                             ),
                             criteriaBuilder.and(
-                                    criteriaBuilder.lessThanOrEqualTo(root.get("startTime"), endTime),
-                                    criteriaBuilder.greaterThanOrEqualTo(root.get("endTime"), endTime)
+                                    criteriaBuilder.lessThan(root.get("startTime"), endTime),
+                                    criteriaBuilder.greaterThan(root.get("endTime"), endTime)
+                            ),
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(root.get("startTime"), startTime),
+                                    criteriaBuilder.equal(root.get("endTime"), endTime)
                             )
 
                     )
