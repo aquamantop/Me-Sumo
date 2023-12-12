@@ -22,7 +22,7 @@ const Footer = () => {
             fontSize: {xs: 20, sm: 30},
             color: 'black'
              }}>
-          Tus ganas de jugar, ya no se postergan
+          Tus ganas de jugar ya no se postergan
         </Typography>
         <div>
             <IconButton>
