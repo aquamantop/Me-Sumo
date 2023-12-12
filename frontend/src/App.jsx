@@ -22,6 +22,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
 import CourtCreate from "./pages/CourtCreate"
 import ChangePassword from "./pages/ChangePassword";
+import WhoWeAre from "./pages/WhoWeAre";
 
 
 
@@ -82,6 +83,7 @@ function App() {
                     <Route path="/club/:id" element={<Club />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/presentation" element={<WhoWeAre/>} />
                     <Route path="/event/:id" element={<Event />} />
                     <Route path="/new-event" element={<EventCreate />} />
                     <Route path="/disponibility" element={<Disponibility />} />

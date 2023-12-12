@@ -3,6 +3,7 @@ import EventSearch from "../components/eventSearch/EventSearch.jsx";
 import EventShowcase from "../components/eventShowcase/EventShowcase";
 import { Grid, Tabs, Tab } from "@mui/material";
 import ClubShowcase from "../components/clubShowcase/ClubShowcase";
+import WhoWeAreShowcase from "../components/whoWeAreShowcase/WhoWeAreShowcase.jsx"
 import { TabsSX } from "../components/customMui/CustomMui";
 
 
@@ -50,6 +51,7 @@ function Home() {
             >
               <Tab sx={{ color: "#3FEBBD" }} label="Eventos" />
               <Tab sx={{ color: "#3FEBBD" }} label="Clubes" />
+              <Tab sx={{ color: "#3FEBBD" }} label="¿Quiénes somos?" />
             </Tabs>
             {tabValue === 0 && (
               <>
@@ -58,6 +60,7 @@ function Home() {
               </>
             )}
             {tabValue === 1 && <ClubShowcase />}
+            {tabValue === 2 && <WhoWeAreShowcase/>}
           </Grid>
         </Grid>    
 
