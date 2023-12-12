@@ -7,6 +7,8 @@ import com.mesumo.msbookings.models.entities.Booking;
 import com.mesumo.msbookings.models.entities.Participant;
 import com.mesumo.msbookings.models.service.impl.AvailabilityService;
 import com.mesumo.msbookings.models.service.impl.BookingService;
+import com.mesumo.msbookings.models.service.impl.ParticipantService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,20 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/booking")
 public class BookingController {
 
     private final BookingService service;
     private final AvailabilityService availabilityService;
-
-    public BookingController(BookingService service, AvailabilityService availabilityService) {
-        this.service = service;
-        this.availabilityService = availabilityService;
-    }
+    private final ParticipantService participantService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         try{
             response = new ResponseEntity<>(service.findById(id), HttpStatus.OK);
@@ -43,7 +42,7 @@ public class BookingController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAll() {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
         List<Booking> list = service.findAll();
 
         if(list != null){
@@ -55,7 +54,7 @@ public class BookingController {
 
     @GetMapping("/approved")
     public ResponseEntity filterByApproved(@RequestParam boolean approved) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
         List<Booking> list = service.filterByApproved(approved);
 
         if(list != null){
@@ -67,7 +66,7 @@ public class BookingController {
 
     @GetMapping("/approved/{id}")
     public ResponseEntity<?> filterByClubAndApproved(@PathVariable Long id, @RequestParam boolean approved) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
         List<Booking> list = service.filterByClubAndApproved(id, approved);
 
         if(list != null){
@@ -79,7 +78,7 @@ public class BookingController {
 
     @GetMapping("/club_activity")
     public ResponseEntity<?> filterByClubAndActivity(@RequestParam Long clubId, @RequestParam Long activityId) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
         Map<LocalDate, Map<CourtDTO, List<SlotWithoutDaysDTO>>> list = availabilityService.getAvailableBookings(clubId, activityId);
 
         if(list != null){
@@ -91,7 +90,7 @@ public class BookingController {
 
     @GetMapping("filter_endpoint")
     public ResponseEntity<?> filterByActivityNeighborhoodAndDates(@RequestParam(required = false) Long activityId, @RequestParam(required = false) String neighborhood, @RequestParam(required = false) String date, @RequestParam(required = false) Boolean full) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
         if(activityId == null){
             activityId = 0L;
         }
@@ -189,7 +188,8 @@ public class BookingController {
 
     @GetMapping("/court_slots")
     public ResponseEntity<?> filterByCourtAndSlots(@RequestParam Long clubId, @RequestParam Long courtId, @RequestParam Long activityId) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
+
         Map<CourtDTO, Map<LocalDate,List<SlotWithoutDaysDTO>>> map = availabilityService.getAvailableBookingsByCourt(clubId, courtId, activityId);
 
         if(map != null){
@@ -201,7 +201,8 @@ public class BookingController {
 
     @GetMapping("/participant_bookings")
     public ResponseEntity<?> getParticipantsByBookingId(@RequestParam Long userId, @RequestParam boolean approved) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
+
         List<Booking> list = service.filterByUserParticipant(userId, approved);
 
         if(list != null){
@@ -214,7 +215,7 @@ public class BookingController {
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody Booking booking){
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         if(booking != null){
             response = new ResponseEntity<>(service.create(booking), HttpStatus.CREATED);
@@ -225,7 +226,7 @@ public class BookingController {
 
     @PostMapping("/participant/{id}")
     public ResponseEntity<?> addParticipant(@PathVariable Long id, @RequestBody Participant participant){
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         if(participant != null){
             try {
@@ -241,7 +242,7 @@ public class BookingController {
 
     @DeleteMapping("/participant/{id}")
     public ResponseEntity<?> deleteParticipant(@PathVariable Long id, @RequestBody Participant participant){
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         if(participant != null){
             try {
@@ -258,7 +259,7 @@ public class BookingController {
 
     @PutMapping("/update")
     public ResponseEntity<?> update (@RequestBody Booking booking){
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         if(booking != null){
             try {
@@ -274,7 +275,7 @@ public class BookingController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete (@PathVariable Long id) {
-        ResponseEntity response = null;
+        ResponseEntity<?> response;
 
         try {
             service.deleteById(id);
@@ -285,6 +286,12 @@ public class BookingController {
         }
 
         return response;
+    }
+
+    @PutMapping("/participant/update")
+    public ResponseEntity<?> updateParticipant (@RequestBody Participant participant) throws ResourceNotFoundException {
+        participantService.update(participant);
+        return ResponseEntity.ok("Participant updated");
     }
 
 }

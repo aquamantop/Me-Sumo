@@ -4,10 +4,12 @@ import com.mesumo.msusers.exceptions.PasswordException;
 import com.mesumo.msusers.exceptions.ResourceAlreadyExistsException;
 import com.mesumo.msusers.exceptions.ResourceNotFoundException;
 import com.mesumo.msusers.models.entities.User;
+import com.mesumo.msusers.models.entities.dto.ParticipantDTO;
 import com.mesumo.msusers.models.entities.dto.UserChangePassword;
 import com.mesumo.msusers.models.entities.dto.UserDTO;
 import com.mesumo.msusers.models.mappers.UserMapper;
 import com.mesumo.msusers.models.repository.IUserRepository;
+import com.mesumo.msusers.models.repository.feign.ParticipantRepository;
 import com.mesumo.msusers.models.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,10 +20,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
+    private final UserMapper userMapper = new UserMapper();
     private final IUserRepository userRepository ;
     private final PasswordEncoder passwordEncoder;
-
-    private final UserMapper userMapper = new UserMapper();
+    private final ParticipantRepository participantRepository;
 
     @Override
     public UserDTO findById(Long id) throws ResourceNotFoundException {
@@ -68,12 +70,15 @@ public class UserService implements IUserService {
 
         User userExists = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User id: " + user.getUserId() + "not found"));
+        ParticipantDTO participantDTO = new ParticipantDTO(user.getUserId(), user.getFirstName(), user.getLastName());
 
         if (user.getNameUser() != null) userExists.setUserName(user.getNameUser());
         if (user.getFirstName() != null) userExists.setFirstName(user.getFirstName());
         if (user.getLastName() != null) userExists.setLastName(user.getLastName());
         if (user.getEmail() != null) userExists.setEmail(user.getEmail());
         if (user.getNeighborhood() != null) userExists.setNeighborhood(user.getNeighborhood());
+
+        updateParticipant(participantDTO);
 
         return userRepository.save(userExists);
     }
@@ -105,6 +110,10 @@ public class UserService implements IUserService {
             throw new ResourceNotFoundException("User not found");
         }
         return userMapper.convertToDto(userExists.get());
+    }
+
+    private void updateParticipant(ParticipantDTO participant) {
+        participantRepository.updateParticipant(participant);
     }
 
 }
