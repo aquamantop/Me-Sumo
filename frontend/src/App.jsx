@@ -22,7 +22,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Slots from "./pages/Slots";
 import CourtCreate from "./pages/CourtCreate"
 import ChangePassword from "./pages/ChangePassword";
-
+import ClubCreate from "./pages/ClubCreate"
 
 
 function App() {
@@ -93,6 +93,7 @@ function App() {
                     <Route path="/reports" element={<Reports />} />
                     <Route path='/booking/:id' element={<Bookings />} />
                     <Route path="/new-court/" element={<CourtCreate/>} />
+                    <Route path="/new-club/" element={<ClubCreate />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>

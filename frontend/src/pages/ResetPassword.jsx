@@ -132,8 +132,8 @@ export default function ResetPassword() {
                 message: 'La contraseña es requerida',
               },
               pattern: {
-                value: /^.{6,}$/,
-                message: 'La contraseña debe tener al menos 6 caracteres',
+                value: /^.{6,18}$/,
+                message: 'La contraseña debe tener entre 6 y 18 caracteres',
               },
             }}
             icon={<LockSharpIcon />}
