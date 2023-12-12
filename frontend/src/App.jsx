@@ -60,7 +60,7 @@ function App() {
             input: {
               '&:-webkit-autofill': {
                 WebkitBoxShadow: 'none',
-                WebkitTextFillColor: '#fff',
+                WebkitTextFillColor: 'none',
               },
             },
           },
