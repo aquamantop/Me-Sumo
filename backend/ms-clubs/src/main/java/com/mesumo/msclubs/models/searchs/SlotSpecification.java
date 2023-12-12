@@ -31,9 +31,23 @@ public class SlotSpecification implements Specification<Slot> {
             Join<Slot, DayEntity> join = root.join("days");
 
             Predicate courtCondition = criteriaBuilder.equal(root.get("court"), court);
-            Predicate timeCondition = criteriaBuilder.and(
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startTime),
-                    criteriaBuilder.lessThanOrEqualTo(root.get("endTime"), endTime)
+            Predicate timeCondition = criteriaBuilder.or(
+                    criteriaBuilder.and(
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("endTime"), startTime),
+                            criteriaBuilder.lessThan(root.get("startTime"), endTime)
+                    ),
+                    criteriaBuilder.and(
+                            criteriaBuilder.greaterThan(root.get("endTime"), startTime),
+                            criteriaBuilder.lessThanOrEqualTo(root.get("startTime"), endTime)
+                    ),
+                    criteriaBuilder.and(
+                            criteriaBuilder.lessThan(root.get("endTime"), endTime),
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startTime)
+                    ),
+                    criteriaBuilder.and(
+                            criteriaBuilder.equal(root.get("endTime"), startTime),
+                            criteriaBuilder.equal(root.get("startTime"), endTime)
+                    )
             );
             Predicate dayCondition = join.get("id").in(dayIds);
 
