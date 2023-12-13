@@ -1,14 +1,22 @@
-import React, { useEffect } from "react";
-import { Grid, Typography, Box, Link, Button, Card, Divider, Container } from "@mui/material";
 import "react-image-gallery/styles/css/image-gallery.css";
-import ImageGallery from "react-image-gallery";
-import CourtCard from "./courtCard/CourtCard";
+import { Grid, Typography, Card, Divider } from "@mui/material";
 import { useBookingContext } from '../../hooks/bookingContext';
+import { useParams } from 'react-router';
+import axiosInstance from "../../hooks/api/axiosConfig";
+import CourtCard from "./courtCard/CourtCard";
+import EventCard from "./../eventShowcase/EventCard";
+import ImageGallery from "react-image-gallery";
+import React, { useEffect, useState } from "react";
 
 export const ClubInfo = ({ club }) => {
+  const { id } = useParams();
   const { bookingInfo, saveBookingInfo } = useBookingContext();
 
   const { description, amenities, url, activities, name, neighborhood } = club
+
+  const [eventList, setEventList] = useState([]);
+    const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     saveBookingInfo({
@@ -16,6 +24,15 @@ export const ClubInfo = ({ club }) => {
       clubName: name,
       neighborhoodName: neighborhood.name
     })
+  }, [])
+
+  useEffect(() => {
+    axiosInstance.get(`booking/approved/${id}?approved=false`)
+      .then((response) => {
+        setEventList(response.data)
+        setLoading(false)
+      })
+      .catch((error) => setError(error))
   }, [])
 
 
@@ -61,15 +78,10 @@ export const ClubInfo = ({ club }) => {
                       p: 1
                     }}>
                     <Typography variant="body1" color="primary.main">Servicios del Club</Typography>
-                    {/* {
-                      amenities.map((amenitie, index) => {
-                        return <Typography variant="body2" color="secondary.main" key={index} >{amenitie.name}</Typography>
-                      })
-                    } */}
                     <Grid container>
                       {amenities.map((amenitie, index) => (
                         <Grid item key={index} xs={6}>
-                          <Typography variant="body2" color="z secondary.main">
+                          <Typography variant="body2" color="secondary.main">
                             {amenitie.name}
                           </Typography>
                         </Grid>
@@ -91,6 +103,31 @@ export const ClubInfo = ({ club }) => {
               })
             ))}
           </Grid>
+        </Grid>
+        <Grid item xs={12} md={3} p={2}>
+          {
+            !loading && (
+              <>
+              <Typography variant="h5" color="primary.main" >Eventos del club</Typography>
+              <Divider sx={{ mt: 1, mb: 1 }} />
+              {eventList.length == 0 ?
+                <Typography variant="body2" color="secondary.main" >Aún no hay eventos creados para este club</Typography> :
+                eventList.map((event) => {
+                  return (
+                    <Grid
+                      item
+                      xs={12}
+                      key={event.id}
+                      sx={{ p: 1 }}
+                    >
+                      <EventCard booking={event}/>
+                    </Grid>        
+                  )
+                })
+              }
+              </>
+            )
+          }
         </Grid>
       </Grid>
     </>
