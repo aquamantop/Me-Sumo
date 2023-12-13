@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
-@FeignClient(url = "http://localhost:8084/booking", name = "ms-bookings", configuration = FeignConfig.class)
+@FeignClient(url = "http://http://ec2-54-198-112-83.compute-1.amazonaws.com:8084/booking", name = "ms-bookings", configuration = FeignConfig.class)
 public interface IParticipantFeignClient {
 
     @GetMapping("/get-participant/{userId}")
