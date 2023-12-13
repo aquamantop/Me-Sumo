@@ -6,7 +6,6 @@ import com.mesumo.msbookings.models.repository.IParticipantRepository;
 import com.mesumo.msbookings.models.service.IParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -30,12 +29,18 @@ public class ParticipantService implements IParticipantService {
     }
 
     @Override
-    public Participant update(Participant participant) {
-        return null;
+    public void update(Participant participant) {
+        Optional<Participant> participantBBDD = repository.findByUserId(participant.getUserId());
+        if(participantBBDD.isPresent()){
+            if (participant.getFirstName() != null) participantBBDD.get().setFirstName(participant.getFirstName());
+            if (participant.getLastName() != null) participantBBDD.get().setLastName(participant.getLastName());
+            repository.save(participantBBDD.get());
+        }
     }
 
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
 }

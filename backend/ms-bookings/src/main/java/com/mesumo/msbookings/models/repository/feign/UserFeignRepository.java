@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class UserFeignRepository implements IUserFeignClient{
 
-
     @Qualifier("com.mesumo.msbookings.models.repository.feign.IUserFeignClient")
     private final IUserFeignClient feignClient;
 
@@ -17,4 +16,5 @@ public class UserFeignRepository implements IUserFeignClient{
     public UserDTO getById(Long id) {
         return feignClient.getById(id);
     }
+
 }

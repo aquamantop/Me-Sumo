@@ -61,8 +61,9 @@ jobs:
       run: |
           echo "Deploying started..."
           ssh ubuntu@${HOST} sudo systemctl stop booking.service
-          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-bookings/target/ms_bookings.jar ubuntu@${HOST}:~/booking
+          scp ms_bookings.jar ubuntu@${HOST}:~/booking
           ssh ubuntu@${HOST} sudo systemctl start booking.service
           echo "Finished deploying the app."
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-bookings/target
       env:
           HOST: ${{ secrets.DEPLOY_SERVER_IP_BOOKING }}

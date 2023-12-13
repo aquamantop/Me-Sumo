@@ -68,11 +68,12 @@ jobs:
 
     - name: Deploy Eureka
       run: |
-          echo "Deploying started..."
-          ssh ubuntu@${HOST} "sudo systemctl stop eureka.service"
-          scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-discovery/target/ms_discovery.jar ubuntu@${HOST}:~/app/eureka
-          ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
-          echo "Finished deploying the app."
+        echo "Deploying started..."
+        ssh ubuntu@${HOST} "sudo systemctl stop eureka.service"
+        scp ms_discovery.jar ubuntu@${HOST}:~/app/eureka
+        ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
+        echo "Finished deploying the app."
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-discovery/target
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
               
@@ -80,8 +81,10 @@ jobs:
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop gateway.service
-        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-gateway/target/ms_gateway.jar ubuntu@${HOST}:~/app/gateway
+        scp ms_gateway.jar ubuntu@${HOST}:~/app/gateway
+        # scp ms_gateway.jar ubuntu@${HOST}:~/app/gateway
         ssh ubuntu@${HOST} sudo systemctl start gateway.service
         echo "Finished deploying the app."
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-gateway/target
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}

@@ -7,7 +7,7 @@ public interface IParticipantService {
 
     Participant findById(Long id) throws ResourceNotFoundException;
     Participant create(Participant participant);
-    Participant update(Participant participant);
+    void update(Participant participant);
     void deleteById(Long id);
 
 }
