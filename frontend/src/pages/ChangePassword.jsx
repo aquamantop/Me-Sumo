@@ -1,7 +1,6 @@
 import { ButtonSX } from '../components/customMui/CustomMui'
 import { delay } from "../helpers/delay"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 import { useUserContext } from "../hooks/userContext";
 import { useState } from "react"
 import axiosInstance from "../hooks/api/axiosConfig";
@@ -14,8 +13,7 @@ import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 
 export default function ChangePassword() {
-  const { user } = useUserContext();
-  const navigate = useNavigate();
+  const { user, logoutUser } = useUserContext()
 
   const {
     watch,
@@ -53,9 +51,9 @@ export default function ChangePassword() {
       setBoxOpen(true);
   };
 
-  const goLogin = async () => {
+  const logout = async () => {
     await delay(2000)
-    navigate("/login")
+    logoutUser();
   }
 
   const onSubmit = handleSubmit(async (userData) => {
@@ -76,7 +74,7 @@ export default function ChangePassword() {
       if (response) {
         setError("");
         showMessage(okMessage)
-        goLogin()
+        logout()
       }
     } catch (error) {
       setError("Algo salió mal. Por favor, volvé a intentarlo.");
@@ -114,7 +112,7 @@ export default function ChangePassword() {
             marginBottom: "36px"
           }}
         >
-          Ingresa tu los datos para completar el cambio de tu contraseña.
+          Ingresa los datos para completar el cambio de tu contraseña.
         </Typography>
 
         <Stack
@@ -128,7 +126,7 @@ export default function ChangePassword() {
           <CustomInput
             name='oldPassword'
             control={control}
-            type='oldPassword'
+            type='password'
             placeholder='Contraseña actual *'
             error={!!errors.oldPassword}
             helperText={errors?.oldPassword?.message}
@@ -149,7 +147,7 @@ export default function ChangePassword() {
           <CustomInput
             name='newPassword'
             control={control}
-            type='newPassword'
+            type='password'
             placeholder='Nueva contraseña *'
             error={!!errors.newPassword}
             helperText={errors?.newPassword?.message}

@@ -55,7 +55,6 @@ const Profile = () => {
         setNeighborhoods(neighborhoodsResponse.data);
         const bookingResponse = await axiosInstance.get(`/booking/participant_bookings?userId=${userInfo.userId}&approved=false`);
         setBookingInfo(bookingResponse.data);
-        // console.log('esto es bInfo',bookingInfo);
         setLoading(false);
       } catch (error) {
         setLoading(false);

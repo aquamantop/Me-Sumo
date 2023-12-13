@@ -92,11 +92,9 @@ const Booking = () => {
         if (user && isParticipant) {
             axiosInstance.delete(`/booking/participant/${id}`, 
                 {
-                    data: { id: participant.id }
-                },
-                {
+                    data: { id: participant.id },
                     headers: { "Authorization": `Bearer ${user.token}` }
-                }  
+                },
             )
             .then(response => {
                 showMessage({message: 'Lamentamos no contar con vos'});

@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getUserByEmail } from "./api/userApi"
 import axiosInstance from "./api/axiosConfig";
 
-
 const UserContext = createContext();
 
 export const useUserContext = () => {
@@ -25,16 +24,12 @@ export const UserProvider = ({children}) => {
       .catch(console.log("Error id club"))
       }
     
-
     const data = {
       ...userData,
       role: userInfo.role, 
       clubId: clubId,
       token: token
     };
-
-  
-
 
     setUser(data);
     localStorage.setItem("user", JSON.stringify(data));
@@ -44,7 +39,7 @@ export const UserProvider = ({children}) => {
   const logoutUser = () => {
     setUser(null);
     localStorage.removeItem("user");
-    window.location.reload();
+    window.location.assign("/");
   };
 
   useEffect(() => {
