@@ -53,7 +53,7 @@ public class BookingController {
     }
 
     @GetMapping("/approved")
-    public ResponseEntity filterByApproved(@RequestParam boolean approved) {
+    public ResponseEntity<?> filterByApproved(@RequestParam boolean approved) {
         ResponseEntity<?> response;
         List<Booking> list = service.filterByApproved(approved);
 
@@ -289,9 +289,13 @@ public class BookingController {
     }
 
     @PutMapping("/participant/update")
-    public ResponseEntity<?> updateParticipant (@RequestBody Participant participant) throws ResourceNotFoundException {
+    public ResponseEntity<?> updateParticipant (@RequestBody Participant participant) {
         participantService.update(participant);
         return ResponseEntity.ok("Participant updated");
     }
 
+    @GetMapping("/get-participant/{userId}")
+    public ResponseEntity<List<Participant>> getParticipantByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(participantService.findByUserId(userId));
+    }
 }

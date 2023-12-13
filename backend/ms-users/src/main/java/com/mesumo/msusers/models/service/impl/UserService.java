@@ -112,8 +112,19 @@ public class UserService implements IUserService {
         return userMapper.convertToDto(userExists.get());
     }
 
+    private List<ParticipantDTO> getParticipantByUserId(Long userId) {
+        return participantRepository.getParticipantByUserId(userId);
+    }
+
     private void updateParticipant(ParticipantDTO participant) {
-        participantRepository.updateParticipant(participant);
+        List<ParticipantDTO> participantList = getParticipantByUserId(participant.getUserId());
+        if (!participantList.isEmpty()) {
+            participantList.forEach(participant1 -> {
+                if (participant.getFirstName() != null) participant1.setFirstName(participant.getFirstName());
+                if (participant.getLastName() != null) participant1.setLastName(participant.getLastName());
+                participantRepository.updateParticipant(participant1);
+            });
+        }
     }
 
 }
