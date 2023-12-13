@@ -53,9 +53,7 @@ jobs:
     - name: Build MS Booking
       run: |
         echo "Building app..."
-        echo ${{ secrets.DATABASE_URL }}
-        echo ${{ secrets.DATABASE_USERNAME }}
-        echo ${{ secrets.DATABASE_PASSWORD }}
+        env
         cd backend/ms-bookings
         mvn install --file pom.xml
         echo "Finished building the app."
