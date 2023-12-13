@@ -1,0 +1,15 @@
+server:
+  port: ${PORT:8761}
+
+spring:
+  application:
+    name: Eureka-server
+eureka:
+  instance:
+#    hostname: localhost
+    hostname: ec2-107-21-182-26.compute-1.amazonaws.com
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

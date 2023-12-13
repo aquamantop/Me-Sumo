@@ -6,11 +6,11 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 
 const Footer = () => {
   return (
-    <AppBar position='sticky' sx={{
-      top: 'auto',
-      bottom: 0,
-      background: 'linear-gradient(to bottom, #D6FF4E, #5DBE7A, #3E8059)',
-    }}>
+    <AppBar
+    sx={{
+      position:'unset'
+    }}
+    >
       <Toolbar sx={{justifyContent:'space-between'}}>
         <Typography 
         variant="body2" 

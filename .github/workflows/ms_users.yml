@@ -1,0 +1,69 @@
+name: Build & Deploy MS Users
+
+on:
+  push:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-users/**'
+  pull_request:
+    branches: [ "backend", "main" ]
+    paths:
+      - 'backend/ms-users/**'
+
+jobs:
+  config-aws:
+    name: Config AWS credentials
+    runs-on: ubuntu-latest
+    steps:
+      
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+  deploy-user:
+    needs: config-aws
+    name: Build User with Maven
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Configure SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DEPLOY_KEY_USER }}" > ~/.ssh/id_rsa
+        chmod 400 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.DEPLOY_SERVER_IP_USER }} >> ~/.ssh/known_hosts
+      env:
+        HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
+
+    - name: Build & Deploy MS User
+      run: |
+        echo "Building app..."
+        cd backend/ms-users
+        mvn install --file pom.xml
+        echo "Finished building the app."
+        
+    - name: Deploy User
+      run: |
+        echo "Deploying started..."
+        ssh ubuntu@${HOST} sudo systemctl stop user.service
+        scp ms_users.jar ubuntu@${HOST}:~/user
+        ssh ubuntu@${HOST} sudo systemctl start user.service
+        echo "Finished deploying the app."
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-users/target
+      env:
+          HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
