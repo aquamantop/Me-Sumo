@@ -73,7 +73,7 @@ jobs:
         scp ms_discovery.jar ubuntu@${HOST}:~/app/eureka
         ssh ubuntu@${HOST} "sudo systemctl start eureka.service"
         echo "Finished deploying the app."
-      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-gateway/target
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-discovery/target
       env:
         HOST: ${{secrets.DEPLOY_SERVER_IP_EUREKA_GATEWAY}}
               
