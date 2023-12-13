@@ -61,8 +61,9 @@ jobs:
       run: |
         echo "Deploying started..."
         ssh ubuntu@${HOST} sudo systemctl stop user.service
-        scp /home/runner/work/Grupo-5/Grupo-5/backend/ms-users/target/ms_users.jar ubuntu@${HOST}:~/user
+        scp ms_users.jar ubuntu@${HOST}:~/user
         ssh ubuntu@${HOST} sudo systemctl start user.service
         echo "Finished deploying the app."
+      working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-users/target
       env:
           HOST: ${{ secrets.DEPLOY_SERVER_IP_USER }}
