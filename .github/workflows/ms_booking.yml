@@ -56,6 +56,10 @@ jobs:
         cd backend/ms-bookings
         mvn install --file pom.xml
         echo "Finished building the app."
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
     - name: Deploy Booking
       run: |
