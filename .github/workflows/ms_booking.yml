@@ -14,8 +14,8 @@ jobs:
   config-aws:
     name: Config AWS credentials
     runs-on: ubuntu-latest
-
     steps:
+      
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -67,3 +67,6 @@ jobs:
       working-directory: /home/runner/work/Me-Sumo/Me-Sumo/backend/ms-bookings/target
       env:
           HOST: ${{ secrets.DEPLOY_SERVER_IP_BOOKING }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
